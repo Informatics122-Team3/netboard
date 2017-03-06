@@ -5,7 +5,7 @@ Max Kirchgesner,
 Anping He,
 Victor Stolle,
 Carolyn Lai,
-Daniel Alboroz,
+Daniel Albornoz,
 Michael Vavro,
 Jot Lambsar,
 Nicholas Digeronimo
