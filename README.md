@@ -42,4 +42,4 @@ Design and implement an extensible Board Game Server
 2. click file -> open from -> github
 3. authorize your github account 
 4. click `Informatics122-Team3/netboard`
-5. click netboard_uml.xml
+5. click `netboard_uml.xml`
