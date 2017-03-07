@@ -35,3 +35,11 @@ Design and implement an extensible Board Game Server
 - **Stakeholder:** future developers of the Board Game Server (how is the understandability and quality of the code and design?)
 - **Stakeholder:** game developers (how is the extensibility of the Board Game Server in supporting new board games? how is the experience of plugging in a new game?)
 - **Stakeholder:** you (what are your contributions to the project?)
+
+## To open/edit the UML diagram
+
+1. go to [draw.io](https://www.draw.io)
+2. click file -> open from -> github
+3. authorize your github account 
+4. click `Informatics122-Team3/netboard`
+5. click netboard_uml.xml
