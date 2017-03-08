@@ -40,7 +40,7 @@ Design and implement an extensible Board Game Server
 3. right click on netboard_uml.xml -> open with -> draw.io Diagrams
 
 ## DATA INTERCHANGE FORMAT
-***Note:* this is important for everyone to understand. Please ask someone for clarification if you are confused.**
+***Note:* this is important to understand. Please ask someone for clarification if you are confused.**
 This is the JSON format in which the client and server will send their data to eachother:
 There are 3 types of messages that will ever need to be sent between a client and a server:
 
@@ -54,6 +54,7 @@ There are 3 types of messages that will ever need to be sent between a client an
         gameType: "connect4"
     }
     ```
+    **Note:** if the server recieves a message of type "host", it will create a new ActiveGame of the chosen type and add `hostUsername` as one of the players of the game.
 2. The client wishes to join a host's game as a guest
 
     ```javascript
@@ -64,16 +65,23 @@ There are 3 types of messages that will ever need to be sent between a client an
         hostUsername: "darksteelknight",
     }
     ```
+    **Note:** this will set the `isFull` flag in the ActiveGame being hosted by `hostUsername`. This will also start the game between `guestUsername` and `hostUsername`
 3. The client wishes to send a board update to the server or vice versa
 
     ```javascript
     {
-
-
-
-
+        messageType: "boardupdate",
+        gameState: {
+            isConnected: True,
+            turn: darksteelknight,
+            boardState: [
+                char[][],
+                char[][]
+            ]
+        }
     }
     ```
+    **Note:** the `isConnected` flag will signal to the reciever that the game should still be running; nobody has expressed a desire to disconnect or stop the game.
 
 
 
