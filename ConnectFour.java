@@ -1,5 +1,5 @@
 /* 
-    This program implements the 'Connect four' game (exercise 7.20 in the book, 8th edition)
+    Taken From http://www.mathcs.emory.edu/~dsavenk/courses/fall13/cs170/classcode/ConnectFour.java
 */
 import java.util.*;
 
