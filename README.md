@@ -73,7 +73,7 @@ There are 3 types of messages that will ever need to be sent between a client an
         messageType: "boardupdate",
         gameState: {
             isConnected: True,
-            turn: darksteelknight,
+            turn: "darksteelknight",
             boardState: [
                 char[][],
                 char[][]
