@@ -1,5 +1,6 @@
 /* 
     Taken From http://www.mathcs.emory.edu/~dsavenk/courses/fall13/cs170/classcode/ConnectFour.java
+    Exceptions should probably be caught in the GUI and result in the GUI displaying that a move is invalid for example
 */
 import java.util.*;
 
