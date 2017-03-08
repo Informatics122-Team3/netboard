@@ -37,12 +37,15 @@ Design and implement an extensible Board Game Server
 ## NetBoard Basics (Start Here) *Not Finished Yet*
 There are two main components to the NetBoard application
 
-1. Server Side
-    - The NetBoard server holds a list of all Active games
-        - An active game holds a game instance 
-            - a game instance holds the board for that game and the logic for that game
-        - An active game also keeps track of the host and guest usernames/ip addresses
-        - An active game is responsible for listening for board updates from 
+1. **NetBoardServer:** this component holds majority of the game logic and implementation
+    - `NetBoardServer` is the entry point for the server-side application.
+    - When `NetBoardServer` starts, it basically sits and waits for clients using the `listenForConnections()` method.
+    - Once a connection is made with client A, client A's information is saved and displayed in the game lobby.
+    - Once client B comes along expressing a desire to play with client A, a new `ActiveGameThread` object is created with client A and client B as the two players. Client A is removed from the lobby.
+    - From this point on, the `ActiveGameThread` object is responsible for coordinating messages between client A and client B
+2. **NetBoardClient:** 
+    - `NetBoardClient` is an extremely thin client because most of the logic will be handled on the serverside.
+    - Will most probably just take care of the GUI as well as initial connection to server.
 
 ## To open/edit the UML diagram
 1. go to the [google drive](https://drive.google.com/drive/u/1/folders/0APxwav_gZipYUk9PVA)
@@ -76,12 +79,13 @@ There are 3 types of messages that will ever need to be sent between a client an
     }
     ```
     **Note:** this will set the `isFull` flag in the ActiveGame being hosted by `hostUsername`. This will also start the game between `guestUsername` and `hostUsername`
-3. The client wishes to send a board update to the server or vice versa
+3. The client wishes to send a board update to an ActiveGameThread or vice versa
 
     ```javascript
     {
         messageType: "boardupdate",
         gameState: {
+            isValid: True,
             isConnected: True,
             turn: "darksteelknight",
             boardState: [
@@ -91,7 +95,10 @@ There are 3 types of messages that will ever need to be sent between a client an
         }
     }
     ```
-    **Note:** the `isConnected` flag will signal to the reciever that the game should still be running; nobody has expressed a desire to disconnect or stop the game.
+    **Note:** the `isValid` flag will indicate whether the previously submitted move is a valid move. If this is set to false, an error message should pop up on the client.
+    **Note:** the `isConnected` flag will signal to the reciever that the game should still be running; nobody has expressed a desire to disconnect or stop the game. 
+    **Note:** `boardState is actually a list of boards (char[][]), because some game types might require more than one board.
+    
 
 
 
