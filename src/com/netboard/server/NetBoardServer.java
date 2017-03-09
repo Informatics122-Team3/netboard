@@ -1,6 +1,7 @@
 package com.netboard.server;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -38,16 +39,21 @@ public class NetBoardServer {
 		log("Client connected: " + s.getInetAddress().toString() + ", " + s.getPort());
 		
 		Scanner in = new Scanner(s.getInputStream());
+		PrintWriter out = new PrintWriter(s.getOutputStream(), true); //true means a newline will flush the output
+		
+		out.println("Welcome to NetBoardServer V_1.0");
 		
 		while (true) {
 			String message = in.nextLine();
 			if (message.equals("exit")) break;
 			System.out.println(message);
+			out.println(message);
 		}
 		//TODO serialize incoming JSON messages into java objects
 		
 		
 		in.close();
+		out.close();
 	}
 	
 	private void createNewActiveGameThread(Game gameInstance, Player host, Player guest) {
