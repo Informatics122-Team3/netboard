@@ -13,7 +13,7 @@ public class ActiveGameThread implements Runnable {
 		this.guest = guest;
 	}
 	
-	@Override
+	
 	public void run() {
 		// TODO Auto-generated method stub
 
