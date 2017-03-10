@@ -34,7 +34,7 @@ public class LobbyThread implements Runnable {
 			switch(msgArr[0]) { //placeholder until previous line works
 			case "host":
 				//TODO
-				nbs.addHostToLobby(msgArr[1], s, msgArr[2]);
+				nbs.addHostToLobby(msgArr[1], s, msgArr[2]); //ex. `host darksteelknight connect4`
 				return;
 			case "join":
 				//TODO

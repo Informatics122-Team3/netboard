@@ -100,6 +100,7 @@ public class NetBoardServer {
 	}
 	
 	private void spawnLobbyThread(Socket clientSocket) {
+		log("Spawning lobby thread to handle client...");
 		LobbyThread lt = new LobbyThread(this, clientSocket);
 		Thread lobbyThread = new Thread(lt);
 		lobbyThread.start();
