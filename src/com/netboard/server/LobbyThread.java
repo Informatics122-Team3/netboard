@@ -22,15 +22,19 @@ public class LobbyThread implements Runnable {
 	
 	private void listenForActions() {
 		
-		boolean doneListening = false;
-		while (!doneListening) {
+		while (true) {
 			
-			String msgStr = in.next("" /*insert regex here*/);
+			//String msgStr = in.next("" /*insert regex here*/);
+			String msgStr = in.nextLine();
+			String[] msgArr = msgStr.split(" ");
 			
 			// TODO Message msgObj = Message.deserialize(msgStr);
-			switch("msgObj.messageType") { //placeholder until previous line works
+			// TODO switch(msgObj.messageType)...
+			
+			switch(msgArr[0]) { //placeholder until previous line works
 			case "host":
 				//TODO
+				nbs.addHostToLobby(msgArr[1], s, msgArr[2]);
 				return;
 			case "join":
 				//TODO
