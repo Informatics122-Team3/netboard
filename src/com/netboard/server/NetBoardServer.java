@@ -34,6 +34,9 @@ public class NetBoardServer {
 	}
 	
 	private void listenForConnections() throws IOException {
+//      Example of serialization code (you can remove this):
+//		Message m =  new HostMessage("12.32.23 - ip address", "jimmy - username", "checkers - gametype");
+//		System.out.println(m.serialize());
 		log("Listening for connections...");
 		Socket s = ss.accept();
 		log("Client connected: " + s.getInetAddress().toString() + ", " + s.getPort());
