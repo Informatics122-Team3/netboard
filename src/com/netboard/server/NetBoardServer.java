@@ -1,16 +1,24 @@
 package com.netboard.server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
+
+import com.netboard.game.Player;
 
 public class NetBoardServer {
 	public static final int PORT = 57575;
 	private ServerSocket ss;
-	private List<String> supportedGames;
+	private static final List<String> supportedGames = 
+			Arrays.asList(
+					"connect4", 
+					"battleship", 
+					"checkers"
+			);
+	
 	private List<Player> playerLobby;
 	
 	public static void main(String[] args) {
@@ -22,46 +30,72 @@ public class NetBoardServer {
 	}
 	
 	public NetBoardServer(int port) {
-		//TODO 
+		playerLobby = new LinkedList<>();
 		try {
 			ss = new ServerSocket(PORT);
 			listenForConnections();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			NetBoardServer.log("Socket Error");
 			e.printStackTrace();
 		}
 	}
 	
+	public synchronized void addPlayerToLobby(String username, Socket socket, String gameType) {
+		Player p = new Player(username, socket, gameType);
+		this.playerLobby.add(p);
+		log(String.format("Added %s :: %s to lobby...", username, gameType));
+	}
+	
+	public synchronized void removePlayerFromLobby(String username) {
+		
+		for (Player p : playerLobby) {
+			if (p.getUsername().equals(username)) {
+				playerLobby.remove(p);
+				break;
+			}
+		}
+		
+		log(String.format("Removed %s from lobby...", username));
+	}
+	
+	/**
+	 * This creates a new game thread which handles the two connected players.
+	 * Note: This will only be called from a LobbyThread object
+	 * @param gameInstance - an instance of the hosted game type
+	 * @param host - the Player hosting the game
+	 * @param guest - the Player joining the game
+	 */
+	public synchronized void spawnActiveGameThread(String gameType, Player host, Player guest) {
+		ActiveGameThread agt = new ActiveGameThread(gameType, host, guest);
+		Thread gameThread = new Thread(agt);
+		gameThread.start();
+	}
+	
+	/**
+	 * Waits until a client attempts to connect.
+	 * @throws IOException - if there's any kind of socket error
+	 */
 	private void listenForConnections() throws IOException {
 //      Example of serialization code (you can remove this):
 //		Message m =  new HostMessage("12.32.23 - ip address", "jimmy - username", "checkers - gametype");
 //		System.out.println(m.serialize());
-		log("Listening for connections...");
-		Socket s = ss.accept();
-		log("Client connected: " + s.getInetAddress().toString() + ", " + s.getPort());
-		
-		Scanner in = new Scanner(s.getInputStream());
-		PrintWriter out = new PrintWriter(s.getOutputStream(), true); //true means a newline will flush the output
-		
-		out.println("Welcome to NetBoardServer V_1.0");
 		
 		while (true) {
-			String message = in.nextLine();
-			if (message.equals("exit")) break;
-			System.out.println(message);
-			out.println(message);
+			log("Listening for connections...");
+			Socket s = ss.accept();
+			log("Client connected: " + s.getInetAddress().toString() + ", " + s.getPort());
+			
+			// TODO send the client the player lobby and the supported games
+			
+			spawnLobbyThread(s);
 		}
-		//TODO serialize incoming JSON messages into java objects
 		
-		
-		in.close();
-		out.close();
 	}
 	
-	private void createNewActiveGameThread(Game gameInstance, Player host, Player guest) {
-		Thread gameThread = new Thread(new ActiveGameThread(gameInstance, host, guest));
-		gameThread.start();
+	private void spawnLobbyThread(Socket clientSocket) {
+		LobbyThread lt = new LobbyThread(this, clientSocket);
+		Thread lobbyThread = new Thread(lt);
+		lobbyThread.start();
 	}
 
 }

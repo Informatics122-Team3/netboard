@@ -1,6 +1,4 @@
-package com.netboard.server;
-
-import com.google.gson.Gson;
+package com.netboard.message;
 
 public abstract class Message {
 	String messageType;

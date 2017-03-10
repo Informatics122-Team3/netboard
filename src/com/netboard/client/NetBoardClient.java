@@ -10,7 +10,7 @@ import java.util.Scanner;
 import com.netboard.client.GUI.GameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
-import com.netboard.server.Player;
+import com.netboard.game.Player;
 
 public class NetBoardClient {
 	private static LoginMaker loginGUI;
