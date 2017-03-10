@@ -40,7 +40,7 @@ public class NetBoardClient {
 			s = new Socket(ip, PORT);
 			System.out.println("Server Connected: " + s.getInetAddress().toString() + ", " + s.getPort());
 			
-			PrintWriter out = new PrintWriter(s.getOutputStream());
+			PrintWriter out = new PrintWriter(s.getOutputStream(), true);
 			
 			while(true) {
 				System.out.print(">> ");
