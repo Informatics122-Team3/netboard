@@ -17,22 +17,41 @@ public class Player {
 		this.gameType = gameType;
 	}
 	
+	/**
+	 * @return the username of the player
+	 */
 	public String getUsername() {
 		return this.username;
 	}
 	
+	/**
+	 * @return string representation of the gameType the player is hosting/playing
+	 */
 	public String getGameType() {
 		return this.gameType;
 	}
 	
+	/**
+	 * @return the ip address of the Player's machine
+	 */
 	public String getIPAddress() {
 		return socket.getInetAddress().toString();
 	}
 	
+	/**
+	 * This is used for creating a Scanner from a player's socket.
+	 * @return the InputStream of the player's socket
+	 * @throws IOException
+	 */
 	public InputStream getInputStream() throws IOException {
 		return socket.getInputStream();
 	}
 	
+	/**
+	 * This is used for creating a PrintWriter from a player's socket.
+	 * @return the OutputStream of the player's socket
+	 * @throws IOException
+	 */
 	public OutputStream getOutputStream() throws IOException {
 		return socket.getOutputStream();
 	}
