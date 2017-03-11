@@ -110,7 +110,7 @@ There are 4 types of messages that will ever need to be sent between a client an
 
 ## To open/edit the UML diagram
 1. go to the [google drive](https://drive.google.com/drive/u/1/folders/0APxwav_gZipYUk9PVA)
-2. open the March_9_Deliverable folder
+2. open the March_14_Deliverable folder
 3. right click on netboard_uml.xml -> open with -> draw.io Diagrams
 
 
