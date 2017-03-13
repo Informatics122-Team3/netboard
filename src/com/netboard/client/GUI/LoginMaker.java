@@ -135,8 +135,16 @@ public class LoginMaker extends GUIMaker{
 	         
 	         if( command.equals( "Exit" ))  {
 	        	 promptAndClose();
-	         } else if( command.equals("Enter Lobby")){
-	        	 statusLabel.setText("You have logged in as: " + nameTxt.getText() + "\n On Server: " + serverTxt.getText());
+	        	 } 
+	         else if( command.equals("Enter Lobby")){
+	        	 //statusLabel.setText("You have logged in as: " + nameTxt.getText() + "\n On Server: " + serverTxt.getText());
+	        	 //add an if statement here: if login credentials are valid 
+	        	 //and if login is successful, then execute these statements
+	        	
+	        	 mainFrame.dispose();
+	        	 LobbyMaker lm = new LobbyMaker();
+				 lm.prepareGUI();
+				 lm.show();
 	         }
 	    }
 	}
