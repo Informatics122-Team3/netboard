@@ -84,7 +84,11 @@ There are 4 types of messages that will ever need to be sent between a client an
     - **Note:** the `isValid` flag will indicate whether the previously submitted move is a valid move. If this is set to false, an error message should pop up on the client.
     - **Note:** the `isConnected` flag will signal to the reciever that the game should still be running; nobody has expressed a desire to disconnect or stop the game. 
     - **Note:** `boardState is actually a list of boards (char[][]), because some game types might require more than one board.
-    
+
+## Example 2-player connect sequence:
+
+![imgur_sequence_diagram](http://i.imgur.com/ylpY6eN.png "2-player sequence diagram")
+
 ## Requirements
 - The Board Game Server should accommodate any board game that involves a grid layout and game elements on this layout, including games such as Chess, **Checkers**, Tic-Tac-Toe, Gomoku, **Connect Four**, Nine Men's Morris, Chutes and Ladders, Stratego, Shogi, Pente, **Battleship**…
 - The Board Game Server should make it as easy as possible to create implementations of new games.
@@ -106,8 +110,6 @@ There are 4 types of messages that will ever need to be sent between a client an
 
 ## To open/edit the UML diagram
 1. go to the [google drive](https://drive.google.com/drive/u/1/folders/0APxwav_gZipYUk9PVA)
-2. open the March_9_Deliverable folder
+2. open the March_14_Deliverable folder
 3. right click on netboard_uml.xml -> open with -> draw.io Diagrams
-
-
 
