@@ -1,3 +1,4 @@
+package com.netboard.GameLogic;
 /* 
     This program implements the 'Connect four' game (exercise 7.20 in the book, 8th edition)
 */

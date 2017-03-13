@@ -1,0 +1,5 @@
+com.netboard.client
+com.netboard.client.GUI
+com.netboard.game
+com.netboard.message
+com.netboard.server

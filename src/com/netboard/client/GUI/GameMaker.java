@@ -1,3 +1,5 @@
+package com.netboard.client.GUI;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
