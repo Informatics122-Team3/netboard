@@ -205,22 +205,38 @@ public class LobbyMaker extends GUIMaker{
 		mainFrame.setVisible(true);  
 }
 		
-		private class ButtonClickListener implements ActionListener{
+		private void loginError(){
+		int output = JOptionPane.showConfirmDialog(mainFrame
+			       ,"Login Error"
+				   ,"Bad Server/Name"
+				   ,JOptionPane.OK_CANCEL_OPTION
+				   ,JOptionPane.INFORMATION_MESSAGE);
 
-		    public void actionPerformed(ActionEvent e) {
-		         String command = e.getActionCommand();  
-		         
-		         if( command.equals( "Exit" ))  {
-		        	 System.exit(0);
-		         }
-		         else if ( command.equals("Back")) {
-		        	mainFrame.dispose();
-		        	//Call function that tells client to disconnect from the server
-	        		LoginMaker lgm = new LoginMaker();
-	        		lgm.prepareGUI();
-	        		lgm.show();
-		         }
-		    }
-		}
+			        if(output == JOptionPane.OK_OPTION){
+			           
+			        } else if(output == JOptionPane.CANCEL_OPTION){
+			        	promptAndClose();
+			        }
+	}
+	
+	private void login(){
+		if (client.connect(serverTxt.getText(), nameTxt.getText()))
+			client.showLobby();
+		else
+			loginError();
+	}
+	
+	private class ButtonClickListener implements ActionListener{
+
+	    public void actionPerformed(ActionEvent e) {
+	         String command = e.getActionCommand();  
+	         
+	         if(command.equals( "Exit" ))  {
+	        	 promptAndClose();
+	         } else if(command.equals( "Login" )){
+	        	 login();
+	         }
+	    }
+	}
 		
 }
