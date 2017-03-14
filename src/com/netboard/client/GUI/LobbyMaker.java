@@ -182,6 +182,7 @@ public class LobbyMaker extends GUIMaker{
 		//listModel.addElement(player2.getUsername() + " - " + player2.getGameType());
 		//listModel.addElement(player3.getUsername()  + " - " + player3.getGameType());
 		
+		//get playerInfo from client, display current players
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		for (Entry<String, String> e : client.getPlayerInfo()){
 			listModel.addElement(e.getKey() + " - " + e.getValue());
@@ -210,26 +211,6 @@ public class LobbyMaker extends GUIMaker{
 		mainFrame.setVisible(true);  
 }
 		
-		private void loginError(){
-		int output = JOptionPane.showConfirmDialog(mainFrame
-			       ,"Login Error"
-				   ,"Bad Server/Name"
-				   ,JOptionPane.OK_CANCEL_OPTION
-				   ,JOptionPane.INFORMATION_MESSAGE);
-
-			        if(output == JOptionPane.OK_OPTION){
-			           
-			        } else if(output == JOptionPane.CANCEL_OPTION){
-			        	promptAndClose();
-			        }
-	}
-	
-	private void login(){
-		if (client.connect(serverTxt.getText(), nameTxt.getText()))
-			client.showLobby();
-		else
-			loginError();
-	}
 	
 	private class ButtonClickListener implements ActionListener{
 
