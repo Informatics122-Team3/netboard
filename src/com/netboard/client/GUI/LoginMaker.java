@@ -128,23 +128,36 @@ public class LoginMaker extends GUIMaker{
       mainFrame.setVisible(true);  
 	}
 	
+	private void loginError(){
+		int output = JOptionPane.showConfirmDialog(mainFrame
+			       ,"Login Error"
+				   ,"Bad Server/Name"
+				   ,JOptionPane.OK_CANCEL_OPTION
+				   ,JOptionPane.INFORMATION_MESSAGE);
+
+			        if(output == JOptionPane.OK_OPTION){
+			           
+			        } else if(output == JOptionPane.CANCEL_OPTION){
+			        	promptAndClose();
+			        }
+	}
+	
+	private void login(){
+		if (client.connect(serverTxt.getText(), nameTxt.getText()))
+			client.showLobby();
+		else
+			loginError();
+	}
+	
 	private class ButtonClickListener implements ActionListener{
 
 	    public void actionPerformed(ActionEvent e) {
 	         String command = e.getActionCommand();  
 	         
-	         if( command.equals( "Exit" ))  {
+	         if(command.equals( "Exit" ))  {
 	        	 promptAndClose();
-	        	 } 
-	         else if( command.equals("Enter Lobby")){
-	        	 //statusLabel.setText("You have logged in as: " + nameTxt.getText() + "\n On Server: " + serverTxt.getText());
-	        	 //add an if statement here: if login credentials are valid 
-	        	 //and if login is successful, then execute these statements
-	        	
-	        	 mainFrame.dispose();
-	        	 LobbyMaker lm = new LobbyMaker();
-				 lm.prepareGUI();
-				 lm.show();
+	         } else if(command.equals( "Enter Lobby" )){
+	        	 login();
 	         }
 	    }
 	}
