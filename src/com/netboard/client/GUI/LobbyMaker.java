@@ -27,7 +27,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
-import com.netboard.server.Player;
+import java.util.Map.Entry;
+import com.netboard.client.NetBoardClient;
+import com.netboard.game.Player;
 
 public class LobbyMaker extends GUIMaker{
 
@@ -38,7 +40,7 @@ public class LobbyMaker extends GUIMaker{
 	JList usernameList;
 	JScrollPane listScroller;
 	GridBagConstraints backCBG, refreshCBG, hostCBG, joinCBG, cPanel, jPanel, lPanel;
-
+	NetBoardClient client;
 	
 //	public static void main(String[] args) {
 //		
@@ -47,9 +49,9 @@ public class LobbyMaker extends GUIMaker{
 //		lm.show();
 //	}
 	
-	public LobbyMaker() {
+	public LobbyMaker(NetBoardClient newClient) {
 		// TODO Auto-generated constructor stub
-		
+		client = newClient;
 	}
 	
 	public void initFrame(){
