@@ -172,15 +172,20 @@ public class LobbyMaker extends GUIMaker{
 //		innerPanel.add(hostBtn);
 //		controlPanel.add(innerPanel, Component.CENTER_ALIGNMENT);
 		  
-		Player player1 = new Player("darksteelknight", "ConnectFour");
-		Player player2 = new Player("desoron", "Checkers");
-		Player player3 = new Player("paulusm", "Battleship");
+		//Player player1 = new Player("darksteelknight", "ConnectFour");
+		//Player player2 = new Player("desoron", "Checkers");
+		//Player player3 = new Player("paulusm", "Battleship");
 		
 		//create the list and populate it with the string username elements
+		//DefaultListModel<String> listModel = new DefaultListModel<String>();
+		//listModel.addElement(player1.getUsername() + " - " + player1.getGameType());
+		//listModel.addElement(player2.getUsername() + " - " + player2.getGameType());
+		//listModel.addElement(player3.getUsername()  + " - " + player3.getGameType());
+		
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
-		listModel.addElement(player1.getUsername() + " - " + player1.getGameType());
-		listModel.addElement(player2.getUsername() + " - " + player2.getGameType());
-		listModel.addElement(player3.getUsername()  + " - " + player3.getGameType());
+		for (Entry<String, String> e : client.getPlayerInfo()){
+			listModel.addElement(e.getKey() + " - " + e.getValue());
+		}
 		
 		//initialize the actual JList component that will appear in the frame
 		usernameList = new JList(listModel);
