@@ -1,40 +1,32 @@
 package CheckersStandalone;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class CheckersGame {
 	//Member Variables
-	private CheckersStandalone.CheckersBoard board;
+	private com.netboard.game.board.CheckersBoard board;
 	private int turn;
 	private boolean gameOver;
-	
 	//Default Constructor
 	public CheckersGame()
 	{
-		board = new CheckersStandalone.CheckersBoard();
+		board = new com.netboard.game.board.CheckersBoard();
 		
 		//Player Turn (0: Player 1, 1: Player 2)
 		gameOver = false;
 		turn = 0;
 	}
-	
 	//Prints the board
 	public void printTable()
 	{
 		board.printBoard();
 		System.out.println("Player 1 Pieces: " + board.getp1Pieces() + "\tPlayer 2 Pieces: " + board.getp2Pieces());
 	}
-	
 	//returns what type of piece is at the x,y coordinates (o, x, "")
 	public String pieceAt(int x, int y)	{ return board.findPiece(x, y).getIcon(); }
-	
 	//Accessor methods
-
 	public int getTurn(){ return turn; }
 	public boolean getGameOver(){ return gameOver; }
-
-	
 	//returns the player turn
 	public String getPlayerTurn()
 	{
@@ -42,17 +34,14 @@ public class CheckersGame {
 			return "Player 1";
 		return "Player 2";
 	}
-	
 	public boolean isP1Turn()
 	{
 		if(turn == 0)
 			return true;
 		return false; 
-	}
-	
+	}	
 	//switches player turn
 	public void switchTurn(){ turn = (turn + 1) % 2; }
-
 	
 //LOGIC PORTION --------------------------------------------------------------------------------
 	
@@ -265,8 +254,7 @@ public class CheckersGame {
 			return true;
 		return false;
 	}
-//END LOGIC ------------------------------------------------------------------------------------
-	
+//END LOGIC ------------------------------------------------------------------------------------	
 //ENGINE PORTION -------------------------------------------------------------------------------
 	
 	//method that processes the user's desired move
