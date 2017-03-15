@@ -19,7 +19,8 @@ public class NetBoardServer {
 					"checkers"
 			);
 	
-	private List<Player> playerLobby;
+	//volatile means this will be modified by multiple threads
+	private volatile List<Player> playerLobby;
 	
 	public static void main(String[] args) {
 		new NetBoardServer(PORT);
