@@ -1,6 +1,6 @@
 package Battleship;
 
-import com.netboard.game.Piece;
+import com.netboard.game.piece.Piece;
 
 public class BattleshipLogic {
 
@@ -32,22 +32,22 @@ public class BattleshipLogic {
 
 	// Checks if the game is over
 	public boolean isGameOver(int [][] board){
-		
+		return false;
 	}
 	
 	// Declares winner of match
 	public String getWinner(int [][] board){
-		
+		return "";
 	}
 	
 	// Updates the gameboard
 	public boolean updateBoard(Piece[][] board, Piece p){
-		
+		return false;
 	}
 	
 	// Declares the player whos turn it currently is
 	public String getActivePlayer(int [][] board){
-		
+		return "";
 	}
 	
 	// Changes the player who is currently playing

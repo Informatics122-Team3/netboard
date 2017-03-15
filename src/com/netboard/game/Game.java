@@ -2,6 +2,8 @@ package com.netboard.game;
 
 import java.util.List;
 
+import com.netboard.game.board.Board;
+
 public abstract class Game {
 	private List<Board> boardState;
 	private Logic logic;
