@@ -70,7 +70,6 @@ There are 4 types of messages that will ever need to be sent between a client an
     ```javascript
     {
         messageType: "boardupdate",
-
         isValid: True,
         isConnected: True,
         turn: "darksteelknight",
