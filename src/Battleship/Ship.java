@@ -1,6 +1,8 @@
 package Battleship;
 
-public class Ship {
+import com.netboard.game.piece.Piece;
+
+public class Ship extends Piece {
 
 	int ship[];
 	int length;
