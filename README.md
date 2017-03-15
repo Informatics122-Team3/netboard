@@ -70,15 +70,14 @@ There are 4 types of messages that will ever need to be sent between a client an
     ```javascript
     {
         messageType: "boardupdate",
-        gameState: {
-            isValid: True,
-            isConnected: True,
-            turn: "darksteelknight",
-            boardState: [
-                char[][],
-                char[][]
-            ]
-        }
+
+        isValid: True,
+        isConnected: True,
+        turn: "darksteelknight",
+        boardState: [
+            char[][],
+            char[][]
+        ] 
     }
     ```
     - **Note:** the `isValid` flag will indicate whether the previously submitted move is a valid move. If this is set to false, an error message should pop up on the client.
