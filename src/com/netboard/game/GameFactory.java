@@ -4,19 +4,20 @@ public class GameFactory {
 	/**
 	 * @param gameType a string representing a game type
 	 * @return a Game object of the specified type
+	 * @throws Exception if the game is not supported
 	 */
-	public static Game createGame(String gameType) {
+	public static Game createGame(String gameType) throws Exception {
+		
 		// TODO
 		switch (gameType) {
 		case "connect4":
-			break;
+			//return new Connect4Game();
 		case "battleship":
-			break;
+			//return new BattleShipGame();
 		case "checkers":
-			break;
+			//return new CheckersGame();
 		default:
+			throw new Exception();
 		}
-		
-		return null;
 	}
 }

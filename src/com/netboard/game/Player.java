@@ -1,8 +1,8 @@
 package com.netboard.game;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Player {
@@ -39,21 +39,21 @@ public class Player {
 	}
 	
 	/**
-	 * This is used for creating a Scanner from a player's socket.
-	 * @return the InputStream of the player's socket
+	 * This is used for reading Objects from a player's socket.
+	 * @return the ObjectInputStream of the player's socket
 	 * @throws IOException
 	 */
-	public InputStream getInputStream() throws IOException {
-		return socket.getInputStream();
+	public ObjectInputStream getObjectInputStream() throws IOException {
+		return new ObjectInputStream(socket.getInputStream());
 	}
 	
 	/**
-	 * This is used for creating a PrintWriter from a player's socket.
-	 * @return the OutputStream of the player's socket
+	 * This is used for writing objects to a player's socket.
+	 * @return the ObjectOutputStream of the player's socket
 	 * @throws IOException
 	 */
-	public OutputStream getOutputStream() throws IOException {
-		return socket.getOutputStream();
+	public ObjectOutputStream getObjectOutputStream() throws IOException {
+		return new ObjectOutputStream(socket.getOutputStream());
 	}
 	
 }

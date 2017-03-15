@@ -1,48 +1,32 @@
 package com.netboard.server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
 
 import com.netboard.game.Game;
 import com.netboard.game.GameFactory;
 import com.netboard.game.Player;
+import com.netboard.game.board.Board;
+import com.netboard.message.BoardUpdateMessage;
 
 public class ActiveGameThread implements Runnable {
 
 	private Game gameInstance;
 	private Player host;
 	private Player guest;
-	private boolean isFull;
 	
-	private Scanner hostIn;
-	private PrintWriter hostOut;
-	private Scanner guestIn;
-	private PrintWriter guestOut;
 	
 	public ActiveGameThread(String gameType, Player host, Player guest) {
-		this.gameInstance = GameFactory.createGame(gameType);
-		
-		// host initialization
-		this.host = host;
 		try {
-			this.hostIn = new Scanner(host.getInputStream());
-			this.hostOut = new PrintWriter(host.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			this.gameInstance = GameFactory.createGame(gameType);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		
-		// guest initialization
+		this.host = host;
 		this.guest = guest;
-		try {
-			this.guestIn = new Scanner(guest.getInputStream());
-			this.guestOut = new PrintWriter(guest.getOutputStream());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 	
 	public void run() {
@@ -53,21 +37,74 @@ public class ActiveGameThread implements Runnable {
 		
 		while (true) {
 			
-			//TODO 
-			
-			if (gameInstance.getPlayerTurn().equals(host.getUsername())) {
-				// TODO
-				gameInstance.toggleTurn();
+			try {
+				Player activePlayer = getActivePlayer();
+				ObjectInputStream playerIn = activePlayer.getObjectInputStream();
+				BoardUpdateMessage boardMsg = (BoardUpdateMessage) playerIn.readObject();
+				
+				if (!boardMsg.inConnectedState()) {
+					broadcastBoardUpdate(
+							boardMsg.getBoardState(),
+							true,
+							false, // this indicates that someone wants to disconnect
+							boardMsg.getTurn()
+					);
+					break;
+				}
+				if (gameInstance.applyBoardUpdate(boardMsg.getBoardState())) {
+					broadcastBoardUpdate(
+							gameInstance.getBoardState(),
+							true,
+							true,
+							gameInstance.getTurn()
+					);
+				}
+				else {
+					BoardUpdateMessage invalidMoveMsg = new BoardUpdateMessage(
+							boardMsg.getBoardState(),
+							false, // this indicates that the previous move was invalid
+							true,
+							boardMsg.getTurn()
+					);
+					
+					ObjectOutputStream playerOut = activePlayer.getObjectOutputStream();
+					playerOut.writeObject(invalidMoveMsg);
+					playerOut.close();
+					
+				}
+				
+				playerIn.close();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			else {
-				// TODO
-			}			
+			
+			gameInstance.toggleTurn();
 		}
 		
 	}
 	
-	private void broadcastBoardUpdate() {
-		// TODO send board update to host and guest
+	private Player getActivePlayer() {
+		return gameInstance.getTurn().equals(host.getUsername()) ? host : guest;
+	}
+	
+	private void broadcastBoardUpdate(List<Board> boardState, boolean isValid, boolean isConnected, String turn) {
+		
+		BoardUpdateMessage boardMsg = 
+				new BoardUpdateMessage(boardState, isValid, isConnected, turn);
+		
+		try {
+			ObjectOutputStream hostOut = host.getObjectOutputStream();
+			hostOut.writeObject(boardMsg);
+			hostOut.close();
+			
+			ObjectOutputStream guestOut = host.getObjectOutputStream();
+			guestOut.writeObject(boardMsg);
+			guestOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
