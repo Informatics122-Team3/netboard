@@ -50,7 +50,7 @@ public class NetBoardClient {
 	public NetBoardClient() {
 			loginGUI = new LoginMaker(this);
 			lobbyGUI = new LobbyMaker(this);
-			gameGUI = new GameMaker();
+			gameGUI = new GameMaker(new Player("maxypoo43", s, "connect4"));
 			hostGameGUI = new HostGameMaker();
 			supportedGames = new ArrayList<String>();
 			

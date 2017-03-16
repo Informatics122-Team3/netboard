@@ -46,10 +46,6 @@ public class GameMaker extends GUIMaker {
 //		gm.show();
 //}
 	
-	public GameMaker() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	public GameMaker(Player player) {
 		// TODO takes in Player object in order to
 		// display the gameType and Username in the window
