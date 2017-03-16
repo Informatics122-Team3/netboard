@@ -1,7 +1,8 @@
-package Battleship;
+package com.netboard.GameLogic;
 
 import java.util.ArrayList;
 
+import com.netboard.game.Player;
 import com.netboard.game.piece.Ship;
 
 public class BattleshipLogic {
@@ -37,7 +38,7 @@ public class BattleshipLogic {
 	}
 	
 	// Declares winner of match
-	public String getWinner(ArrayList<ArrayList<String>> a){
+	public String getWinner(){
 		return "";
 	}
 	
@@ -54,7 +55,7 @@ public class BattleshipLogic {
 
 	// Changes the player who is currently playing
 	public void setActivePlayer(ArrayList<ArrayList<String>> a){
-		
+		//
 	}
 	
 }

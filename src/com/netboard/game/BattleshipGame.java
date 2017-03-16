@@ -1,8 +1,9 @@
-package Battleship;
+package com.netboard.game;
 
 import java.util.ArrayList;
 
 import com.netboard.game.board.BattleshipBoard;
+import com.netboard.GameLogic.BattleshipLogic;
 import com.netboard.game.board.Board;
 
 public class BattleshipGame {

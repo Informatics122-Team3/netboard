@@ -2,7 +2,6 @@ package com.netboard.game.board;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import javafx.util.Pair;
 
 import com.netboard.game.piece.AircraftCarrier;
@@ -34,7 +33,6 @@ public class BattleshipBoard extends Board{
 		player.add(c);
 		player.add(d);
 		player.add(s);
-		
 	}
 
 	public void setBoard() {}
