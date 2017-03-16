@@ -22,7 +22,7 @@ import com.netboard.client.GUI.GameMaker;
 import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
-import com.netboard.server.Player;
+import com.netboard.game.Player;
 
 public class NetBoardClient {
 	private static LoginMaker loginGUI;
@@ -48,10 +48,10 @@ public class NetBoardClient {
 	}
 	
 	public NetBoardClient() {
-//			loginGUI = new LoginMaker(this);
-//			lobbyGUI = new LobbyMaker(this);
-//			gameGUI = new GameMaker(this);
-//			hostGameGUI = new HostGameMaker(this);
+			loginGUI = new LoginMaker(this);
+			lobbyGUI = new LobbyMaker(this);
+			gameGUI = new GameMaker(this);
+			hostGameGUI = new HostGameMaker(this);
 			supportedGames = new ArrayList<String>();
 			
 			//TODO	change this to ArrayList<Player> ??
@@ -96,7 +96,7 @@ public class NetBoardClient {
 				for(int i = 0; i < names.length; ++i){
 					playerInfo.put(names[i], playerGames[i]);
 				}
-//				supportedGames = new ArrayList<>(Arrays.asList(serverGameList));
+				supportedGames = new ArrayList<>(Arrays.asList(serverGameList));
 				name = newName;
 		    	return true;
 		    }
@@ -117,7 +117,6 @@ public class NetBoardClient {
 			objOut = new ObjectOutputStream(s.getOutputStream());
 			objOut.writeObject(msg);
 		} catch (IOException e) { e.printStackTrace(); }
-		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -132,6 +131,9 @@ public class NetBoardClient {
 		return someMsg;
 	}
 	
+	public String getIP(){
+		return s.getInetAddress().getHostAddress();
+	}
 	public ArrayList<String> getSupportedGames(){
 		return this.supportedGames;
 	}
@@ -150,11 +152,12 @@ public class NetBoardClient {
 		gameGUI.show();
 	}
 	public void showHostGame(){
-//		hostGameGUI.show();
+		hostGameGUI.show();
 	}
 	public void showLogin(){
 		loginGUI.show();
 	}
 	//
 }
+
 
