@@ -15,6 +15,10 @@ public class InitMessage extends Message {
 		return this.username;
 	}
 	
+	public boolean isValidUsername() {
+		return this.validUsername;
+	}
+	
 	public void setInvalidUsername() {
 		this.validUsername = false;
 	}
