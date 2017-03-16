@@ -1,28 +1,23 @@
 package Battleship;
 
+import java.util.ArrayList;
+
+import com.netboard.game.board.BattleshipBoard;
+import com.netboard.game.board.Board;
+
 public class BattleshipGame {
 	
 	// Initialize game ships
-	Ship ships[] = new Ship[5];
+	private BattleshipBoard bb;
 	
 	// Initializes the ships and its coordinates
 	// x1 and y1 are its starting coordinates and x2 and y2 are its ending coordinates
-	public BattleshipGame(int x1, int x2, int y1, int y2){
-		AircraftCarrier a = new AircraftCarrier(x1, x2, y1, y2);
-		Battleship b = new Battleship(x1, x2, y1, y2);
-		Cruiser c = new Cruiser(x1, x2, y1, y2);
-		Destroyer d = new Destroyer(x1, x2, y1, y2);
-		Submarine s = new Submarine(x1, x2, y1, y2);
-		
-		ships[0] = a;
-		ships[1] = b;
-		ships[2] = c;
-		ships[3] = d;
-		ships[4] = s;
+	public BattleshipGame(int x1, int y1, int vert_or_hor){
+		bb = new BattleshipBoard(x1,y1,vert_or_hor);
 	}
 	
-	// A Battleship board is 10 x 10
-	
-	
+	public void updateBoard(ArrayList<Board> a) {
+		//
+	}
 	
 }
