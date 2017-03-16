@@ -43,5 +43,10 @@ public abstract class GUIMaker {
           
         }
 	}
+	
+	public void redraw() {
+		mainFrame.revalidate();
+		mainFrame.repaint();
+	}
 	         
 }

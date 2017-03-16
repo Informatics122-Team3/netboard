@@ -69,11 +69,10 @@ public class ActiveGameThread implements Runnable {
 					
 					ObjectOutputStream playerOut = activePlayer.getObjectOutputStream();
 					playerOut.writeObject(invalidMoveMsg);
-					playerOut.close();
+;
 					
 				}
 				
-				playerIn.close();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -98,11 +97,11 @@ public class ActiveGameThread implements Runnable {
 		try {
 			ObjectOutputStream hostOut = host.getObjectOutputStream();
 			hostOut.writeObject(boardMsg);
-			hostOut.close();
+
 			
 			ObjectOutputStream guestOut = host.getObjectOutputStream();
 			guestOut.writeObject(boardMsg);
-			guestOut.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -256,6 +256,7 @@ public class LobbyMaker extends GUIMaker{
 	        	 new RefreshMessage(null, null);
 	        	 
 	        	 client.writeMessage(refMsg);
+	        	 client.refresh();
 	        	 break;
 	         }
 	         

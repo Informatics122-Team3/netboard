@@ -17,7 +17,7 @@ public class GameFactory {
 		case "checkers":
 			//return new CheckersGame();
 		default:
-			System.out.println("created game");
+			System.out.println(String.format("GameFactory: created %s game", gameType));
 		}
 		
 		return null;

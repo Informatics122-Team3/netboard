@@ -14,6 +14,7 @@ public class LobbyThread implements Runnable {
 	private NetBoardServer nbs;
 	private Socket s;
 	private ObjectInputStream in;
+	private ObjectOutputStream out;
 	
 	
 	public LobbyThread(NetBoardServer nbs, Socket clientSocket) {
@@ -21,6 +22,8 @@ public class LobbyThread implements Runnable {
 		this.s = clientSocket;
 		try {
 			in = new ObjectInputStream(s.getInputStream());
+			out = new ObjectOutputStream(s.getOutputStream());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,9 +61,10 @@ public class LobbyThread implements Runnable {
 				}
 				else if (msgObj instanceof RefreshMessage) {
 					
-					ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
-					out.writeObject(nbs.getPlayerLobby());
-					out.writeObject(NetBoardServer.supportedGames);
+					RefreshMessage refMsg = 
+							new RefreshMessage(nbs.getPlayerLobby(), NetBoardServer.supportedGames);
+					
+					out.writeObject(refMsg);
 				}
 				else {
 					System.err.println("Something has gone horribly awry...\n");

@@ -150,6 +150,16 @@ public class NetBoardClient {
 	public void showLogin(){
 		loginGUI.show();
 	}
+
+	public void refresh() {
+		RefreshMessage refMsg = readMessage();
+		
+		this.playerInfo = refMsg.getPlayerLobby();
+		this.supportedGames = refMsg.getSupportedGames();
+		
+		lobbyGUI.redraw();
+		
+	}
 	
 }
 

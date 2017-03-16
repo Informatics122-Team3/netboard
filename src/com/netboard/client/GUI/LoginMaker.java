@@ -42,8 +42,8 @@ public class LoginMaker extends GUIMaker{
 		  mainFrame = new JFrame("NetBoard Login");
 	      headerLabel = new JLabel("Select a Server & Sign In",JLabel.CENTER );
 	      statusLabel = new JLabel(" ",JLabel.CENTER);
-	      serverTxt = new JTextField("Server", TXTWIDTH);
-	      nameTxt = new JTextField("Username", TXTWIDTH);
+	      serverTxt = new JTextField("localhost", TXTWIDTH);
+	      nameTxt = new JTextField("", TXTWIDTH);
 	      userPanel = new JPanel();
 	      splitPane = new JSplitPane();
 	      controlPanel = new JPanel();
