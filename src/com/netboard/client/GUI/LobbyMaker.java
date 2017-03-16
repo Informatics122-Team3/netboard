@@ -237,11 +237,15 @@ public class LobbyMaker extends GUIMaker{
 	        	 break;
 	        	 
 	         case "Join":
+	        	 
+	        	 String hostname = usernameList.getSelectedValue().toString();
+	        	 hostname = hostname.split(" ")[0]; //the first word of the string is the username
+	        	 
 	        	 JoinMessage joinMsg = 
 	        	 new JoinMessage(
 	        			 "nothing", 
 	        			 client.getName(), 
-	        			 "maxypoo43");
+	        			 hostname);
 	        	 
 	        	 client.writeMessage(joinMsg);
 	        	 client.showGame();

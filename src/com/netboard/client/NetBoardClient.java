@@ -65,19 +65,17 @@ public class NetBoardClient {
 			
 			//TODO encapsulate into its own init function
 			//This sends the name to the server for validation
-		    ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
 		    
 		    InitMessage initMsg = new InitMessage(newName);
 		    
-		    out.writeObject(initMsg);
+		    writeMessage(initMsg);
 		    
 		    //Reads validation response,
 		    //if success: populate names & games on client side
 		    //for display in GUIs
 		    //else if "retry": loginGUI knows to keep displaying login window
-		    ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 		    
-		    Object response = in.readObject();
+		    Object response = readMessage();
 		    
 		    if (response instanceof InitMessage) {
 		    	//failure
@@ -96,7 +94,7 @@ public class NetBoardClient {
 		    	return true;
 		    }
 		    
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (IOException e) {
 			return false;
 		}
 		return false;
@@ -108,7 +106,7 @@ public class NetBoardClient {
 			objOut = new ObjectOutputStream(s.getOutputStream());
 			objOut.writeObject(msg);
 		} catch (IOException e) { e.printStackTrace(); }
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -152,5 +150,6 @@ public class NetBoardClient {
 	public void showLogin(){
 		loginGUI.show();
 	}
+	
 }
 

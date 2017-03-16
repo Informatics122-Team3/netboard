@@ -86,7 +86,8 @@ public class ActiveGameThread implements Runnable {
 	}
 	
 	private Player getActivePlayer() {
-		return gameInstance.getTurn().equals(host.getUsername()) ? host : guest;
+		return (Math.random() < 0.5 ? host : guest) ;
+		//return gameInstance.getTurn().equals(host.getUsername()) ? host : guest;
 	}
 	
 	private void broadcastBoardUpdate(List<Board> boardState, boolean isValid, boolean isConnected, String turn) {

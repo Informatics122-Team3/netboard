@@ -17,15 +17,7 @@ public class RefreshMessage extends Message {
 		return playerLobby;
 	}
 	
-//	public void setPlayerLobby(List<String> pl) {
-//		this.playerLobby = pl;
-//	}
-	
 	public List<String> getSupportedGames() {
 		return this.supportedGames;
 	}
-	
-//	public void setSupportedGames(List<String> games) {
-//		this.supportedGames = games;
-//	}
 }

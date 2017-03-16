@@ -1,10 +1,10 @@
-package com.netboard.GameLogic;
+package com.netboard.game;
 //Adapted from: http://www.javaproblems.com/2013/01/creating-connect-four-game-in-java.html 
 //For inf 122 final project
 
 import java.util.Scanner;
 
-import com.netboard.game.Board;
+import com.netboard.game.board.Board;
 
 //This will be.. a huge code so we will have to make
 //lots of methods for each aspect of the game
@@ -66,7 +66,7 @@ public static void dropRedPattern(String[][] f)
   //to drop a red into
   //Note: the user isn't supposed to know that we have 15 columns
   //starting at index 0 till 14 but just 6 nice ones
-  System.out.println("Drop a red disk at column (0–6): ");
+  System.out.println("Drop a red disk at column (0ï¿½6): ");
   Scanner scan = new Scanner (System.in);
   
   //Thankfully, there's a simple formula for converting a 1-2-3-4-5-6 
@@ -98,7 +98,7 @@ public static void dropRedPattern(String[][] f)
 //Same as the above step, just yellow
 public static void dropYellowPattern(String[][] f)
 {
-  System.out.println("Drop a yellow disk at column (0–6): ");
+  System.out.println("Drop a yellow disk at column (0ï¿½6): ");
   Scanner scan = new Scanner (System.in);
   int c = 2*scan.nextInt()+1;
   for (int i =5;i>=0;i--)
@@ -286,7 +286,7 @@ public static void main (String[] args)
      System.out.println();
      
      String[][] nolines = removelines(f);
-     Board a = new Board();
+     //Board a = new Board();
      //a.grid = nolines;
      printnolines(nolines);
      

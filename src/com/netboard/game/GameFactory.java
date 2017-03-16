@@ -6,7 +6,7 @@ public class GameFactory {
 	 * @return a Game object of the specified type
 	 * @throws Exception if the game is not supported
 	 */
-	public static Game createGame(String gameType) throws Exception {
+	public static Game createGame(String gameType) {
 		
 		// TODO
 		switch (gameType) {
@@ -17,7 +17,9 @@ public class GameFactory {
 		case "checkers":
 			//return new CheckersGame();
 		default:
-			throw new Exception();
+			System.out.println("created game");
 		}
+		
+		return null;
 	}
 }
