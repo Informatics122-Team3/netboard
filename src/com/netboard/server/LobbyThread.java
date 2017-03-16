@@ -3,13 +3,6 @@ package com.netboard.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.Scanner;
-
-import com.netboard.message.BoardUpdateMessage;
-import com.netboard.message.HostMessage;
-import com.netboard.message.JoinMessage;
-import com.netboard.message.Message;
-import com.netboard.message.NewPlayerMessage;
 
 public class LobbyThread implements Runnable {
 
