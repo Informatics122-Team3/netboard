@@ -1,28 +1,20 @@
 package com.netboard.client;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.List;
 
 import com.netboard.client.GUI.GameMaker;
 import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
+import com.netboard.message.InitMessage;
+import com.netboard.message.RefreshMessage;
 
 public class NetBoardClient {
 	private static LoginMaker loginGUI;
@@ -33,8 +25,8 @@ public class NetBoardClient {
 	public static final int PORT = 57575;
 	private Socket s;
 	private String name;
-	private ArrayList<String> supportedGames;
-	private Map<String, String> playerInfo;
+	private List<String> supportedGames;
+	private List<String> playerInfo;
 	private ObjectInputStream objIn;
 	private ObjectOutputStream objOut;
 	
@@ -54,8 +46,7 @@ public class NetBoardClient {
 			hostGameGUI = new HostGameMaker();
 			supportedGames = new ArrayList<String>();
 			
-			//TODO	change this to ArrayList<Player> ??
-			playerInfo = new HashMap<String, String>();
+			playerInfo = new ArrayList<String>();
 	}
 	
 	/**
@@ -73,40 +64,38 @@ public class NetBoardClient {
 			
 			//TODO encapsulate into its own init function
 			//This sends the name to the server for validation
-		    OutputStream toServer = s.getOutputStream();
-		    DataOutputStream out = new DataOutputStream(toServer);
-		    out.writeUTF(newName);
+		    ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+		    
+		    InitMessage initMsg = new InitMessage(newName);
+		    
+		    out.writeObject(initMsg);
 		    
 		    //Reads validation response,
-		    //if "success": populate names & games on client side
+		    //if success: populate names & games on client side
 		    //for display in GUIs
 		    //else if "retry": loginGUI knows to keep displaying login window
-		    InputStream inFromServer = s.getInputStream();
-		    DataInputStream in = new DataInputStream(inFromServer);
-		    String response = in.readUTF();
-		    if (response.equals("success")){
-		    	
-		    	String line = in.readUTF();
-				String names[] = line.split(" ");
-		    	line = in.readUTF();
-				String playerGames[] = line.split(" ");
-		    	line = in.readUTF();
-				String serverGameList[] = line.split(" ");
-				
-				for(int i = 0; i < names.length; ++i){
-					playerInfo.put(names[i], playerGames[i]);
-				}
-				supportedGames = new ArrayList<>(Arrays.asList(serverGameList));
-				name = newName;
-		    	return true;
-		    }
-		    else if (response.equals("retry")){
+		    ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+		    
+		    Object response = in.readObject();
+		    
+		    if (response instanceof InitMessage) {
+		    	//failure
 		    	return false;
 		    }
+		    else if (response instanceof RefreshMessage){
+		    	//success
+		    	RefreshMessage refMsg = (RefreshMessage) response;
+		    	
+		    	playerInfo = refMsg.getPlayerLobby();
+		    	supportedGames = refMsg.getSupportedGames();
+		    	
+		    	name = newName;
+		    	
+		    	return true;
+		    }
 		    
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException | ClassNotFoundException e) {
+			return false;
 		}
 		return false;
 	}
@@ -132,11 +121,11 @@ public class NetBoardClient {
 		return someMsg;
 	}
 	
-	public ArrayList<String> getSupportedGames(){
+	public List<String> getSupportedGames(){
 		return this.supportedGames;
 	}
-	public Set<Entry<String, String>> getPlayerInfo(){
-		return this.playerInfo.entrySet();
+	public List<String> getPlayerInfo(){
+		return this.playerInfo;
 	}
 
 	public String getName(){

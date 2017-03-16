@@ -186,8 +186,8 @@ public class LobbyMaker extends GUIMaker{
 		
 		//get playerInfo from client, display current players
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
-		for (Entry<String, String> e : client.getPlayerInfo()){
-			listModel.addElement(e.getKey() + " - " + e.getValue());
+		for (String e : client.getPlayerInfo()){
+			listModel.addElement(e);
 		}
 		
 		//initialize the actual JList component that will appear in the frame
