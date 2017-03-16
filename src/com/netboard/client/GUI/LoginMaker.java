@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -33,12 +34,12 @@ public class LoginMaker extends GUIMaker{
 	JButton loginBtn, exitBtn;
 	final int TXTWIDTH = 16;
 	
-	//if you want to spawn the Login window, uncomment this main function
-//	public static void main(String[] args) {
-//	LoginMaker lm = new LoginMaker();
-//	lm.prepareGUI();
-//	lm.show();
-//}
+//	if you want to spawn the Login window, uncomment this main function
+	public static void main(String[] args) {
+	LoginMaker lm = new LoginMaker();
+	lm.prepareGUI();
+	lm.show();
+}
 	
 	public LoginMaker(){
 		  mainFrame = new JFrame("NetBoard Login");
@@ -78,10 +79,7 @@ public class LoginMaker extends GUIMaker{
       userPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
       userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.PAGE_AXIS));
       
-//	  splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);  
-//    splitPane.setDividerLocation(100);                    
-//	  splitPane.setTopComponent(userPanel);                  
-//	  splitPane.setBottomComponent(controlPanel);          
+      
 	}
 	
 	public void fillFrame(){
@@ -143,10 +141,10 @@ public class LoginMaker extends GUIMaker{
 	}
 	
 	private void login(){
-		if (client.connect(serverTxt.getText(), nameTxt.getText()))
-			client.showLobby();
-		else
-			loginError();
+//		if (client.connect(serverTxt.getText(), nameTxt.getText()))
+//			client.showLobby();
+//		else
+//			loginError();
 	}
 	
 	private class ButtonClickListener implements ActionListener{

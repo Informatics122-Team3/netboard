@@ -8,6 +8,15 @@ public class Player {
 	private String username;
 	private String gameType;
 	
+	public Player(String username) {
+		this.username = username;
+	}
+	
+	public Player(String username, String gameType) {
+		this.username = username;
+		this.gameType = gameType;
+	}
+	
 	public String getUsername() {
 		return this.username;
 	}

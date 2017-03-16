@@ -29,7 +29,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import java.util.Map.Entry;
 import com.netboard.client.NetBoardClient;
-import com.netboard.game.Player;
+import com.netboard.server.Player;
 
 public class LobbyMaker extends GUIMaker{
 
@@ -222,7 +222,7 @@ public class LobbyMaker extends GUIMaker{
 	         if(command.equals( "Exit" ))  {
 	        	 promptAndClose();
 	         } else if(command.equals( "Login" )){
-	        	 login();
+	        	 //login();
 	         }
 	    }
 	}

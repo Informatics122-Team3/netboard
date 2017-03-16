@@ -23,7 +23,8 @@ public abstract class GUIMaker {
 	abstract void initPanels();         
 	abstract void fillFrame();
 	abstract void show();
-	
+		
+
 	public final void prepareGUI(){
 		initFrame();
 		initComponents();  

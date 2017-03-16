@@ -10,13 +10,16 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -263,12 +266,22 @@ public class GameMaker extends GUIMaker {
 	}
 	
 	void makeBoard(JPanel boardPanel, JButton[][] boardTiles) {
-		Insets buttonMargin = new Insets(7, 7, 7, 7);
-//		Insets buttonMargin = new Insets(0, 0, 0, 0);
+//		Insets buttonMargin = new Insets(7, 7, 7, 7);
+		Insets buttonMargin = new Insets(0, 0, 0, 0);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 //				JButton b = new JButton(Integer.toString(i) + ", " + Integer.toString(j));
 				JButton b = new JButton();
+				if ((j % 2 == 1 && i % 2 == 1) || (j % 2== 0 && i % 2 == 0)) {
+					try {
+						ImageIcon img = new ImageIcon(getClass().getResource("/netboard/images/parakeet_no.PNG"));
+						b.setIcon(img);
+					}
+					catch (Exception e) {
+						System.out.println(e);
+					}
+				}
+				
 				b.setActionCommand(i + "," + j);
 				b.addActionListener(new ButtonClickListener());
 				b.setMargin(buttonMargin);

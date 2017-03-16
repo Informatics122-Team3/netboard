@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.netboard.game.Player;
+import com.netboard.server.Player;
 
 public class NetBoardServer {
 	public static final int PORT = 57575;
@@ -35,7 +35,7 @@ public class NetBoardServer {
 	}
 	
 	public NetBoardServer(int port) {
-		playerLobby = new LinkedList<>();
+//		playerLobby = new LinkedList<>();
 		try {
 			ss = new ServerSocket(PORT);
 			listenForConnections();
@@ -55,8 +55,8 @@ public class NetBoardServer {
 				return false;
 		}
 		
-		Player p = new Player(username, socket, "Looking for Game");
-		this.playerLobby.add(p);
+//		Player p = new Player(username, socket, "Looking for Game");
+//		this.playerLobby.add(p);
 		log(String.format("Added %s :: %s to lobby...", username));
 		return true;
 	}
@@ -68,8 +68,8 @@ public class NetBoardServer {
 	 * @param gameType the gametype string of the hosted game
 	 */
 	public synchronized void addHostToLobby(String username, Socket socket, String gameType) {
-		Player p = new Player(username, socket, gameType);
-		this.playerLobby.add(p);
+//		Player p = new Player(username, socket, gameType);
+//		this.playerLobby.add(p);
 		log(String.format("Added %s :: %s to lobby...", username, gameType));
 	}
 	
@@ -98,9 +98,9 @@ public class NetBoardServer {
 	 */
 	public synchronized void spawnActiveGameThread(String gameType, Player host, Player guest) {
 		
-		ActiveGameThread agt = new ActiveGameThread(gameType, host, guest);
-		Thread gameThread = new Thread(agt);
-		gameThread.start();
+//		ActiveGameThread agt = new ActiveGameThread(gameType, host, guest);
+//		Thread gameThread = new Thread(agt);
+//		gameThread.start();
 	}
 	
 	private void listenForConnections() throws IOException {
@@ -135,7 +135,7 @@ public class NetBoardServer {
 			}
 			else {
 				out.writeUTF("success");
-				playerLobby.add(new Player(newUserName, s, "Looking"));
+//				playerLobby.add(new Player(newUserName, s, "Looking"));
 				out.writeUTF(Arrays.toString(getPlayerNames().toArray()));
 				out.writeUTF(Arrays.toString(getPlayerGames().toArray()));
 				out.writeUTF(Arrays.toString(supportedGames.toArray()));
@@ -181,9 +181,9 @@ public class NetBoardServer {
 	
 	private void spawnLobbyThread(Socket clientSocket) {
 		log("Spawning lobby thread to handle client...");
-		LobbyThread lt = new LobbyThread(this, clientSocket);
-		Thread lobbyThread = new Thread(lt);
-		lobbyThread.start();
+//		LobbyThread lt = new LobbyThread(this, clientSocket);
+//		Thread lobbyThread = new Thread(lt);
+//		lobbyThread.start();
 	}
 
 }
