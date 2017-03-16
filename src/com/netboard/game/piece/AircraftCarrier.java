@@ -1,7 +1,6 @@
 package com.netboard.game.piece;
 
 import java.util.ArrayList;
-
 import javafx.util.Pair;
 
 public class AircraftCarrier extends Ship{

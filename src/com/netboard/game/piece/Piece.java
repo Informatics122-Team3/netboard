@@ -36,38 +36,15 @@ public class Piece {
 		this.icon = "";
 	}
 
-	public char getValue() {
-		return this.value;
-	}
-	private void setValue(char value) {
-		this.value = value;
-	}
+	public char getValue() { return this.value;	}
+	public String getIconStr() { return icon; }
+	public int getX() {	return x; }
+	public int getY() {	return y; }
+	public String getIcon() { return icon; }
 	
-	public String getIconStr() {
-		return icon;
-	}
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
+	public void setIcon(String icon) { this.icon = icon; }
+	public void setY(int y) { this.y = y; }	
+	public void setX(int x) { this.x = x; }
+	private void setValue(char value) {	this.value = value;	}
+	
 }
