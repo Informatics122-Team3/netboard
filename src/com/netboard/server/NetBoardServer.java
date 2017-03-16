@@ -214,7 +214,7 @@ public class NetBoardServer {
 		
 	}
 	
-	private Boolean handleConnection(Socket s){
+	private Boolean handleConnection(Socket s) {
 		 ObjectInputStream in;
 		 ObjectOutputStream out;
          InitMessage initMsg;
