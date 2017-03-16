@@ -1,6 +1,8 @@
 package com.netboard.message;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
 	private String messageType;
 	
 	public Message(String messageType) {

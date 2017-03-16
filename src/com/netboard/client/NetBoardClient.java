@@ -23,8 +23,9 @@ public class NetBoardClient {
 	private static HostGameMaker hostGameGUI;
 	
 	public static final int PORT = 57575;
-	private Socket s;
+	public Socket s;
 	private String name;
+	private String serverIP;
 	private List<String> supportedGames;
 	private List<String> playerInfo;
 	private ObjectInputStream objIn;
@@ -34,7 +35,7 @@ public class NetBoardClient {
 		new NetBoardClient();
 		loginGUI.prepareGUI();
 		lobbyGUI.prepareGUI();
-		gameGUI.prepareGUI();
+		//gameGUI.prepareGUI();
 		hostGameGUI.prepareGUI();
 		loginGUI.show();
 	}
@@ -42,7 +43,7 @@ public class NetBoardClient {
 	public NetBoardClient() {
 			loginGUI = new LoginMaker(this);
 			lobbyGUI = new LobbyMaker(this);
-			gameGUI = new GameMaker(new Player("maxypoo43", s, "connect4"));
+			//
 			hostGameGUI = new HostGameMaker();
 			supportedGames = new ArrayList<String>();
 			
@@ -90,6 +91,7 @@ public class NetBoardClient {
 		    	supportedGames = refMsg.getSupportedGames();
 		    	
 		    	name = newName;
+		    	serverIP = host;
 		    	
 		    	return true;
 		    }
@@ -132,10 +134,16 @@ public class NetBoardClient {
 		return this.name;
 	}
 	
+	public String getServerIP() {
+		return this.serverIP;
+	}
+	
 	public void showLobby(){
 		lobbyGUI.show();
 	}
 	public void showGame(){
+		GameMaker gameGUI = new GameMaker(new Player("testPlayer", s ,"testGame"));
+		gameGUI.prepareGUI();
 		gameGUI.show();
 	}
 	public void showHostGame(){
@@ -144,6 +152,5 @@ public class NetBoardClient {
 	public void showLogin(){
 		loginGUI.show();
 	}
-	//
 }
 
