@@ -33,6 +33,8 @@ public class CheckersBoard extends Board{
 		setBoard();
 	}
 
+	public ArrayList<ArrayList<String>> getCLIBoard(){ return CLIBoard; }
+	
 	public void setBoard()
 	{
 		for(int i = 0; i < getHeight(); i++)
