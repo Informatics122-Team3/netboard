@@ -237,6 +237,13 @@ public class CheckersGame {
 		return to_return;
 	}
 	
+	public boolean isValidMove(String type, ArrayList<Integer> old, ArrayList<Integer> updated, boolean Jumping)
+	{
+		if(Jumping){ if(getJumpMoves(old.get(0), old.get(1), type).contains(updated)) { return true; } }
+		else{ if(getPieceMoves(old.get(0), old.get(1),type).contains(updated)) {return true; } }
+		return false;
+	}
+	
 	//check for winner
 	public int checkWinner()
 	{
@@ -278,5 +285,6 @@ public class CheckersGame {
 			System.out.println("Invalid input, try again.");
 		}
 	}
+	
 }
 
