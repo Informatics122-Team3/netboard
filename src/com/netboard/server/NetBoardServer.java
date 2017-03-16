@@ -108,19 +108,18 @@
 
 package com.netboard.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 import com.netboard.game.Player;
+import com.netboard.message.InitMessage;
+import com.netboard.message.RefreshMessage;
 
 public class NetBoardServer {
 	public static final int PORT = 57575;
@@ -144,6 +143,10 @@ public class NetBoardServer {
 		System.err.println(message);
 	}
 	
+	/**
+	 * Entry point for the server-side program
+	 * @param port the port on which to listen for connections
+	 */
 	public NetBoardServer(int port) {
 		playerLobby = new ArrayList<>();
 		try {
@@ -212,34 +215,29 @@ public class NetBoardServer {
 	}
 	
 	private Boolean handleConnection(Socket s){
-		 DataInputStream in;
-		 DataOutputStream out;
-         String newUserName;
+		 ObjectInputStream in;
+		 ObjectOutputStream out;
+         InitMessage initMsg;
+         RefreshMessage refMsg;
          
 		try {
-			in = new DataInputStream(s.getInputStream());
-			out = new DataOutputStream(s.getOutputStream());
-			newUserName = in.readUTF();
+			in = new ObjectInputStream(s.getInputStream());
+			out = new ObjectOutputStream(s.getOutputStream());
+			initMsg = (InitMessage) in.readObject();
 			
-			if (playerExists(newUserName)){
-				out.writeUTF("retry");
+			if (playerExists(initMsg.getUsername())) {
+				initMsg.setInvalidUsername();
+				out.writeObject(initMsg);
 				return false;
 			}
 			else {
-				out.writeUTF(Arrays.toString(getPlayerLobby().toArray()));
-				out.writeUTF(Arrays.toString(NetBoardServer.supportedGames.toArray()));				
-
-				// sending the player lobby and supported games is sufficient
-				// out.writeUTF("success");
-				// We don't add the player to the lobby yet
-				//playerLobby.add(new Player(newUserName, s, "Looking"));
-				//out.writeUTF(Arrays.toString(getPlayerNames().toArray()));
-				//out.writeUTF(Arrays.toString(getPlayerGames().toArray()));
+				
+				refMsg = new RefreshMessage(getPlayerLobby(), supportedGames);
+				out.writeObject(refMsg);				
 				
 				return true;
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}     
 		return false;
@@ -272,34 +270,10 @@ public class NetBoardServer {
 		
 		return null;
 	}
-	
-//	public List<String> getPlayerNames(){
-//		List<String> names = new ArrayList<String>();
-//		for (Player p : playerLobby){
-//			names.add(p.getUsername());
-//		}
-//		return names;
-//	}
-//	public List<String> getPlayerGames(){
-//		List<String> games = new ArrayList<String>();
-//		for (Player p : playerLobby){
-//			games.add(p.getGameType());
-//		}
-//		return games;
-//	}	
-//	public Map<String, String> getPlayerInfo(){
-//		Map<String, String> info = new HashMap<String, String>();
-//		for(Player p : playerLobby){
-//			info.put(p.getUsername(), p.getGameType());
-//		}
-//		return info;
-//	}	
-	private Boolean playerExists(String newUserName){
-		for (Player p : playerLobby){
-			if (p.getUsername().equals(newUserName))
-				return true;
-		}
-		return false;		
+		
+	private Boolean playerExists(String newUsername){
+		Player p = findPlayer(newUsername);
+		return p != null;
 	}
 	
 	private void spawnLobbyThread(Socket clientSocket) {

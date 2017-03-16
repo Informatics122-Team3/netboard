@@ -44,6 +44,7 @@ public class LobbyThread implements Runnable {
 				else if(msgObj instanceof JoinMessage)
 				{
 					JoinMessage joinMsgObj = (JoinMessage) msgObj;
+					
 					String guestUsername = joinMsgObj.getGuestUserName(),
 							hostUsername = joinMsgObj.getHostUsername();
 					
@@ -70,9 +71,19 @@ public class LobbyThread implements Runnable {
 			catch (ClassNotFoundException e) { e.printStackTrace(); } 
 			catch (IOException e) { e.printStackTrace(); }
 		}
+		
+		close();
 	}
 	
 	public void run() {
 		listenForActions();
-	}	
+	}
+	
+	public void close() {
+		try {
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
