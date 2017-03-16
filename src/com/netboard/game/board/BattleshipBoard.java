@@ -42,5 +42,11 @@ public class BattleshipBoard extends Board{
 	public void addPiece(int x, int y, String type) {} //NOTE: you can compare the string type, and then create the object accordingly.
 	
 	public void removePiece(int x, int y, String type){}
+
+	@Override
+	public void updateBoard() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
