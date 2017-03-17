@@ -1,8 +1,6 @@
 package com.netboard.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import com.netboard.game.Player;
 import com.netboard.message.CommsBridge;
 import com.netboard.message.InitMessage;
 import com.netboard.message.RefreshMessage;
+
 
 public class NetBoardServer {
 	public static final int PORT = 57575;
@@ -91,6 +90,7 @@ public class NetBoardServer {
 		ActiveGameThread agt = new ActiveGameThread(gameType, host, guest);
 		Thread gameThread = new Thread(agt);
 		gameThread.start();
+		log("Spawned an ActiveGameThread to handle game");
 		try {
 			listenForConnections();
 		} catch (IOException e) {

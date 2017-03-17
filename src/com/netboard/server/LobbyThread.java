@@ -1,11 +1,9 @@
 package com.netboard.server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.netboard.game.Player;
+import com.netboard.message.ApplyMoveMessage;
 import com.netboard.message.CommsBridge;
 import com.netboard.message.HostMessage;
 import com.netboard.message.JoinMessage;
@@ -59,8 +57,13 @@ public class LobbyThread implements Runnable {
 				
 				CommsBridge.writeMessage(s, refMsg);
 			}
+			else if (msgObj instanceof ApplyMoveMessage) {
+				System.err.println("LobbyThread: client disconnected from lobby");
+				break;
+			}
 			else {
 				System.err.println("Something has gone horribly awry...\n");
+				break;
 			}
 		}
 	}

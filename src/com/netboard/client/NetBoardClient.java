@@ -13,6 +13,7 @@ import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
+import com.netboard.message.ApplyMoveMessage;
 import com.netboard.message.InitMessage;
 import com.netboard.message.RefreshMessage;
 
@@ -28,14 +29,11 @@ public class NetBoardClient {
 	private String serverIP;
 	private List<String> supportedGames;
 	private List<String> playerInfo;
-	//private ObjectInputStream objIn;
-	//private ObjectOutputStream objOut;
 	
 	public static void main(String[] args) {
 		new NetBoardClient();
 		loginGUI.prepareGUI();
 		lobbyGUI.prepareGUI();
-		//gameGUI.prepareGUI();
 		hostGameGUI.prepareGUI();
 		loginGUI.show();
 	}
@@ -44,7 +42,7 @@ public class NetBoardClient {
 			loginGUI = new LoginMaker(this);
 			lobbyGUI = new LobbyMaker(this);
 			//
-			hostGameGUI = new HostGameMaker();
+			hostGameGUI = new HostGameMaker(this);
 			supportedGames = new ArrayList<String>();
 			
 			playerInfo = new ArrayList<String>();
@@ -131,8 +129,10 @@ public class NetBoardClient {
 	public void showLobby(){
 		lobbyGUI.show();
 	}
-	public void showGame(){
-		GameMaker gameGUI = new GameMaker(new Player("testPlayer", s ,"testGame"));
+	
+	public void showGame(String hostname, String gameType){
+		Player hostPlayer = new Player("hostname", s, gameType);
+		GameMaker gameGUI = new GameMaker(this, hostPlayer);
 		gameGUI.prepareGUI();
 		gameGUI.show();
 	}
@@ -157,6 +157,12 @@ public class NetBoardClient {
 		
 		lobbyGUI.redraw();
 		
+	}
+	
+	public void disconnectFromServer() {
+		ApplyMoveMessage disconnectMsg = 
+				new ApplyMoveMessage(null, 0, 0, false); // false means intention to disconnect
+		writeMessage(disconnectMsg);
 	}
 	
 }

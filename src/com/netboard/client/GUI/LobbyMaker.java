@@ -39,18 +39,9 @@ public class LobbyMaker extends GUIMaker{
 	JList usernameList;
 	JScrollPane listScroller;
 	GridBagConstraints backCBG, refreshCBG, hostCBG, joinCBG, cPanel, jPanel, lPanel;
-	NetBoardClient client;
-	
-//	public static void main(String[] args) {
-//		
-//		LobbyMaker lm = new LobbyMaker();
-//		lm.prepareGUI();
-//		lm.show();
-//	}
 	
 	public LobbyMaker(NetBoardClient newClient) {
-		// TODO Auto-generated constructor stub
-		client = newClient;
+		super(newClient);
 	}
 	
 	public void initFrame(){
@@ -233,13 +224,14 @@ public class LobbyMaker extends GUIMaker{
 	        			 "connect4");
 	        	 
 	        	 client.writeMessage(hostMsg);
-	        	 client.showGame();
+	        	 client.showGame(client.getName(), "connect4"); // TODO remove hard-coded gameType
 	        	 break;
 	        	 
 	         case "Join":
 	        	 
 	        	 String hostname = usernameList.getSelectedValue().toString();
 	        	 hostname = hostname.split(" ")[0]; //the first word of the string is the username
+	        	 String gameType = hostname.split(" ")[2]; // third string is the gametype
 	        	 
 	        	 JoinMessage joinMsg = 
 	        	 new JoinMessage(
@@ -248,7 +240,7 @@ public class LobbyMaker extends GUIMaker{
 	        			 hostname);
 	        	 
 	        	 client.writeMessage(joinMsg);
-	        	 client.showGame();
+	        	 client.showGame(hostname, gameType);
 	        	 break;
 	        	 
 	         case "Refresh":

@@ -11,7 +11,7 @@ public class GameFactory {
 		// TODO
 		switch (gameType) {
 		case "connect4":
-			//return new Connect4Game();
+			return new Connect4Game();
 		case "battleship":
 			//return new BattleShipGame();
 		case "checkers":
