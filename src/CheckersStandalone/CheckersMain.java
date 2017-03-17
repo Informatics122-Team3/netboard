@@ -6,7 +6,6 @@ import java.util.Arrays;
 public class CheckersMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		CheckersGame c = new CheckersGame();
 		c.printTable();
 		c.makeMove("o", new ArrayList<Integer>(Arrays.asList(1,2)),new ArrayList<Integer>(Arrays.asList(0,3)) , false);

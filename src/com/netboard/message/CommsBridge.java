@@ -6,27 +6,28 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class CommsBridge {
-
-	public static boolean writeMessage(Socket s, Object msgObj) {
-		ObjectOutputStream out;
+	
+	public static <T> boolean writeMessage(Socket s, T msg){
 		try {
-			out = new ObjectOutputStream(s.getOutputStream());
-			out.writeObject(msgObj);
+			ObjectOutputStream objOut = new ObjectOutputStream(s.getOutputStream());
+			objOut.writeObject(msg);
 			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException e) { 
+			e.printStackTrace(); 
 			return false;
 		}
+
 	}
-	
-	public static Object readMessage(Socket s) {
-		ObjectInputStream in;
+
+	@SuppressWarnings("unchecked")
+	public static <T> T readMessage(Socket s){
+		T someMsg = null;
 		try {
-			in = new ObjectInputStream(s.getInputStream());
-			return in.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
+			ObjectInputStream objIn = new ObjectInputStream(s.getInputStream());
+			someMsg = (T) objIn.readObject();
+		} 
+		catch (ClassNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		return someMsg;
 	}
 }

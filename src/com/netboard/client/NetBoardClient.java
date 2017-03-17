@@ -2,7 +2,6 @@ package com.netboard.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -14,7 +13,9 @@ import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
 import com.netboard.message.ApplyMoveMessage;
+import com.netboard.message.CommsBridge;
 import com.netboard.message.InitMessage;
+import com.netboard.message.JoinMessage;
 import com.netboard.message.RefreshMessage;
 
 public class NetBoardClient {
@@ -63,9 +64,9 @@ public class NetBoardClient {
 		    
 		    InitMessage initMsg = new InitMessage(newName);
 		    
-		    writeMessage(initMsg);
+		    CommsBridge.writeMessage(s, initMsg);
 		    
-		    Object response = readMessage();
+		    Object response = CommsBridge.readMessage(s);
 		    
 		    if (response instanceof InitMessage) {
 		    	//failure
@@ -88,27 +89,6 @@ public class NetBoardClient {
 			return false;
 		}
 		return false;
-	}
-	
-
-	public <T> void writeMessage(T msg){
-		try {
-			ObjectOutputStream objOut = new ObjectOutputStream(s.getOutputStream());
-			objOut.writeObject(msg);
-		} catch (IOException e) { e.printStackTrace(); }
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T readMessage(){
-		T someMsg = null;
-		try {
-			ObjectInputStream objIn = new ObjectInputStream(s.getInputStream());
-			someMsg = (T) objIn.readObject();
-		} 
-		catch (ClassNotFoundException e) { e.printStackTrace(); } 
-		catch (IOException e) { e.printStackTrace(); }
-		return someMsg;
 	}
 	
 	public List<String> getSupportedGames(){
@@ -148,21 +128,29 @@ public class NetBoardClient {
 	public void refresh() {
 		RefreshMessage refRequestMsg =  new RefreshMessage(null,null);
 		
-		writeMessage(refRequestMsg);
+		CommsBridge.writeMessage(s, refRequestMsg);
 		
-		RefreshMessage refResponseMsg = readMessage();
+		RefreshMessage refResponseMsg = CommsBridge.readMessage(s);
 		
 		this.playerInfo = refResponseMsg.getPlayerLobby();
 		this.supportedGames = refResponseMsg.getSupportedGames();
 		
-		lobbyGUI.redraw();
+		lobbyGUI.redraw(); //TODO idk how to reshow the 
 		
 	}
 	
 	public void disconnectFromServer() {
 		ApplyMoveMessage disconnectMsg = 
-				new ApplyMoveMessage(null, 0, 0, false); // false means intention to disconnect
-		writeMessage(disconnectMsg);
+				new ApplyMoveMessage(null, 0, 0, false); // false means you want to disconnect
+		CommsBridge.writeMessage(s, disconnectMsg);
+	}
+
+	public boolean writeMessage(Object msg) {
+		return CommsBridge.writeMessage(s, msg);
+	}
+	
+	public <T> T readMessage(Socket s){
+		return CommsBridge.readMessage(s);
 	}
 	
 }

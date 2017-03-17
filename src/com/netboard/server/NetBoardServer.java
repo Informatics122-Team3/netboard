@@ -94,7 +94,6 @@ public class NetBoardServer {
 		try {
 			listenForConnections();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -177,7 +176,6 @@ public class NetBoardServer {
 		try {
 			listenForConnections();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -8,7 +8,7 @@ public class GameFactory {
 	 */
 	public static Game createGame(String gameType) {
 		
-		// TODO
+		// TODO make the concrete gametypes
 		switch (gameType) {
 		case "connect4":
 			return new Connect4Game();
