@@ -28,8 +28,8 @@ public class NetBoardClient {
 	private String serverIP;
 	private List<String> supportedGames;
 	private List<String> playerInfo;
-	private ObjectInputStream objIn;
-	private ObjectOutputStream objOut;
+	//private ObjectInputStream objIn;
+	//private ObjectOutputStream objOut;
 	
 	public static void main(String[] args) {
 		new NetBoardClient();
@@ -61,19 +61,11 @@ public class NetBoardClient {
 	public Boolean connect(String host, String newName){
 		try {
 			InetAddress ip = InetAddress.getByName(host);
-			s = new Socket(ip, PORT);
-			
-			//TODO encapsulate into its own init function
-			//This sends the name to the server for validation
+			s = new Socket(ip, PORT);			
 		    
 		    InitMessage initMsg = new InitMessage(newName);
 		    
 		    writeMessage(initMsg);
-		    
-		    //Reads validation response,
-		    //if success: populate names & games on client side
-		    //for display in GUIs
-		    //else if "retry": loginGUI knows to keep displaying login window
 		    
 		    Object response = readMessage();
 		    
@@ -103,7 +95,7 @@ public class NetBoardClient {
 
 	public <T> void writeMessage(T msg){
 		try {
-			objOut = new ObjectOutputStream(s.getOutputStream());
+			ObjectOutputStream objOut = new ObjectOutputStream(s.getOutputStream());
 			objOut.writeObject(msg);
 		} catch (IOException e) { e.printStackTrace(); }
 
@@ -113,7 +105,7 @@ public class NetBoardClient {
 	public <T> T readMessage(){
 		T someMsg = null;
 		try {
-			objIn = new ObjectInputStream(s.getInputStream());
+			ObjectInputStream objIn = new ObjectInputStream(s.getInputStream());
 			someMsg = (T) objIn.readObject();
 		} 
 		catch (ClassNotFoundException e) { e.printStackTrace(); } 
@@ -144,18 +136,24 @@ public class NetBoardClient {
 		gameGUI.prepareGUI();
 		gameGUI.show();
 	}
+	
 	public void showHostGame(){
 		hostGameGUI.show();
 	}
+	
 	public void showLogin(){
 		loginGUI.show();
 	}
 
 	public void refresh() {
-		RefreshMessage refMsg = readMessage();
+		RefreshMessage refRequestMsg =  new RefreshMessage(null,null);
 		
-		this.playerInfo = refMsg.getPlayerLobby();
-		this.supportedGames = refMsg.getSupportedGames();
+		writeMessage(refRequestMsg);
+		
+		RefreshMessage refResponseMsg = readMessage();
+		
+		this.playerInfo = refResponseMsg.getPlayerLobby();
+		this.supportedGames = refResponseMsg.getSupportedGames();
 		
 		lobbyGUI.redraw();
 		

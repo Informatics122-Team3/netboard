@@ -3,6 +3,7 @@ package com.netboard.game;
 import java.util.List;
 
 import com.netboard.game.board.Board;
+import com.netboard.game.piece.Piece;
 
 public abstract class Game {
 	private List<Board> boardState;
@@ -36,5 +37,5 @@ public abstract class Game {
 		whosTurn = !whosTurn;
 	}
 	
-	public abstract boolean applyBoardUpdate(List<Board> boardState);
+	public abstract boolean makeMove(Piece p, int newX, int newY);
 }
