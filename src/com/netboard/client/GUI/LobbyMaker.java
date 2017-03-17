@@ -229,9 +229,9 @@ public class LobbyMaker extends GUIMaker{
 	        	 
 	         case "Join":
 	        	 
-	        	 String hostname = usernameList.getSelectedValue().toString();
-	        	 hostname = hostname.split(" ")[0]; //the first word of the string is the username
-	        	 String gameType = hostname.split(" ")[2]; // third string is the gametype
+	        	 String[] selection = usernameList.getSelectedValue().toString().split(" ");
+	        	 String hostname = selection[0]; //the first word of the string is the username
+	        	 String gameType = selection[2]; // third string is the gametype
 	        	 
 	        	 JoinMessage joinMsg = 
 	        	 new JoinMessage(
@@ -249,6 +249,12 @@ public class LobbyMaker extends GUIMaker{
 	         }
 	         
 	    }
+	}
+
+
+	public void refresh() {
+		// TODO refresh the lobby somehow?
+		
 	}
 		
 }

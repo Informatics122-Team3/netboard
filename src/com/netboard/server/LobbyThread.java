@@ -62,7 +62,7 @@ public class LobbyThread implements Runnable {
 				break;
 			}
 			else {
-				System.err.println("Something has gone horribly awry...\n");
+				System.err.println("LobbyThread: horribly awry...\n");
 				break;
 			}
 		}

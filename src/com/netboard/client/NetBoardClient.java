@@ -135,8 +135,7 @@ public class NetBoardClient {
 		this.playerInfo = refResponseMsg.getPlayerLobby();
 		this.supportedGames = refResponseMsg.getSupportedGames();
 		
-		lobbyGUI.redraw(); //TODO idk how to reshow the 
-		
+		lobbyGUI.refresh();
 	}
 	
 	public void disconnectFromServer() {

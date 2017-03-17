@@ -1,12 +1,10 @@
 package com.netboard.server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.List;
 
 import com.netboard.game.Game;
 import com.netboard.game.GameFactory;
+import com.netboard.game.GameNotSupportedException;
 import com.netboard.game.Player;
 import com.netboard.game.board.Board;
 import com.netboard.message.ApplyMoveMessage;
@@ -23,8 +21,8 @@ public class ActiveGameThread implements Runnable {
 		try {
 			this.gameInstance = GameFactory.createGame(gameType);
 			gameInstance.setPlayers(host.getUsername(), guest.getUsername());
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (GameNotSupportedException e) {
+			System.err.println(e.getMessage());
 		}
 		
 		this.host = host;
@@ -41,8 +39,7 @@ public class ActiveGameThread implements Runnable {
 			
 			Player activePlayer = getActivePlayer();
 			
-			ApplyMoveMessage moveMsg = 
-					(ApplyMoveMessage) CommsBridge.readMessage(activePlayer.getSocket());
+			ApplyMoveMessage moveMsg = CommsBridge.readMessage(activePlayer.getSocket());
 			
 			if (!moveMsg.inConnectedState()) {
 				broadcastBoardUpdate(

@@ -13,8 +13,7 @@ public class Connect4Game extends Game {
 	
 	@Override
 	public boolean makeMove(Piece p, int newX, int newY) {
-		// TODO Auto-generated method stub
-		// check logic stuff
+		// TODO check logic and make move if valid
 		return true;
 	}
 
