@@ -1,8 +1,6 @@
 package com.netboard.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,8 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.netboard.game.Player;
+import com.netboard.message.CommsBridge;
 import com.netboard.message.InitMessage;
 import com.netboard.message.RefreshMessage;
+
 
 public class NetBoardServer {
 	public static final int PORT = 57575;
@@ -90,6 +90,12 @@ public class NetBoardServer {
 		ActiveGameThread agt = new ActiveGameThread(gameType, host, guest);
 		Thread gameThread = new Thread(agt);
 		gameThread.start();
+		log("Spawned an ActiveGameThread to handle game");
+		try {
+			listenForConnections();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void listenForConnections() throws IOException {
@@ -107,32 +113,26 @@ public class NetBoardServer {
 	}
 	
 	private Boolean handleConnection(Socket s){
-		 ObjectInputStream in;
-		 ObjectOutputStream out;
          InitMessage initMsg;
          RefreshMessage refMsg;
          
-		try {
-			in = new ObjectInputStream(s.getInputStream());
-			out = new ObjectOutputStream(s.getOutputStream());
-			initMsg = (InitMessage) in.readObject();
+
+		initMsg = (InitMessage) CommsBridge.readMessage(s);
+		
+		if (playerExists(initMsg.getUsername())) {
+			initMsg.setInvalidUsername();
+			CommsBridge.writeMessage(s, initMsg);
 			
-			if (playerExists(initMsg.getUsername())) {
-				initMsg.setInvalidUsername();
-				out.writeObject(initMsg);
-				return false;
-			}
-			else {
-				
-				refMsg = new RefreshMessage(getPlayerLobby(), supportedGames);
-				out.writeObject(refMsg);				
-				
-				return true;
-			}
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}     
-		return false;
+			return false;
+		}
+		else {
+			
+			refMsg = new RefreshMessage(getPlayerLobby(), supportedGames);
+			CommsBridge.writeMessage(s, refMsg);
+
+			return true;
+		}
+
 	}
 	
 	public synchronized List<String> getPlayerLobby() {
@@ -169,10 +169,15 @@ public class NetBoardServer {
 	}
 	
 	private void spawnLobbyThread(Socket clientSocket) {
-		log("Spawning lobby thread to handle client...");
 		LobbyThread lt = new LobbyThread(this, clientSocket);
 		Thread lobbyThread = new Thread(lt);
 		lobbyThread.start();
+		log("Spawned a lobby thread to handle client...");
+		try {
+			listenForConnections();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

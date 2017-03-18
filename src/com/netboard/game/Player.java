@@ -1,8 +1,10 @@
 package com.netboard.game;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class Player {
@@ -31,6 +33,10 @@ public class Player {
 		return this.gameType;
 	}
 	
+	public Socket getSocket() {
+		return this.socket;
+	}
+	
 	/**
 	 * @return the ip address of the Player's machine
 	 */
@@ -38,22 +44,6 @@ public class Player {
 		return socket.getInetAddress().toString();
 	}
 	
-	/**
-	 * This is used for reading Objects from a player's socket.
-	 * @return the ObjectInputStream of the player's socket
-	 * @throws IOException
-	 */
-	public ObjectInputStream getObjectInputStream() throws IOException {
-		return new ObjectInputStream(socket.getInputStream());
-	}
-	
-	/**
-	 * This is used for writing objects to a player's socket.
-	 * @return the ObjectOutputStream of the player's socket
-	 * @throws IOException
-	 */
-	public ObjectOutputStream getObjectOutputStream() throws IOException {
-		return new ObjectOutputStream(socket.getOutputStream());
-	}
+
 	
 }

@@ -3,8 +3,10 @@ package CheckersStandalone;
 public class CheckersMain {
 
 	public static void main(String[] args) {
+
 		// TODO Auto-generated method stub
 		com.netboard.game.CheckersGame c = new com.netboard.game.CheckersGame("peater", "vstolle");
+
 		c.printTable();
 		c.makeMove(c.getBoardState().get(0).at(1, 2), 0, 3);
 		c.makeMove(c.getBoardState().get(0).at(0, 3), 1, 4);
