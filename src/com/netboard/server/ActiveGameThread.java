@@ -1,15 +1,15 @@
 package com.netboard.server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.List;
 
 import com.netboard.game.Game;
 import com.netboard.game.GameFactory;
+import com.netboard.game.GameNotSupportedException;
 import com.netboard.game.Player;
 import com.netboard.game.board.Board;
+import com.netboard.message.ApplyMoveMessage;
 import com.netboard.message.BoardUpdateMessage;
+import com.netboard.message.CommsBridge;
 
 public class ActiveGameThread implements Runnable {
 
@@ -17,12 +17,12 @@ public class ActiveGameThread implements Runnable {
 	private Player host;
 	private Player guest;
 	
-	
 	public ActiveGameThread(String gameType, Player host, Player guest) {
 		try {
 			this.gameInstance = GameFactory.createGame(gameType);
-		} catch (Exception e) {
-			e.printStackTrace();
+			gameInstance.setPlayers(host.getUsername(), guest.getUsername());
+		} catch (GameNotSupportedException e) {
+			System.err.println(e.getMessage());
 		}
 		
 		this.host = host;
@@ -37,46 +37,37 @@ public class ActiveGameThread implements Runnable {
 		
 		while (true) {
 			
-			try {
-				Player activePlayer = getActivePlayer();
-				ObjectInputStream playerIn = activePlayer.getObjectInputStream();
-				BoardUpdateMessage boardMsg = (BoardUpdateMessage) playerIn.readObject();
+			Player activePlayer = getActivePlayer();
+			
+			ApplyMoveMessage moveMsg = CommsBridge.readMessage(activePlayer.getSocket());
+			
+			if (!moveMsg.inConnectedState()) {
+				broadcastBoardUpdate(
+						null,
+						true,
+						false, // this indicates that someone wants to disconnect
+						null
+				);
+				break;
+			}
+			if (gameInstance.makeMove(moveMsg.getPiece(), moveMsg.getNewX(), moveMsg.getNewY())) {
+				broadcastBoardUpdate(
+						gameInstance.getBoardState(),
+						true,
+						true,
+						gameInstance.getTurn()
+				);
+			}
+			else {
+				BoardUpdateMessage invalidMoveMsg = new BoardUpdateMessage(
+						null,
+						false, // this indicates that the previous move was invalid
+						true,
+						null
+				);
 				
-				if (!boardMsg.inConnectedState()) {
-					broadcastBoardUpdate(
-							boardMsg.getBoardState(),
-							true,
-							false, // this indicates that someone wants to disconnect
-							boardMsg.getTurn()
-					);
-					break;
-				}
-				if (gameInstance.applyBoardUpdate(boardMsg.getBoardState())) {
-					broadcastBoardUpdate(
-							gameInstance.getBoardState(),
-							true,
-							true,
-							gameInstance.getTurn()
-					);
-				}
-				else {
-					BoardUpdateMessage invalidMoveMsg = new BoardUpdateMessage(
-							boardMsg.getBoardState(),
-							false, // this indicates that the previous move was invalid
-							true,
-							boardMsg.getTurn()
-					);
-					
-					ObjectOutputStream playerOut = activePlayer.getObjectOutputStream();
-					playerOut.writeObject(invalidMoveMsg);
-;
-					
-				}
-				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				CommsBridge.writeMessage(
+						activePlayer.getSocket(), invalidMoveMsg);					
 			}
 			
 			gameInstance.toggleTurn();
@@ -85,8 +76,7 @@ public class ActiveGameThread implements Runnable {
 	}
 	
 	private Player getActivePlayer() {
-		return (Math.random() < 0.5 ? host : guest) ;
-		//return gameInstance.getTurn().equals(host.getUsername()) ? host : guest;
+		return gameInstance.getTurn().equals(host.getUsername()) ? host : guest;
 	}
 	
 	private void broadcastBoardUpdate(List<Board> boardState, boolean isValid, boolean isConnected, String turn) {
@@ -94,17 +84,8 @@ public class ActiveGameThread implements Runnable {
 		BoardUpdateMessage boardMsg = 
 				new BoardUpdateMessage(boardState, isValid, isConnected, turn);
 		
-		try {
-			ObjectOutputStream hostOut = host.getObjectOutputStream();
-			hostOut.writeObject(boardMsg);
-
-			
-			ObjectOutputStream guestOut = host.getObjectOutputStream();
-			guestOut.writeObject(boardMsg);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		CommsBridge.writeMessage(host.getSocket(), boardMsg);
+		CommsBridge.writeMessage(guest.getSocket(), boardMsg);
 	}
 
 }

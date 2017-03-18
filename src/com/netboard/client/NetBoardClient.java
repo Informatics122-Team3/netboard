@@ -2,7 +2,6 @@ package com.netboard.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -13,7 +12,10 @@ import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
+import com.netboard.message.ApplyMoveMessage;
+import com.netboard.message.CommsBridge;
 import com.netboard.message.InitMessage;
+import com.netboard.message.JoinMessage;
 import com.netboard.message.RefreshMessage;
 
 public class NetBoardClient {
@@ -28,14 +30,11 @@ public class NetBoardClient {
 	private String serverIP;
 	private List<String> supportedGames;
 	private List<String> playerInfo;
-	private ObjectInputStream objIn;
-	private ObjectOutputStream objOut;
 	
 	public static void main(String[] args) {
 		new NetBoardClient();
 		loginGUI.prepareGUI();
 		lobbyGUI.prepareGUI();
-		//gameGUI.prepareGUI();
 		hostGameGUI.prepareGUI();
 		loginGUI.show();
 	}
@@ -44,7 +43,7 @@ public class NetBoardClient {
 			loginGUI = new LoginMaker(this);
 			lobbyGUI = new LobbyMaker(this);
 			//
-			hostGameGUI = new HostGameMaker();
+			hostGameGUI = new HostGameMaker(this);
 			supportedGames = new ArrayList<String>();
 			
 			playerInfo = new ArrayList<String>();
@@ -61,21 +60,13 @@ public class NetBoardClient {
 	public Boolean connect(String host, String newName){
 		try {
 			InetAddress ip = InetAddress.getByName(host);
-			s = new Socket(ip, PORT);
-			
-			//TODO encapsulate into its own init function
-			//This sends the name to the server for validation
+			s = new Socket(ip, PORT);			
 		    
 		    InitMessage initMsg = new InitMessage(newName);
 		    
-		    writeMessage(initMsg);
+		    CommsBridge.writeMessage(s, initMsg);
 		    
-		    //Reads validation response,
-		    //if success: populate names & games on client side
-		    //for display in GUIs
-		    //else if "retry": loginGUI knows to keep displaying login window
-		    
-		    Object response = readMessage();
+		    Object response = CommsBridge.readMessage(s);
 		    
 		    if (response instanceof InitMessage) {
 		    	//failure
@@ -100,27 +91,6 @@ public class NetBoardClient {
 		return false;
 	}
 	
-
-	public <T> void writeMessage(T msg){
-		try {
-			objOut = new ObjectOutputStream(s.getOutputStream());
-			objOut.writeObject(msg);
-		} catch (IOException e) { e.printStackTrace(); }
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T readMessage(){
-		T someMsg = null;
-		try {
-			objIn = new ObjectInputStream(s.getInputStream());
-			someMsg = (T) objIn.readObject();
-		} 
-		catch (ClassNotFoundException e) { e.printStackTrace(); } 
-		catch (IOException e) { e.printStackTrace(); }
-		return someMsg;
-	}
-	
 	public List<String> getSupportedGames(){
 		return this.supportedGames;
 	}
@@ -139,26 +109,47 @@ public class NetBoardClient {
 	public void showLobby(){
 		lobbyGUI.show();
 	}
-	public void showGame(){
-		GameMaker gameGUI = new GameMaker(new Player("testPlayer", s ,"testGame"));
+	
+	public void showGame(String hostname, String gameType){
+		Player hostPlayer = new Player("hostname", s, gameType);
+		GameMaker gameGUI = new GameMaker(this, hostPlayer);
 		gameGUI.prepareGUI();
 		gameGUI.show();
 	}
+	
 	public void showHostGame(){
 		hostGameGUI.show();
 	}
+	
 	public void showLogin(){
 		loginGUI.show();
 	}
 
 	public void refresh() {
-		RefreshMessage refMsg = readMessage();
+		RefreshMessage refRequestMsg =  new RefreshMessage(null,null);
 		
-		this.playerInfo = refMsg.getPlayerLobby();
-		this.supportedGames = refMsg.getSupportedGames();
+		CommsBridge.writeMessage(s, refRequestMsg);
 		
-		lobbyGUI.redraw();
+		RefreshMessage refResponseMsg = CommsBridge.readMessage(s);
 		
+		this.playerInfo = refResponseMsg.getPlayerLobby();
+		this.supportedGames = refResponseMsg.getSupportedGames();
+		
+		lobbyGUI.refresh();
+	}
+	
+	public void disconnectFromServer() {
+		ApplyMoveMessage disconnectMsg = 
+				new ApplyMoveMessage(null, 0, 0, false); // false means you want to disconnect
+		CommsBridge.writeMessage(s, disconnectMsg);
+	}
+
+	public boolean writeMessage(Object msg) {
+		return CommsBridge.writeMessage(s, msg);
+	}
+	
+	public <T> T readMessage(Socket s){
+		return CommsBridge.readMessage(s);
 	}
 	
 }

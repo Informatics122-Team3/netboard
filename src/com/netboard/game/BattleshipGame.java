@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import com.netboard.game.board.BattleshipBoard;
 import com.netboard.GameLogic.BattleshipLogic;
 import com.netboard.game.board.Board;
+import com.netboard.game.piece.Piece;
 
-public class BattleshipGame {
+public class BattleshipGame extends Game {
 	
 	// Initialize game ships
 	private BattleshipBoard bb;
@@ -16,9 +17,11 @@ public class BattleshipGame {
 	public BattleshipGame(int x1, int y1, int vert_or_hor){
 		bb = new BattleshipBoard(x1,y1,vert_or_hor);
 	}
-	
-	public void updateBoard(ArrayList<Board> a) {
-		//
+
+	@Override
+	public boolean makeMove(Piece p, int newX, int newY) {
+		// TODO check logic and make move if valid
+		return false;
 	}
 	
 }

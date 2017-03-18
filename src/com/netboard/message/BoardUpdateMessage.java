@@ -3,6 +3,7 @@ package com.netboard.message;
 import java.util.List;
 
 import com.netboard.game.board.Board;
+import com.netboard.game.piece.Piece;
 
 
 public class BoardUpdateMessage extends Message {
@@ -15,7 +16,7 @@ public class BoardUpdateMessage extends Message {
 	 * 
 	 * @param bs the boardstate
 	 * @param isValid was the previously made move a valid one
-	 * @param isConnected does everyone still wish to stay connected
+	 * @param isConnected does the sender still wish to stay connected
 	 * @param turn who's turn is it
 	 */
 	public BoardUpdateMessage(List<Board> bs, boolean isValid, boolean isConnected, String turn) {

@@ -9,7 +9,9 @@ public class CheckersBoard extends Board{
 	
 	private ArrayList<ArrayList<String>> CLIBoard;
 	
-	public CheckersBoard() {
+	
+	public CheckersBoard(String player1, String player2) {
+		super(player1, player2);
 		setWidth(8);
 		setHeight(8);
 		p1 = new ArrayList<com.netboard.game.piece.CheckersPiece>();
@@ -33,6 +35,12 @@ public class CheckersBoard extends Board{
 		setBoard();
 	}
 
+	public com.netboard.game.piece.Piece at(int x, int y)
+	{
+		return (com.netboard.game.piece.Piece) findPiece(x,y);
+	}
+	
+	
 	public ArrayList<ArrayList<String>> getCLIBoard(){ return CLIBoard; }
 	
 	public void setBoard()
