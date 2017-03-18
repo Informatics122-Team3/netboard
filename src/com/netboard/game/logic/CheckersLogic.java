@@ -1,52 +1,42 @@
-package CheckersStandalone;
+package com.netboard.game.logic;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CheckersGame {
-	//Member Variables
+import com.netboard.game.piece.Piece;
+
+public class CheckersLogic implements com.netboard.game.Logic{
+
 	private com.netboard.game.board.CheckersBoard board;
-	private int turn;
-	private boolean gameOver;
-	//Default Constructor
-	public CheckersGame()
+	private boolean Jumping;
+	
+	public CheckersLogic(com.netboard.game.board.CheckersBoard board) {
+		this.board = board;
+		Jumping = false;
+	}
+
+	public boolean getJumping() { return Jumping; }
+	public void setJumping(boolean Jumping)	{ this.Jumping = Jumping; }
+	
+	public int checkWinner()
 	{
-		board = new com.netboard.game.board.CheckersBoard();
+		if(board.getp1Pieces() == 0)
+			return 1;
+		else if(board.getp2Pieces() == 0)
+			return 0;
+		else
+			return -1;
+	}
+	public boolean isGameOver() { return checkWinner() >= 0? true : false; }
+	public String getWinner() { return checkWinner() == 0? board.getPlayer1() : board.getPlayer2(); }
 		
-		//Player Turn (0: Player 1, 1: Player 2)
-		gameOver = false;
-		turn = 0;
+	public boolean isValidMove(Piece p, int newX, int newY) {
+		if(Jumping){ if(getJumpMoves(p.getX(), p.getY(), p.getIcon()).contains(new ArrayList<Integer>(Arrays.asList(newX, newY)))) { return true; } }
+		else{ if(getPieceMoves(p.getX(), p.getY(), p.getIcon()).contains(new ArrayList<Integer>(Arrays.asList(newX, newY)))) {return true; } }
+		return false;
 	}
-	//Prints the board
-	public void printTable()
-	{
-		board.printBoard();
-		System.out.println("Player 1 Pieces: " + board.getp1Pieces() + "\tPlayer 2 Pieces: " + board.getp2Pieces());
-	}
-	//returns what type of piece is at the x,y coordinates (o, x, "")
 	public String pieceAt(int x, int y)	{ return board.findPiece(x, y).getIcon(); }
-	//Accessor methods
-	public int getTurn(){ return turn; }
-	public boolean getGameOver(){ return gameOver; }
-	//returns the player turn
-	public String getPlayerTurn()
-	{
-		if(turn == 0)
-			return "Player 1";
-		return "Player 2";
-	}
-	public boolean isP1Turn()
-	{
-		if(turn == 0)
-			return true;
-		return false; 
-	}	
-	//switches player turn
-	public void switchTurn(){ turn = (turn + 1) % 2; }
-	
-//LOGIC PORTION --------------------------------------------------------------------------------
-	
-	//Finds all moves, move numbers correspond to: 
-	
+
 	public boolean checkLeft1Up1(int x, int y, String type)
 	{
 		if(x > 0 && y > 0)
@@ -237,54 +227,17 @@ public class CheckersGame {
 		return to_return;
 	}
 	
-	public boolean isValidMove(String type, ArrayList<Integer> old, ArrayList<Integer> updated, boolean Jumping)
-	{
-		if(Jumping){ if(getJumpMoves(old.get(0), old.get(1), type).contains(updated)) { return true; } }
-		else{ if(getPieceMoves(old.get(0), old.get(1),type).contains(updated)) {return true; } }
-		return false;
-	}
-	
-	//check for winner
-	public int checkWinner()
-	{
-		if(board.getp1Pieces() == 0)
-			return 1;
-		else if(board.getp2Pieces() == 0)
-			return 0;
-		else
-			return -1;
-	}
-
 	public boolean canJump(int x, int y, String type)
 	{
 		if(getJumpMoves(x,y,type).isEmpty())
 			return true;
 		return false;
 	}
-//END LOGIC ------------------------------------------------------------------------------------	
-//ENGINE PORTION -------------------------------------------------------------------------------
 	
-	//method that processes the user's desired move
-	public void makeMove(String type, ArrayList<Integer> old, ArrayList<Integer> updated, boolean Jumping){
-			
-		if(Jumping && getJumpMoves(old.get(0), old.get(1), type).contains(updated))
-		{
-			board.updateBoard(board.findPiece(old.get(0), old.get(1)), updated.get(0), updated.get(1));
-			
-			System.out.println("Jumped piece " + type + " from [" + old.get(0) + "," + old.get(1) + "] to [" + updated.get(0) + "," + updated.get(1) + "]");
-		}
-		
-		else if(Jumping == false && getPieceMoves(old.get(0), old.get(1), type).contains(updated))
-		{
-			board.updateBoard(board.findPiece(old.get(0),old.get(1)), updated.get(0), updated.get(1));
-			
-			System.out.println("Moved piece " + type + " from [" + old.get(0) + "," + old.get(1) + "] to [" + updated.get(0) + "," + updated.get(1) + "]");
-		}
-		else
-		{
-			System.out.println("Invalid input, try again.");
-		}
+	public boolean updateBoard(ArrayList<ArrayList<String>> board, Piece p) {
+		return false;
 	}
 	
+	
+	
 }
-
