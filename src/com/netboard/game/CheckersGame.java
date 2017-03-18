@@ -1,6 +1,5 @@
 package com.netboard.game;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -82,16 +81,3 @@ public class CheckersGame extends Game{
 //END ENGINE PORTION ---------------------------------------------------------------------------
 }
 
-=======
-import com.netboard.game.piece.Piece;
-
-public class CheckersGame extends Game {
-
-	@Override
-	public boolean makeMove(Piece p, int newX, int newY) {
-		// TODO Check Logic and make move if valid
-		return false;
-	}
-
-}
->>>>>>> origin/master

@@ -11,7 +11,7 @@ import com.netboard.game.piece.Destroyer;
 import com.netboard.game.piece.Ship;
 import com.netboard.game.piece.Submarine;
 
-public class BattleshipBoard extends Board {
+public class BattleshipBoard extends Board{
 
 	private ArrayList<ArrayList<String>> board;
 	private ArrayList<Ship> player;

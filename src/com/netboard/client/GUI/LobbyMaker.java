@@ -39,9 +39,18 @@ public class LobbyMaker extends GUIMaker{
 	JList usernameList;
 	JScrollPane listScroller;
 	GridBagConstraints backCBG, refreshCBG, hostCBG, joinCBG, cPanel, jPanel, lPanel;
+	NetBoardClient client;
+	
+//	public static void main(String[] args) {
+//		
+//		LobbyMaker lm = new LobbyMaker();
+//		lm.prepareGUI();
+//		lm.show();
+//	}
 	
 	public LobbyMaker(NetBoardClient newClient) {
-		super(newClient);
+		// TODO Auto-generated constructor stub
+		client = newClient;
 	}
 	
 	public void initFrame(){
@@ -224,14 +233,13 @@ public class LobbyMaker extends GUIMaker{
 	        			 "connect4");
 	        	 
 	        	 client.writeMessage(hostMsg);
-	        	 client.showGame(client.getName(), "connect4"); // TODO remove hard-coded gameType
+	        	 client.showGame();
 	        	 break;
 	        	 
 	         case "Join":
 	        	 
-	        	 String[] selection = usernameList.getSelectedValue().toString().split(" ");
-	        	 String hostname = selection[0]; //the first word of the string is the username
-	        	 String gameType = selection[2]; // third string is the gametype
+	        	 String hostname = usernameList.getSelectedValue().toString();
+	        	 hostname = hostname.split(" ")[0]; //the first word of the string is the username
 	        	 
 	        	 JoinMessage joinMsg = 
 	        	 new JoinMessage(
@@ -240,21 +248,19 @@ public class LobbyMaker extends GUIMaker{
 	        			 hostname);
 	        	 
 	        	 client.writeMessage(joinMsg);
-	        	 client.showGame(hostname, gameType);
+	        	 client.showGame();
 	        	 break;
 	        	 
 	         case "Refresh":
+	        	 RefreshMessage refMsg = 
+	        	 new RefreshMessage(null, null);
+	        	 
+	        	 client.writeMessage(refMsg);
 	        	 client.refresh();
 	        	 break;
 	         }
 	         
 	    }
-	}
-
-
-	public void refresh() {
-		// TODO refresh the lobby somehow?
-		
 	}
 		
 }

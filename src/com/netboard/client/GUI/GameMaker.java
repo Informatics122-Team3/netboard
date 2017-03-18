@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.netboard.client.NetBoardClient;
 import com.netboard.game.Player;
 
 public class GameMaker extends GUIMaker {
@@ -32,7 +31,6 @@ public class GameMaker extends GUIMaker {
 	int cols = 7;
 	JButton[][] boardSquares = new JButton[rows][cols]; //TODO don't hardcode board dimensions
 	JButton[][] boardSquares2 = new JButton[rows][cols];
-	
 	// checkers: 10 rows x 10 cols
 	// connectfour: 6 rows x 7 cols
 	// battleship: 10 rows x 10 cols, 2 boards
@@ -48,9 +46,10 @@ public class GameMaker extends GUIMaker {
 //		gm.show();
 //}
 	
-	public GameMaker(NetBoardClient client, Player host) {
-		super(client);
-		this.host = host;
+	public GameMaker(Player player) {
+		// TODO takes in Player object in order to
+		// display the gameType and Username in the window
+		this.host = player;
 	}
 	
 	public void show(){
@@ -85,7 +84,7 @@ public class GameMaker extends GUIMaker {
 
 	void initFrame()
 	{
-		String frameTitle = "NetBoard - " + client.getName();
+		String frameTitle = "NetBoard - " + host.getGameType() + ": " + host.getUsername();
 		mainFrame = new JFrame(frameTitle);
 		if (host.getGameType().equals("Battleship")) {
 			mainFrame.setSize(900, 1000);

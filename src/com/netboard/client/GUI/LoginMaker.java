@@ -24,6 +24,7 @@ import com.netboard.client.NetBoardClient;
 
 
 public class LoginMaker extends GUIMaker{
+	NetBoardClient client;
 	JSplitPane splitPane;
 	JPanel controlPanel, userPanel, innerPanel;
 	JTextField serverTxt, nameTxt;
@@ -37,8 +38,7 @@ public class LoginMaker extends GUIMaker{
 //	lm.show();
 //}
 	
-	public LoginMaker(NetBoardClient client){
-		super(client);
+	public LoginMaker(NetBoardClient nbc){
 		  mainFrame = new JFrame("NetBoard Login");
 	      headerLabel = new JLabel("Select a Server & Sign In",JLabel.CENTER );
 	      statusLabel = new JLabel(" ",JLabel.CENTER);
@@ -49,6 +49,7 @@ public class LoginMaker extends GUIMaker{
 	      controlPanel = new JPanel();
 	      
 	      innerPanel = new JPanel();
+	      this.client = nbc;
 	}
 	
 	public void initFrame(){

@@ -4,8 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import com.netboard.client.NetBoardClient;
-
 public abstract class GUIMaker {
 	
 	static final int STARTWIDTH = 900;
@@ -16,17 +14,12 @@ public abstract class GUIMaker {
 	protected JLabel headerLabel;
 	protected JLabel statusLabel;
 
-	protected NetBoardClient client;
 	abstract void initFrame();
 	abstract void initComponents();  
 	abstract void setWindowListener();
 	abstract void initPanels();         
 	abstract void fillFrame();
 	abstract void show();
-	
-	public GUIMaker(NetBoardClient client) {
-		this.client = client;
-	}
 	
 	public final void prepareGUI(){
 		initFrame();
@@ -45,11 +38,15 @@ public abstract class GUIMaker {
 	   JOptionPane.INFORMATION_MESSAGE);
 
         if(output == JOptionPane.YES_OPTION){
-        	client.disconnectFromServer();
-        	System.exit(0);
+           System.exit(0);
         } else if(output == JOptionPane.NO_OPTION){
           
         }
+	}
+	
+	public void redraw() {
+		mainFrame.revalidate();
+		mainFrame.repaint();
 	}
 	         
 }
