@@ -1,3 +1,4 @@
+
 # Informatics 122 Final Project -- Client/Server Board Game
 Developed/Designed by:
 Max Paulus,
@@ -25,11 +26,13 @@ There are two main components to the NetBoard application
         - If client A wishes to "host" a game, the `LobbyThread` in charge of handling the client will add the client to `NetBoardServer`'s `playerLobby` list. At this point the `LobbyThread` object will die.
     - **ActiveGameThread:** Once client B comes along expressing a desire to "join" client A's game, a new `ActiveGameThread` object is spawned with client A and client B as the two players. Client A is removed from `NetBoardServer`'s `playerLobby`.
         - From this point on, the `ActiveGameThread` object is responsible for coordinating messages between client A and client B
+        - `ActiveGameThread` uses two message types to do this: `ApplyMoveMessage`'s and `BoardUpdateMessage`'s. Clients send an `ApplyMoveMessage` to the server and the server will broadcast a `BoardUpdateMessage` back to both clients.
         - **Game:** An `ActiveGameThread` will have a `Game` object which represents the game being played.
         - **Logic:** A `Game` will have a `Logic` object which dictates the rules of the game.
 2. **NetBoardClient:** 
     - `NetBoardClient` is an extremely thin client because most of the logic will be handled on the serverside.
     - Will most probably just take care of the GUI as well as initial connection to server.
+    - Sends `ApplyMoveMessage`'s to the serverside. Recieves `BoardUpdateMessage`'s to update its own GUI.
 
 ## DATA INTERCHANGE PROTOCOL
 ***Note:* this is important to understand. Please ask someone for clarification if you are confused.**
@@ -64,8 +67,19 @@ There are 4 types of messages that will ever need to be sent between a client an
         hostUsername: "darksteelknight",
     }
     ```
-    - **Note:** if `darksteelknight` exists in the player lobby, this will spawn an `ActiveGameThread` between `desoron` and `darksteelknight`. This will also remove `darksteelknight` from the player lobby.
-4. The client wishes to send a board update to an ActiveGameThread or vice versa:
+    - **Note:** if `darksteelknight` exists in the player lobby, an `ActiveGameThread` between `desoron` and `darksteelknight` will spawn. `darksteelknight` will also be removed from the player lobby.
+4. The client wishes to apply a move to the board and send it to its ActiveGameThread:
+
+    ```javascript
+    {
+        messageType: "applymove",
+        Piece: thePiece,
+        newX: 3,
+        newY: 4,
+        isConnected: True
+    }
+    ```
+5. An ActiveGameThread wishes to send a board update to one (or both) of its clients:
 
     ```javascript
     {
