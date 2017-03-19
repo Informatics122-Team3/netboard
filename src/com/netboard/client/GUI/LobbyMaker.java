@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -217,13 +218,21 @@ public class LobbyMaker extends GUIMaker{
 	        	 break;
 	        	 
 	         case "Host":
+	        	 
+	        	 String gameChoice = (String)JOptionPane.showInputDialog(
+	                     mainFrame,
+	                     "Choose your game:\n",
+	                     "Customized Dialog",
+	                     JOptionPane.PLAIN_MESSAGE,
+	                     null,
+	                     client.getSupportedGames().toArray(),
+	                     "ham");
+	        	 
 	        	 HostMessage hostMsg = 
 	        	 new HostMessage(
 	        			 "nothing", 
 	        			 client.getUsername(), 
-	        			 "connect4");
-	        	 
-	        	 client.showHostGame();
+	        			 gameChoice);
 	        	 
 	        	 client.writeMessage(hostMsg);
 	        	 client.showGame(client.getUsername(), "connect4"); // TODO remove hard-coded gameType
