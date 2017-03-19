@@ -16,9 +16,11 @@ public class ActiveGameThread implements Runnable {
 	private Game gameInstance;
 	private Player host;
 	private Player guest;
+	private NetBoardServer nbs;
 	
-	public ActiveGameThread(String gameType, Player host, Player guest) {
+	public ActiveGameThread(String gameType, Player host, Player guest, NetBoardServer nbs) {
 		try {
+			this.nbs = nbs;
 			this.gameInstance = GameFactory.createGame(gameType);
 			gameInstance.setPlayers(host.getUsername(), guest.getUsername());
 		} catch (GameNotSupportedException e) {
@@ -48,6 +50,7 @@ public class ActiveGameThread implements Runnable {
 						false, // this indicates that someone wants to disconnect
 						null
 				);
+				nbs.removeHostFromLobby(activePlayer.getUsername());
 				break;
 			}
 			if (gameInstance.makeMove(moveMsg.getPiece(), moveMsg.getNewX(), moveMsg.getNewY())) {

@@ -46,6 +46,7 @@ public class LobbyThread implements Runnable {
 				String gameType = host.getGameType();
 				
 				Player guest = new Player(guestUsername, s, gameType);
+				nbs.removeHostFromLobby(hostUsername);
 				
 				nbs.spawnActiveGameThread(gameType, host, guest);
 				break;
@@ -58,7 +59,7 @@ public class LobbyThread implements Runnable {
 				CommsBridge.writeMessage(s, refMsg);
 			}
 			else if (msgObj instanceof ApplyMoveMessage) {
-				System.err.println("LobbyThread: client disconnected from lobby");
+				System.err.println("LobbyThread: client chose to disconnect");
 				break;
 			}
 			else {

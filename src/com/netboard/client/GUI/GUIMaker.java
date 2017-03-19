@@ -45,7 +45,9 @@ public abstract class GUIMaker {
 	   JOptionPane.INFORMATION_MESSAGE);
 
         if(output == JOptionPane.YES_OPTION){
-        	client.applyDisconnectMove();
+        	try {
+        		client.applyDisconnectMove();        		
+        	} catch (Exception e) { }
         	System.exit(0);
         } else if(output == JOptionPane.NO_OPTION){
           

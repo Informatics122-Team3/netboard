@@ -226,7 +226,9 @@ public class LobbyMaker extends GUIMaker{
 	                     JOptionPane.PLAIN_MESSAGE,
 	                     null,
 	                     client.getSupportedGames().toArray(),
-	                     "ham");
+	                     client.getSupportedGames().toArray()[0]);
+	        	 
+	        	 if (gameChoice == null) break;
 	        	 
 	        	 HostMessage hostMsg = 
 	        	 new HostMessage(

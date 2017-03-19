@@ -59,7 +59,7 @@ public class NetBoardServer {
 	public synchronized void addHostToLobby(String username, Socket socket, String gameType) {
 		Player p = new Player(username, socket, gameType);
 		this.playerLobby.add(p);
-		log(String.format("Added %s :: %s to lobby...", username, gameType));
+		log(String.format("Added %s - %s to lobby...", username, gameType));
 	}
 	
 	/**
@@ -87,15 +87,10 @@ public class NetBoardServer {
 	 */
 	public synchronized void spawnActiveGameThread(String gameType, Player host, Player guest) {
 		
-		ActiveGameThread agt = new ActiveGameThread(gameType, host, guest);
+		ActiveGameThread agt = new ActiveGameThread(gameType, host, guest, this);
 		Thread gameThread = new Thread(agt);
 		gameThread.start();
 		log("Spawned an ActiveGameThread to handle game");
-		try {
-			listenForConnections();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void listenForConnections() throws IOException {
