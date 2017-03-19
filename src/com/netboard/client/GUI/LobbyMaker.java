@@ -235,7 +235,7 @@ public class LobbyMaker extends GUIMaker{
 	        			 gameChoice);
 	        	 
 	        	 client.writeMessage(hostMsg);
-	        	 client.showGame(client.getUsername(), "connect4"); // TODO remove hard-coded gameType
+	        	 client.showGame(client.getUsername(), gameChoice); // TODO remove hard-coded gameType
 	        	 break;
 	        	 
 	         case "Join":

@@ -119,6 +119,8 @@ public class NetBoardClient {
 		Player hostPlayer = new Player(this.username, s, gameType);
 		gameGUI = new GameMaker(this, hostPlayer);
 		gameGUI.prepareGUI();
+		//TODO show different gui depending on gameType?
+		
 		gameGUI.show();
 	}
 	
