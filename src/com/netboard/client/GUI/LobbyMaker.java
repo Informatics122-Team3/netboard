@@ -223,6 +223,8 @@ public class LobbyMaker extends GUIMaker{
 	        			 client.getName(), 
 	        			 "connect4");
 	        	 
+	        	 client.showHostGame();
+	        	 
 	        	 client.writeMessage(hostMsg);
 	        	 client.showGame(client.getName(), "connect4"); // TODO remove hard-coded gameType
 	        	 break;

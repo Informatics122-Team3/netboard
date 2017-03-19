@@ -64,9 +64,9 @@ public class NetBoardClient {
 		    
 		    InitMessage initMsg = new InitMessage(newName);
 		    
-		    CommsBridge.writeMessage(s, initMsg);
+		    writeMessage(initMsg);
 		    
-		    Object response = CommsBridge.readMessage(s);
+		    Object response = readMessage();
 		    
 		    if (response instanceof InitMessage) {
 		    	//failure
@@ -112,7 +112,7 @@ public class NetBoardClient {
 	
 	public void showGame(String hostname, String gameType){
 		Player hostPlayer = new Player("hostname", s, gameType);
-		GameMaker gameGUI = new GameMaker(this, hostPlayer);
+		gameGUI = new GameMaker(this, hostPlayer);
 		gameGUI.prepareGUI();
 		gameGUI.show();
 	}
@@ -128,27 +128,27 @@ public class NetBoardClient {
 	public void refresh() {
 		RefreshMessage refRequestMsg =  new RefreshMessage(null,null);
 		
-		CommsBridge.writeMessage(s, refRequestMsg);
+		writeMessage(refRequestMsg);
 		
-		RefreshMessage refResponseMsg = CommsBridge.readMessage(s);
+		RefreshMessage refResponseMsg = readMessage();
 		
 		this.playerInfo = refResponseMsg.getPlayerLobby();
 		this.supportedGames = refResponseMsg.getSupportedGames();
 		
-		lobbyGUI.refresh();
+		lobbyGUI.refresh(); // TODO lobbyGUI.refresh();
 	}
 	
 	public void disconnectFromServer() {
 		ApplyMoveMessage disconnectMsg = 
 				new ApplyMoveMessage(null, 0, 0, false); // false means you want to disconnect
-		CommsBridge.writeMessage(s, disconnectMsg);
+		writeMessage(disconnectMsg);
 	}
 
 	public boolean writeMessage(Object msg) {
 		return CommsBridge.writeMessage(s, msg);
 	}
 	
-	public <T> T readMessage(Socket s){
+	public <T> T readMessage(){
 		return CommsBridge.readMessage(s);
 	}
 	
