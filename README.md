@@ -99,7 +99,7 @@ There are 4 types of messages that will ever need to be sent between a client an
 
 ## Example 2-player connect sequence:
 
-![imgur_sequence_diagram](http://i.imgur.com/ylpY6eN.png "2-player sequence diagram")
+![imgur_sequence_diagram](http://i.imgur.com/KpNj10E.png "2-player sequence diagram")
 
 ## Requirements
 - The Board Game Server should accommodate any board game that involves a grid layout and game elements on this layout, including games such as Chess, **Checkers**, Tic-Tac-Toe, Gomoku, **Connect Four**, Nine Men's Morris, Chutes and Ladders, Stratego, Shogi, Pente, **Battleship**…
