@@ -12,7 +12,7 @@ public class GameFactory {
 		// TODO make the concrete gametypes
 		switch (gameType) {
 		case "connect4":
-			return new Connect4Game();
+			return new ConnectFourGame(7, 15);
 		case "battleship":
 			return new BattleshipGame(0, 0, 0); //TODO idk what these params are
 		case "checkers":
