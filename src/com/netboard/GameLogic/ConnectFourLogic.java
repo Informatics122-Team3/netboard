@@ -1,5 +1,6 @@
 package com.netboard.GameLogic;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.netboard.game.Logic;
@@ -307,5 +308,17 @@ public class ConnectFourLogic implements Logic {
 
 	public void setActivePlayer() {
 
+	}
+
+	@Override
+	public boolean updateBoard(ArrayList<ArrayList<String>> board, Piece p) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isValidMove(Piece p, int newX, int newY) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

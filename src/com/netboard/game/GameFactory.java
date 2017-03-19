@@ -14,9 +14,9 @@ public class GameFactory {
 		case "connect4":
 			return new ConnectFourGame(7, 15);
 		case "battleship":
-			return new BattleshipGame(0, 0, 0); //TODO idk what these params are
+			//return new BattleshipGame(0, 0, 0); //TODO idk what these params are
 		case "checkers":
-			return new CheckersGame();
+			return new CheckersGame("player1", "player2");
 		default:
 			throw new GameNotSupportedException(gameType);
 		}
