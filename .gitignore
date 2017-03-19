@@ -10,4 +10,5 @@
 hs_err_pid*
 
 # Bin Folder #
-*bin/*
+*/bin/*
+bin/*
