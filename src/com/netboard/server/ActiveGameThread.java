@@ -30,10 +30,10 @@ public class ActiveGameThread implements Runnable {
 	}
 	
 	public void run() {
-		listenForBoardUpdates();		
+		listenForApplyMoves();		
 	}
 	
-	private void listenForBoardUpdates() {
+	private void listenForApplyMoves() {
 		
 		while (true) {
 			

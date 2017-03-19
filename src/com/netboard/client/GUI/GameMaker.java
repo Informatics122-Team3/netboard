@@ -85,7 +85,7 @@ public class GameMaker extends GUIMaker {
 
 	void initFrame()
 	{
-		String frameTitle = "NetBoard - " + client.getName();
+		String frameTitle = "NetBoard - " + client.getUsername();
 		mainFrame = new JFrame(frameTitle);
 		if (host.getGameType().equals("Battleship")) {
 			mainFrame.setSize(900, 1000);

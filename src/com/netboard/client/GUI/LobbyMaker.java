@@ -220,13 +220,13 @@ public class LobbyMaker extends GUIMaker{
 	        	 HostMessage hostMsg = 
 	        	 new HostMessage(
 	        			 "nothing", 
-	        			 client.getName(), 
+	        			 client.getUsername(), 
 	        			 "connect4");
 	        	 
 	        	 client.showHostGame();
 	        	 
 	        	 client.writeMessage(hostMsg);
-	        	 client.showGame(client.getName(), "connect4"); // TODO remove hard-coded gameType
+	        	 client.showGame(client.getUsername(), "connect4"); // TODO remove hard-coded gameType
 	        	 break;
 	        	 
 	         case "Join":
@@ -238,7 +238,7 @@ public class LobbyMaker extends GUIMaker{
 	        	 JoinMessage joinMsg = 
 	        	 new JoinMessage(
 	        			 "nothing", 
-	        			 client.getName(), 
+	        			 client.getUsername(), 
 	        			 hostname);
 	        	 
 	        	 client.writeMessage(joinMsg);
@@ -246,7 +246,7 @@ public class LobbyMaker extends GUIMaker{
 	        	 break;
 	        	 
 	         case "Refresh":
-	        	 client.refresh();
+	        	 client.refreshLobby();
 	        	 break;
 	         }
 	         

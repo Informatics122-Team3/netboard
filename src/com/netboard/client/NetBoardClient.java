@@ -12,6 +12,7 @@ import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
+import com.netboard.game.piece.Piece;
 import com.netboard.message.ApplyMoveMessage;
 import com.netboard.message.CommsBridge;
 import com.netboard.message.InitMessage;
@@ -26,7 +27,7 @@ public class NetBoardClient {
 	
 	public static final int PORT = 57575;
 	public Socket s;
-	private String name;
+	private String username;
 	private String serverIP;
 	private List<String> supportedGames;
 	private List<String> playerInfo;
@@ -79,7 +80,7 @@ public class NetBoardClient {
 		    	playerInfo = refMsg.getPlayerLobby();
 		    	supportedGames = refMsg.getSupportedGames();
 		    	
-		    	name = newName;
+		    	username = newName;
 		    	serverIP = host;
 		    	
 		    	return true;
@@ -98,8 +99,12 @@ public class NetBoardClient {
 		return this.playerInfo;
 	}
 
-	public String getName(){
-		return this.name;
+	/**
+	 * 
+	 * @return the username of this client
+	 */
+	public String getUsername(){
+		return this.username;
 	}
 	
 	public String getServerIP() {
@@ -111,7 +116,7 @@ public class NetBoardClient {
 	}
 	
 	public void showGame(String hostname, String gameType){
-		Player hostPlayer = new Player("hostname", s, gameType);
+		Player hostPlayer = new Player(this.username, s, gameType);
 		gameGUI = new GameMaker(this, hostPlayer);
 		gameGUI.prepareGUI();
 		gameGUI.show();
@@ -125,7 +130,12 @@ public class NetBoardClient {
 		loginGUI.show();
 	}
 
-	public void refresh() {
+	/**
+	 * Constructs and sends a RefreshMessage to the server.
+	 * Refreshes playerInfo list and supported game list.
+	 * Repaints the lobby screen to reflect the refresh.
+	 */
+	public void refreshLobby() {
 		RefreshMessage refRequestMsg =  new RefreshMessage(null,null);
 		
 		writeMessage(refRequestMsg);
@@ -138,16 +148,36 @@ public class NetBoardClient {
 		lobbyGUI.refresh(); // TODO lobbyGUI.refresh();
 	}
 	
-	public void disconnectFromServer() {
+	/**
+	 * Sends an ApplyMoveMessage to the server with isConnected = false
+	 */
+	public void applyDisconnectMove() {
 		ApplyMoveMessage disconnectMsg = 
 				new ApplyMoveMessage(null, 0, 0, false); // false means you want to disconnect
 		writeMessage(disconnectMsg);
 	}
+	
+	/**
+	 * Sends an ApplyMoveMessage to the server with the new Move to be made
+	 */
+	public void applyBoardMove(Piece piece, int newX, int newY) {
+		ApplyMoveMessage moveMsg = new ApplyMoveMessage(piece, newX, newY, true);
+		writeMessage(moveMsg);
+	}
 
+	/**
+	 * Writes an object to the server using the CommsBridge
+	 * @param msg the object representing the message
+	 * @return true if the message was transmitted successfully
+	 */
 	public boolean writeMessage(Object msg) {
 		return CommsBridge.writeMessage(s, msg);
 	}
 	
+	/**
+	 * Reads an incoming object from the server
+	 * @return a generic object to be cast into the object of your choice (if they're compatible)
+	 */
 	public <T> T readMessage(){
 		return CommsBridge.readMessage(s);
 	}
