@@ -720,6 +720,11 @@ public class GameMaker extends GUIMaker {
 				}
 			}
 		}
+		boardPanel.revalidate();
+		mainFrame.revalidate();
+		
+		boardPanel.repaint();
+		mainFrame.repaint();
 	}
 	
 	void updateC4BoardGUI () {
