@@ -221,6 +221,10 @@ public class GameMaker extends GUIMaker {
 	        			 
 	        			 sendReady = false;
 	        			 buttonSelected = false;
+	        			 
+	        			 
+	        			 client.applyBoardMove(selectedPiece, moveCol, moveRow);
+	        			 
 	        		 }
 	        		 /* for non-server/client version:
 	        		  * 
@@ -269,6 +273,8 @@ public class GameMaker extends GUIMaker {
 	        	 }
 	         }
 	    }
+
+		
 	}
 
 	void chooseCheckersPiece(int row, int col) {
@@ -721,5 +727,10 @@ public class GameMaker extends GUIMaker {
 	
 	void updateBattleshipBoardGUI () {
 		BattleshipDefenseBoard batBoard = (BattleshipDefenseBoard) board;
+	}
+
+	public void refresh(List<Board> boardState) {
+		// TODO Auto-generated method stub
+		
 	}
 }

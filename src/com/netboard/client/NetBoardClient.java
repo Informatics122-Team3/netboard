@@ -1,7 +1,6 @@
 package com.netboard.client;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -12,11 +11,12 @@ import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
+import com.netboard.game.board.Board;
 import com.netboard.game.piece.Piece;
 import com.netboard.message.ApplyMoveMessage;
+import com.netboard.message.BoardUpdateMessage;
 import com.netboard.message.CommsBridge;
 import com.netboard.message.InitMessage;
-import com.netboard.message.JoinMessage;
 import com.netboard.message.RefreshMessage;
 
 public class NetBoardClient {
@@ -180,6 +180,15 @@ public class NetBoardClient {
 	 */
 	public <T> T readMessage(){
 		return CommsBridge.readMessage(s);
+	}
+	
+	public void waitForBoardUpdate() {
+		
+		BoardUpdateMessage boardMsg = readMessage();
+		
+		List<Board> boardState = boardMsg.getBoardState();
+		
+		gameGUI.refresh(boardState);
 	}
 	
 }
