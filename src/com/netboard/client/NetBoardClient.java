@@ -191,9 +191,10 @@ public class NetBoardClient {
 		// TODO block game if its not your turn
 		
 		List<Board> boardState = boardMsg.getBoardState();
-		
-		gameGUI.refresh(boardState);
-	}
+		//String gameType = game.getGameType();		//get game type so GUI knows which type of update to call
+								//where do we get this?
+		//gameGUI.updateBoardGUI(boardState, gameType);	//generic updateBoardGUI to call appropriate updateGUI based on gametype
+	}							//this has been stubbed in gameGUI
 	
 }
 
