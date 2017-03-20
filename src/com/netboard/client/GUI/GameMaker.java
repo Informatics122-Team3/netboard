@@ -69,6 +69,8 @@ public class GameMaker extends GUIMaker {
 	boolean buttonSelected = false;
 	boolean sendReady = false;
 	protected static String checkersName = "checkers";
+	protected static String battleshipName = "battleship";
+	protected static String connect4Name = "connect4";
 	
 	//TODO -----TEMP------
 	CheckersGame checkers = new CheckersGame("Player 1", "Player 2");
@@ -734,7 +736,17 @@ public class GameMaker extends GUIMaker {
 	void updateBattleshipBoardGUI () {
 		BattleshipDefenseBoard batBoard = (BattleshipDefenseBoard) board;
 	}
-
+	
+	
+ 	public void updateBoardGUI(List<Board> boards, String gameType){
+// 		if (gameType.equals(checkersName))
+// 			updateCheckersBoardGUI(boards[0]);
+// 		else if (gameType.equals(battleshipName))
+// 			updateBattleshipBoardGUI(boards);
+// 		else if (gameType.equals(connect4Name))
+// 			updateC4BoardGUI(boards[0]);
+ 	}
+	
 	public void refresh(List<Board> boardState) {
 		// TODO Auto-generated method stub
 		
