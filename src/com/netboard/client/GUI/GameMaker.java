@@ -525,11 +525,11 @@ public class GameMaker extends GUIMaker {
 				b.addMouseListener(new HandleRight());
 				if (checkersBoard.findPiece(j, i).getIcon().equals(red_val)) {
 					try {
-					java.net.URL imgURL = getClass().getResource("/images/red_piece.png");
+					java.net.URL imgURL = getClass().getResource("/red_piece.png");
 					ImageIcon img = new ImageIcon(imgURL);
 					b.setIcon(img);
 					
-					java.net.URL imgURL2 = getClass().getResource("/images/red_piece_selected.png");
+					java.net.URL imgURL2 = getClass().getResource("/red_piece_selected.png");
 					ImageIcon img2 = new ImageIcon(imgURL2);
 					b.setSelectedIcon(img2);
 
@@ -540,11 +540,11 @@ public class GameMaker extends GUIMaker {
 				}
 				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_val)) {
 					try {
-					java.net.URL imgURL = getClass().getResource("/images/black_piece.png");
+					java.net.URL imgURL = getClass().getResource("/black_piece.png");
 					ImageIcon img = new ImageIcon(imgURL);
 					b.setIcon(img);
 					
-					java.net.URL imgURL2 = getClass().getResource("/images/black_piece_selected.png");
+					java.net.URL imgURL2 = getClass().getResource("/black_piece_selected.png");
 					ImageIcon img2 = new ImageIcon(imgURL2);
 					b.setSelectedIcon(img2);
 					
@@ -556,11 +556,11 @@ public class GameMaker extends GUIMaker {
 				
 				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_king)) {
 					try {
-					java.net.URL imgURL = getClass().getResource("/images/black_king.png");
+					java.net.URL imgURL = getClass().getResource("/black_king.png");
 					ImageIcon img = new ImageIcon(imgURL);
 					b.setIcon(img);
 					
-					java.net.URL imgURL2 = getClass().getResource("/images/black_king_selected.png");
+					java.net.URL imgURL2 = getClass().getResource("/black_king_selected.png");
 					ImageIcon img2 = new ImageIcon(imgURL2);
 					b.setSelectedIcon(img2);
 					
@@ -572,11 +572,11 @@ public class GameMaker extends GUIMaker {
 				
 				else if (checkersBoard.findPiece(j, i).getIcon().equals(red_king)) {
 					try {
-					java.net.URL imgURL = getClass().getResource("/images/red_king.png");
+					java.net.URL imgURL = getClass().getResource("/red_king.png");
 					ImageIcon img = new ImageIcon(imgURL);
 					b.setIcon(img);
 					
-					java.net.URL imgURL2 = getClass().getResource("/images/red_king_selected.png");
+					java.net.URL imgURL2 = getClass().getResource("/red_king_selected.png");
 					ImageIcon img2 = new ImageIcon(imgURL2);
 					b.setSelectedIcon(img2);
 					
@@ -645,11 +645,11 @@ public class GameMaker extends GUIMaker {
 			for (int j = 0; j < cols; j++) {
 				if (checkersBoard.findPiece(j, i).getIcon().equals(red_val)) {
 					try {
-						java.net.URL imgURL = getClass().getResource("/images/red_piece.png");
+						java.net.URL imgURL = getClass().getResource("/red_piece.png");
 						ImageIcon img = new ImageIcon(imgURL);
 						boardSquares[i][j].setIcon(img);
 						
-						java.net.URL imgURL2 = getClass().getResource("/images/red_piece_selected.png");
+						java.net.URL imgURL2 = getClass().getResource("/red_piece_selected.png");
 						ImageIcon img2 = new ImageIcon(imgURL2);
 						boardSquares[i][j].setSelectedIcon(img2);
 					}
@@ -659,11 +659,11 @@ public class GameMaker extends GUIMaker {
 				}
 				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_val)) {
 					try {
-						java.net.URL imgURL = getClass().getResource("/images/black_piece.png");
+						java.net.URL imgURL = getClass().getResource("/black_piece.png");
 						ImageIcon img = new ImageIcon(imgURL);
 						boardSquares[i][j].setIcon(img);
 						
-						java.net.URL imgURL2 = getClass().getResource("/images/black_piece_selected.png");
+						java.net.URL imgURL2 = getClass().getResource("/black_piece_selected.png");
 						ImageIcon img2 = new ImageIcon(imgURL2);
 						boardSquares[i][j].setSelectedIcon(img2);
 					
@@ -675,11 +675,11 @@ public class GameMaker extends GUIMaker {
 				
 				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_king)) {
 					try {
-						java.net.URL imgURL = getClass().getResource("/images/black_king.png");
+						java.net.URL imgURL = getClass().getResource("/black_king.png");
 						ImageIcon img = new ImageIcon(imgURL);
 						boardSquares[i][j].setIcon(img);
 						
-						java.net.URL imgURL2 = getClass().getResource("/images/black_king_selected.png");
+						java.net.URL imgURL2 = getClass().getResource("/black_king_selected.png");
 						ImageIcon img2 = new ImageIcon(imgURL2);
 						boardSquares[i][j].setSelectedIcon(img2);
 					
@@ -691,11 +691,11 @@ public class GameMaker extends GUIMaker {
 				
 				else if (checkersBoard.findPiece(j, i).getIcon().equals(red_king)) {
 					try {
-						java.net.URL imgURL = getClass().getResource("/images/red_king.png");
+						java.net.URL imgURL = getClass().getResource("/red_king.png");
 						ImageIcon img = new ImageIcon(imgURL);
 						boardSquares[i][j].setIcon(img);
 						
-						java.net.URL imgURL2 = getClass().getResource("/images/red_king_selected.png");
+						java.net.URL imgURL2 = getClass().getResource("/red_king_selected.png");
 						ImageIcon img2 = new ImageIcon(imgURL2);
 						boardSquares[i][j].setSelectedIcon(img2);
 					}
