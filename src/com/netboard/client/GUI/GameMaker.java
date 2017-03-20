@@ -68,6 +68,7 @@ public class GameMaker extends GUIMaker {
 	
 	boolean buttonSelected = false;
 	boolean sendReady = false;
+	protected static String checkersName = "checkers";
 	
 	//TODO -----TEMP------
 	CheckersGame checkers = new CheckersGame("Player 1", "Player 2");
@@ -98,31 +99,28 @@ public class GameMaker extends GUIMaker {
 	// battleship: 10 rows x 10 cols, 2 boards
 
 	
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
+//	
+//		Player player1 = new Player("desoron", checkersName);
+//		Player player2 = new Player("paulusm", "battleship");
+//		Player player3 = new Player("darksteelknight", "connect4");
+//		GameMaker gm = new GameMaker(player1);
+//		gm.prepareGUI();
+//		gm.show();
+//}
 	
-		Player player1 = new Player("desoron", "Checkers");
-		Player player2 = new Player("paulusm", "Battleship");
-		Player player3 = new Player("darksteelknight", "ConnectFour");
-		GameMaker gm = new GameMaker(player1);
-		gm.prepareGUI();
-		gm.show();
-}
-	
-	public GameMaker(Player player) {
+	public GameMaker(Player player, NetBoardClient nbc) {
+		super(nbc);
 		this.host = player;
-		if (host.getGameType().equals("Checkers"))
+		if (host.getGameType().equals(checkersName))
 			this.board = board1;
-		else if (host.getGameType().equals("ConnectFour"))
+		else if (host.getGameType().equals("connect4"))
 			this.board = board2;
-		else if (host.getGameType().equals("Battleship"))
+		else if (host.getGameType().equals("battleship"))
 			this.board = board3;
 		
 	}
-	
-	public GameMaker(NetBoardClient client, Player host) {
-		super(client);
-		this.host = host;
-	}
+
 	
 	public void show(){
 		mainFrame.setVisible(true);
@@ -207,7 +205,7 @@ public class GameMaker extends GUIMaker {
 	        	 if (sendReady) {
 	        		 //send ApplyMoveMessage
 	        		 
-	        		 if (host.getGameType().equals("Checkers")) {
+	        		 if (host.getGameType().equals(checkersName)) {
 	        			 Piece selectedPiece = board1.findPiece(selectedCol, selectedRow);
 	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
 	        			 System.out.println("Current turn is: " + checkers.getPlayerTurn());
@@ -226,7 +224,7 @@ public class GameMaker extends GUIMaker {
 	        		 }
 	        		 /* for non-server/client version:
 	        		  * 
-	        		  * 	if (host.getGameType().equals("Checkers"))
+	        		  * 	if (host.getGameType().equals(checkersName))
 	        		  *			//apply checkers logic here manually
 	        		  *			//if there's no winner yet, apply move
 	        		  *			//call updateCheckersGUI
@@ -248,7 +246,7 @@ public class GameMaker extends GUIMaker {
 	        	 int row = Integer.parseInt(coordList.get(0));
 	        	 int col = Integer.parseInt(coordList.get(1));
 	        	
-	        	 if (host.getGameType().equals("Checkers")) {
+	        	 if (host.getGameType().equals(checkersName)) {
 	        		 System.out.println("Top: --- buttonSelected is: " + buttonSelected + " ---\n");
 	        		 chooseCheckersPiece(row, col);
  
@@ -498,7 +496,7 @@ public class GameMaker extends GUIMaker {
 		makeBoard(board1Panel, boardSquares);
 //		colorCheckersBoard(boardSquares); //TODO: take this out after you're done
 		
-//		if (host.getGameType().equals("Checkers")) {
+//		if (host.getGameType().equals(checkersName)) {
 //			colorCheckersBoard(boardSquares);
 //		}
 		
@@ -615,7 +613,7 @@ public class GameMaker extends GUIMaker {
 	
 	void makeBoard(JPanel boardPanel, JToggleButton[][] boardTiles) {
 		
-		if (host.getGameType().equals("Checkers"))
+		if (host.getGameType().equals(checkersName))
 			makeCheckersBoard(boardPanel, boardTiles);
 		else if (host.getGameType().equals("ConnectFour"))
 			makeC4Board(boardPanel, boardTiles);

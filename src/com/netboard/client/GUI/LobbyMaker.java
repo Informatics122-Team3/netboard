@@ -274,7 +274,15 @@ public class LobbyMaker extends GUIMaker{
                 client.getSupportedGames().toArray(),
                 client.getSupportedGames().toArray()[0]);
    	 
-	    	if (gameChoice == null) {return; }
+    	if (gameChoice == null) {return; } 
+    	HostMessage hostMsg = 
+       new HostMessage(
+		 "nothing", 
+		 client.getUsername(), 
+		 gameChoice);
+       	 
+       	 client.writeMessage(hostMsg);
+       	 client.showGame(client.getUsername(), gameChoice);
 	    	
 	    }
 	    else if (command.equals("Join")) {
