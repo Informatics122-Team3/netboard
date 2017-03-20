@@ -11,6 +11,10 @@ public class CheckersGame extends Game{
 	private com.netboard.game.logic.CheckersLogic logic;
 	private boolean gameOver;
 	
+	public com.netboard.game.board.CheckersBoard getBoard() {
+		return this.board;
+	}
+	
 //CONSTRUCTORS ---------------------------------------------------------------------------------
 	//Default Constructor
 	public CheckersGame(String player1, String player2)

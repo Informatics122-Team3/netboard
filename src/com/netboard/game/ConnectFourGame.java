@@ -10,6 +10,10 @@ public class ConnectFourGame extends Game {
 	private com.netboard.game.logic.ConnectFourLogic logic;
 	private com.netboard.game.board.ConnectFourBoard board;
 	
+	public com.netboard.game.board.ConnectFourBoard getBoard() {
+		return this.board;
+	}
+	
 	public ConnectFourGame(int rows, int columns){
 		logic = new com.netboard.game.logic.ConnectFourLogic();
 		board = new com.netboard.game.board.ConnectFourBoard(rows, columns);

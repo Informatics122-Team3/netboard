@@ -13,6 +13,12 @@ public class Player {
 	private Socket socket;
 	private String gameType;
 	
+	public Player(String username, String gameType) {
+		//TODO: Remove this constructor after integrating GameMaker with Server/Client
+		this.socket = socket;
+		this.gameType = gameType;
+	}
+	
 	public Player(String username, Socket socket, String gameType) {
 		this.username = username;
 		this.socket = socket;
