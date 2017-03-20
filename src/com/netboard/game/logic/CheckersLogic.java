@@ -234,10 +234,6 @@ public class CheckersLogic implements com.netboard.game.Logic{
 		return false;
 	}
 	
-	public boolean updateBoard(ArrayList<ArrayList<String>> board, Piece p) {
-		return false;
-	}
-	
 	
 	
 }
