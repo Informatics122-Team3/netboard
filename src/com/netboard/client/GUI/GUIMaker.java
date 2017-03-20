@@ -24,6 +24,9 @@ public abstract class GUIMaker {
 	abstract void fillFrame();
 	abstract void show();
 	
+	public GUIMaker() {
+		//TODO: Remove this constructor after integrating GameMaker with Server/Client
+	}
 	public GUIMaker(NetBoardClient client) {
 		this.client = client;
 	}

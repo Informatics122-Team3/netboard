@@ -212,54 +212,89 @@ public class LobbyMaker extends GUIMaker{
 	         String command = e.getActionCommand();  
 	         
 	         
-	         switch(command) {
-	         case "Exit":
-	        	 promptAndClose();
-	        	 break;
-	        	 
-	         case "Host":
-	        	 
-	        	 String gameChoice = (String)JOptionPane.showInputDialog(
-	                     mainFrame,
-	                     "Choose your game:\n",
-	                     "Customized Dialog",
-	                     JOptionPane.PLAIN_MESSAGE,
-	                     null,
-	                     client.getSupportedGames().toArray(),
-	                     client.getSupportedGames().toArray()[0]);
-	        	 
-	        	 if (gameChoice == null) break;
-	        	 
-	        	 HostMessage hostMsg = 
-	        	 new HostMessage(
-	        			 "nothing", 
-	        			 client.getUsername(), 
-	        			 gameChoice);
-	        	 
-	        	 client.writeMessage(hostMsg);
-	        	 client.showGame(client.getUsername(), gameChoice); // TODO remove hard-coded gameType
-	        	 break;
-	        	 
-	         case "Join":
-	        	 
-	        	 String[] selection = usernameList.getSelectedValue().toString().split(" ");
-	        	 String hostname = selection[0]; //the first word of the string is the username
-	        	 String gameType = selection[2]; // third string is the gametype
-	        	 
-	        	 JoinMessage joinMsg = 
-	        	 new JoinMessage(
-	        			 "nothing", 
-	        			 client.getUsername(), 
-	        			 hostname);
-	        	 
-	        	 client.writeMessage(joinMsg);
-	        	 client.showGame(hostname, gameType);
-	        	 break;
-	        	 
-	         case "Refresh":
-	        	 client.refreshLobby();
-	        	 break;
-	         }
+//	         switch(command) {
+//	         case "Exit":
+//	        	 promptAndClose();
+//	        	 break;
+//	        	 
+//	         case "Host":
+//	        	 
+//	        	 String gameChoice = (String)JOptionPane.showInputDialog(
+//	                     mainFrame,
+//	                     "Choose your game:\n",
+//	                     "Customized Dialog",
+//	                     JOptionPane.PLAIN_MESSAGE,
+//	                     null,
+//	                     client.getSupportedGames().toArray(),
+//	                     client.getSupportedGames().toArray()[0]);
+//	        	 
+//	        	 if (gameChoice == null) break;
+//	        	 
+//	        	 HostMessage hostMsg = 
+//	        	 new HostMessage(
+//	        			 "nothing", 
+//	        			 client.getUsername(), 
+//	        			 gameChoice);
+//	        	 
+//	        	 client.writeMessage(hostMsg);
+//	        	 client.showGame(client.getUsername(), gameChoice); // TODO remove hard-coded gameType
+//	        	 break;
+//	        	 
+//	         case "Join":
+//	        	 
+//	        	 String[] selection = usernameList.getSelectedValue().toString().split(" ");
+//	        	 String hostname = selection[0]; //the first word of the string is the username
+//	        	 String gameType = selection[2]; // third string is the gametype
+//	        	 
+//	        	 JoinMessage joinMsg = 
+//	        	 new JoinMessage(
+//	        			 "nothing", 
+//	        			 client.getUsername(), 
+//	        			 hostname);
+//	        	 
+//	        	 client.writeMessage(joinMsg);
+//	        	 client.showGame(hostname, gameType);
+//	        	 break;
+//	        	 
+//	         case "Refresh":
+//	        	 client.refreshLobby();
+//	        	 break;
+//	         }
+	         
+	    if (command.equals("Exit")) {
+	    	promptAndClose();	    	
+	    }
+	    else if (command.equals("Host")) {
+	    	String gameChoice = (String)JOptionPane.showInputDialog(
+                mainFrame,
+                "Choose your game:\n",
+                "Customized Dialog",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                client.getSupportedGames().toArray(),
+                client.getSupportedGames().toArray()[0]);
+   	 
+	    	if (gameChoice == null) {return; }
+	    	
+	    }
+	    else if (command.equals("Join")) {
+			String[] selection = usernameList.getSelectedValue().toString().split(" ");
+			String hostname = selection[0]; //the first word of the string is the username
+			String gameType = selection[2]; // third string is the gametype
+			 
+			JoinMessage joinMsg = 
+			new JoinMessage(
+					"nothing", 
+					client.getUsername(), 
+					hostname);
+			
+			client.writeMessage(joinMsg);
+			client.showGame(hostname, gameType);	    	
+	    	
+	    }
+	    else if (command.equals("Refresh")) {
+	    	client.refreshLobby();
+	    }
 	         
 	    }
 	}
