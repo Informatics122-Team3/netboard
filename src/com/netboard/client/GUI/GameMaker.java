@@ -224,6 +224,7 @@ public class GameMaker extends GUIMaker {
 	        			 
 	        			 
 	        			 client.applyBoardMove(selectedPiece, moveCol, moveRow);
+	        			 client.waitForBoardUpdate();
 	        			 
 	        		 }
 	        		 /* for non-server/client version:

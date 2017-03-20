@@ -186,6 +186,10 @@ public class NetBoardClient {
 		
 		BoardUpdateMessage boardMsg = readMessage();
 		
+		String turn = boardMsg.getTurn();
+		
+		// TODO block game if its not your turn
+		
 		List<Board> boardState = boardMsg.getBoardState();
 		
 		gameGUI.refresh(boardState);

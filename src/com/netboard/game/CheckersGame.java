@@ -83,5 +83,10 @@ public class CheckersGame extends Game{
 		}
 	}
 //END ENGINE PORTION ---------------------------------------------------------------------------
+
+	@Override
+	public boolean isGameOver() {
+		return this.logic.isGameOver();
+	}
 }
 

@@ -54,6 +54,16 @@ public class ActiveGameThread implements Runnable {
 				break;
 			}
 			if (gameInstance.makeMove(moveMsg.getPiece(), moveMsg.getNewX(), moveMsg.getNewY())) {
+				
+				if (gameInstance.isGameOver()) {
+					broadcastBoardUpdate(
+							null,
+							true,
+							false, // this indicates that someone wants to disconnect
+							null
+					);
+				}
+				
 				broadcastBoardUpdate(
 						gameInstance.getBoardState(),
 						true,

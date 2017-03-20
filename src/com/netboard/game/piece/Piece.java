@@ -1,6 +1,8 @@
 package com.netboard.game.piece;
 
-public class Piece {
+import java.io.Serializable;
+
+public class Piece implements Serializable {
 	private int x,y;
 	private char value;
 	private String icon;

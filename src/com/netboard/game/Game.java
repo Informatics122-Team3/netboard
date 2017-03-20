@@ -11,11 +11,13 @@ public abstract class Game {
 	private String player1;
 	private String player2;
 	
+	
 	public void setPlayers(String p1, String p2) { this.player1 = p1; this.player2 = p2; }
 	
 	public boolean getWhosTurn() { return whosTurn; }
 	public void setWhosTurn(boolean whosTurn) { this.whosTurn = whosTurn; }
 	
+	public abstract boolean isGameOver();
 	public String getTurn() { return whosTurn ? player1 : player2;}
 	public String getPlayer1() { return player1; }
 	public String getPlayer2() { return player2; }
