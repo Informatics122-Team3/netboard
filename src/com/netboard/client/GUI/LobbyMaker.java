@@ -274,17 +274,9 @@ public class LobbyMaker extends GUIMaker{
                 client.getSupportedGames().toArray(),
                 client.getSupportedGames().toArray()[0]);
    	 
-<<<<<<< HEAD
     	if (gameChoice == null) {return; } 
-    	HostMessage hostMsg = 
-       new HostMessage(
-		 "nothing", 
-		 client.getUsername(), 
-		 gameChoice);
        	 
-       	 client.writeMessage(hostMsg);
        	 client.showGame(client.getUsername(), gameChoice);
-=======
 	    	if (gameChoice == null) { return; }
 	    	
 	    	HostMessage hostMsg = 
@@ -295,7 +287,6 @@ public class LobbyMaker extends GUIMaker{
 	        	 
         	 client.writeMessage(hostMsg);
         	 client.showGame(client.getUsername(), gameChoice); // TODO remove hard-coded gameType
->>>>>>> branch 'master' of https://github.com/Informatics122-Team3/netboard.git
 	    	
 	    }
 	    else if (command.equals("Join")) {
