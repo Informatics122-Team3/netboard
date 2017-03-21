@@ -62,4 +62,9 @@ public class ConnectFourGame extends Game {
 	{
 		board.printBoard();
 	}
+	
+	public ConnectFourBoard getBoard()
+	{
+		return board;
+	}
 }
