@@ -54,6 +54,14 @@ public class CheckersBoard extends Board{
 
 	}
 	
+	public void changeToKing(com.netboard.game.piece.CheckersPiece p)
+	{
+		if(p.getIcon().equals("x"))
+			p.setIcon("X");
+		else if(p.getIcon().equals("o"))
+			p.setIcon("O");
+	}
+	
 	public void printBoard()
 	{
 		String topBar = "  ";

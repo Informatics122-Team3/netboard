@@ -9,7 +9,6 @@ public class CheckersGame extends Game{
 	//Member Variables
 	private com.netboard.game.board.CheckersBoard board;
 	private com.netboard.game.logic.CheckersLogic logic;
-	private boolean gameOver;
 	
 	public com.netboard.game.board.CheckersBoard getBoard() {
 		return this.board;
@@ -25,7 +24,6 @@ public class CheckersGame extends Game{
 		boardState = new ArrayList<com.netboard.game.board.Board>(Arrays.asList(board));
 		logic = new com.netboard.game.logic.CheckersLogic(board);
 		//Player Turn (0: Player 1, 1: Player 2)
-		gameOver = false;
 		setWhosTurn(true);
 	}
 //END CONSTRUCTORS -----------------------------------------------------------------------------
@@ -57,6 +55,9 @@ public class CheckersGame extends Game{
 			return "Player 1";
 		return "Player 2";
 	}
+	
+	public boolean isGameOver() { return this.logic.isGameOver();}
+	
 //END MEMBER METHODS ---------------------------------------------------------------------------
 	
 //ENGINE PORTION -------------------------------------------------------------------------------
@@ -85,9 +86,6 @@ public class CheckersGame extends Game{
 	}
 //END ENGINE PORTION ---------------------------------------------------------------------------
 
-	@Override
-	public boolean isGameOver() {
-		return this.logic.isGameOver();
-	}
+
 }
 
