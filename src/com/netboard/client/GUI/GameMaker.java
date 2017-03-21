@@ -29,6 +29,7 @@ import com.netboard.game.board.BattleshipDefenseBoard;
 import com.netboard.game.board.Board;
 import com.netboard.game.board.CheckersBoard;
 import com.netboard.game.board.ConnectFourBoard;
+import com.netboard.game.logic.ConnectFourLogic;
 import com.netboard.game.piece.CheckersPiece;
 import com.netboard.game.piece.Piece;
 import com.netboard.game.BattleshipGame;
@@ -38,10 +39,10 @@ public class GameMaker extends GUIMaker {
 	Player host;
 	JPanel board1Panel, board2Panel, board1constrain;
 	GridBagConstraints board1CBG, board2CBG, disconnectCBG, 
-		restartCBG, sendMoveCBG, selectedButtonCBG;
+		restartCBG, sendMoveCBG, selectedButtonCBG, turnCBG, winnerCBG;
 	
 	JButton disconnectBtn, restartBtn, sendMoveBtn;
-	JLabel selectedButton;
+	JLabel selectedButton, turnLabel, winnerLabel;
 	Board board;
 	String playerTurn;
 	
@@ -68,8 +69,8 @@ public class GameMaker extends GUIMaker {
 	BattleshipDefenseBoard board3 = bat.getPlayerDenfenseBoards().get(0); //TODO: only gets the first board right now
 	
 
-	JLabel p1score, p2score, winner;
-	GridBagConstraints p1scoreCBG, p2scoreCBG, winnerCBG;
+	JLabel p1score, p2score;
+	GridBagConstraints p1scoreCBG, p2scoreCBG;
 	// ----- TEMP --------
 		
 	int rows = 8;
@@ -124,13 +125,16 @@ public class GameMaker extends GUIMaker {
 		//BoardUpdateMessage msg = client.readMessage();
 		//this.playerTurn = msg.getTurn();
 		
-		if (host.getGameType().equals(checkersName))
+		if (host.getGameType().equals(checkersName)) {
 			this.board = checkers.getBoard();
-		else if (host.getGameType().equals(connect4Name))
+		}
+		else if (host.getGameType().equals(connect4Name)) {
 			this.board = c4.getBoard();
-		else if (host.getGameType().equals(battleshipName))
+//			turnLabel.setText("Turn is: " + c4.getTurn()); //
+		}
+		else if (host.getGameType().equals(battleshipName)) {
 			this.board = bat.getPlayerDenfenseBoards().get(0);
-		
+		}
 	}
 	
 	public void show(){
@@ -246,6 +250,8 @@ public class GameMaker extends GUIMaker {
 	        		 	        		 
 		        	 else if (host.getGameType().equals(connect4Name)){
 		        		 if (c4.isGameOver()) {
+		        			 turnLabel.setText("");
+		        			 winnerLabel.setText("Winner is: " + ConnectFourLogic.checkWinner(c4.getBoard()));
 		        			 return;
 		        		 }
 		        		 c4.makeMove(new Piece(), selectedCol, selectedRow);
@@ -255,6 +261,11 @@ public class GameMaker extends GUIMaker {
 	        			 selectedRow = -1;
 	        			 sendReady = false;
 	        			 buttonSelected = false;
+	        			 
+		        		 if (c4.isGameOver()) {
+		        			 turnLabel.setText("");
+		        			 winnerLabel.setText("Winner is: " + ConnectFourLogic.checkWinner(c4.getBoard()));
+		        		 }
 		        	 }
 	        		 
 		        	 else if (host.getGameType().equals(battleshipName)){
@@ -305,9 +316,13 @@ public class GameMaker extends GUIMaker {
 
 	        	 else if (host.getGameType().equals(connect4Name)){
 	        		 if (c4.isGameOver()) {
+	        			 winnerLabel.setText("Winner is: " + ConnectFourLogic.checkWinner(c4.getBoard()));
+	        			 turnLabel.setText("");
 	        			 boardSquares[row][col].setSelected(false);
 	        			 return;
 	        		 }
+	        		 turnLabel.setText("Turn is: " + c4.getTurn());
+	        		 winnerLabel.setText("");
 	        		 chooseC4Piece(row, col);
 	        	 }
 	         }
@@ -547,6 +562,9 @@ public class GameMaker extends GUIMaker {
 	void fillFrame()
 	{
 		selectedButton = new JLabel(" ", JLabel.CENTER);
+		turnLabel = new JLabel("");
+		winnerLabel = new JLabel("");
+		
 		// JButton disconnectBtn, restartBtn, sendMoveBtn;
 		disconnectBtn = new JButton("Disconnect/Concede");
 		restartBtn = new JButton("Restart Game");
@@ -557,6 +575,8 @@ public class GameMaker extends GUIMaker {
 		restartCBG = new GridBagConstraints();
 		sendMoveCBG = new GridBagConstraints();
 		board1CBG = new GridBagConstraints();
+		winnerCBG = new GridBagConstraints();
+		turnCBG = new GridBagConstraints();
 		
 		disconnectCBG.gridx = 1;
 		disconnectCBG.gridy = 0;
@@ -570,8 +590,18 @@ public class GameMaker extends GUIMaker {
 		restartCBG.insets = new Insets(10, 0, 0, 15);
 		restartCBG.anchor = GridBagConstraints.PAGE_START;
 		
+		turnCBG.gridx = 1;
+		turnCBG.gridy = 3;
+		turnCBG.anchor = GridBagConstraints.PAGE_START;
+//		turnCBG.insets = new Insets(10, 0, 10, 15);
+		
+		winnerCBG.gridx = 1;
+		winnerCBG.gridy = 4;
+		winnerCBG.anchor = GridBagConstraints.PAGE_START;
+//		winnerCBG.insets = new Insets(10, 0, 10, 15);
+		
 		sendMoveCBG.gridx = 1;
-		sendMoveCBG.gridy = 3;
+		sendMoveCBG.gridy = 5;
 		sendMoveCBG.anchor = GridBagConstraints.LINE_END;
 		sendMoveCBG.fill = GridBagConstraints.HORIZONTAL;
 		sendMoveCBG.insets = new Insets(0, 0, 15, 15);
@@ -611,6 +641,8 @@ public class GameMaker extends GUIMaker {
 		
 		mainFrame.add(board1constrain, board1CBG);
 		mainFrame.add(selectedButton, selectedButtonCBG);
+		mainFrame.add(turnLabel, turnCBG);
+		mainFrame.add(winnerLabel, winnerCBG);
 //		mainFrame.add(board1Panel, board1CBG);
 		mainFrame.add(disconnectBtn, disconnectCBG);
 		mainFrame.add(restartBtn, restartCBG);
@@ -875,81 +907,7 @@ public class GameMaker extends GUIMaker {
 				boardPanel.add(boardSquares[i][j]);
 			}
 		}
-		
-//		for (int i = 0; i < rows; i++) {
-//			for (int j = 0; j < cols; j++) {
-//				if (checkersBoard.findPiece(j, i).getIcon().equals("x")) {
-//					try {
-//						java.net.URL imgURL = getClass().getResource("/red_piece.png");
-//						ImageIcon img = new ImageIcon(imgURL);
-//						boardSquares[i][j].setIcon(img);
-//						
-//						java.net.URL imgURL2 = getClass().getResource("/red_piece_selected.png");
-//						ImageIcon img2 = new ImageIcon(imgURL2);
-//						boardSquares[i][j].setSelectedIcon(img2);
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				else if (checkersBoard.findPiece(j, i).getIcon().equals("o")) {
-//					try {
-//						java.net.URL imgURL = getClass().getResource("/black_piece.png");
-//						ImageIcon img = new ImageIcon(imgURL);
-//						boardSquares[i][j].setIcon(img);
-//						
-//						java.net.URL imgURL2 = getClass().getResource("/black_piece_selected.png");
-//						ImageIcon img2 = new ImageIcon(imgURL2);
-//						boardSquares[i][j].setSelectedIcon(img2);
-//					
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				
-//				else if (checkersBoard.findPiece(j, i).getIcon().equals("O")) {
-//					try {
-//						java.net.URL imgURL = getClass().getResource("/black_king.png");
-//						ImageIcon img = new ImageIcon(imgURL);
-//						boardSquares[i][j].setIcon(img);
-//						
-//						java.net.URL imgURL2 = getClass().getResource("/black_king_selected.png");
-//						ImageIcon img2 = new ImageIcon(imgURL2);
-//						boardSquares[i][j].setSelectedIcon(img2);
-//					
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				
-//				else if (checkersBoard.findPiece(j, i).getIcon().equals("X")) {
-//					try {
-//						java.net.URL imgURL = getClass().getResource("/red_king.png");
-//						ImageIcon img = new ImageIcon(imgURL);
-//						boardSquares[i][j].setIcon(img);
-//						
-//						java.net.URL imgURL2 = getClass().getResource("/red_king_selected.png");
-//						ImageIcon img2 = new ImageIcon(imgURL2);
-//						boardSquares[i][j].setSelectedIcon(img2);
-//					}
-//
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				
-//				else if (checkersBoard.findPiece(j, i).getIcon().equals("")) {
-//					try {
-//						boardSquares[i][j].setIcon(null);
-//					}
-//					catch (Exception e) {
-//						System.out.println(e);
-//					}
-//				}
-//			}
-//		}
+
 		boardPanel.revalidate();
 //		mainFrame.revalidate();
 		
