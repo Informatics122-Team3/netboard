@@ -80,11 +80,7 @@ public class GameMaker extends GUIMaker {
 	BattleshipGame bat = new BattleshipGame();
 	BattleshipDefenseBoard board3 = bat.getPlayerDenfenseBoards().get(0); //TODO: only gets the first board right now
 	
-	String null_val = "";
-	String black_val = "o";
-	String black_king = "O";
-	String red_val = "x";
-	String red_king = "X";
+
 	JLabel p1score, p2score, winner;
 	GridBagConstraints p1scoreCBG, p2scoreCBG, winnerCBG;
 	// ----- TEMP --------
@@ -97,7 +93,7 @@ public class GameMaker extends GUIMaker {
 	// connectfour: 6 rows x 7 cols
 	// battleship: 10 rows x 10 cols, 2 boards
 
-	
+	//standalone GameMaker window, doesn't have client connectivity
 	public static void main(String[] args) {
 	
 		Player player1 = new Player("desoron", "Checkers");
@@ -108,6 +104,7 @@ public class GameMaker extends GUIMaker {
 		gm.show();
 }
 	
+	//constructor for standalone GameMaker window
 	public GameMaker(Player player) {
 		this.host = player;
 		if (host.getGameType().equals("Checkers"))
@@ -523,7 +520,7 @@ public class GameMaker extends GUIMaker {
 			for (int j = 0; j < cols; j++) {
 				JToggleButton b = new JToggleButton();
 				b.addMouseListener(new HandleRight());
-				if (checkersBoard.findPiece(j, i).getIcon().equals(red_val)) {
+				if (checkersBoard.findPiece(j, i).getIcon().equals("x")) {
 					try {
 					java.net.URL imgURL = getClass().getResource("/red_piece.png");
 					ImageIcon img = new ImageIcon(imgURL);
@@ -538,7 +535,7 @@ public class GameMaker extends GUIMaker {
 					System.out.println(e);
 				}
 				}
-				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_val)) {
+				else if (checkersBoard.findPiece(j, i).getIcon().equals("o")) {
 					try {
 					java.net.URL imgURL = getClass().getResource("/black_piece.png");
 					ImageIcon img = new ImageIcon(imgURL);
@@ -554,7 +551,7 @@ public class GameMaker extends GUIMaker {
 				}
 				}
 				
-				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_king)) {
+				else if (checkersBoard.findPiece(j, i).getIcon().equals("O")) {
 					try {
 					java.net.URL imgURL = getClass().getResource("/black_king.png");
 					ImageIcon img = new ImageIcon(imgURL);
@@ -570,7 +567,7 @@ public class GameMaker extends GUIMaker {
 				}
 				}
 				
-				else if (checkersBoard.findPiece(j, i).getIcon().equals(red_king)) {
+				else if (checkersBoard.findPiece(j, i).getIcon().equals("X")) {
 					try {
 					java.net.URL imgURL = getClass().getResource("/red_king.png");
 					ImageIcon img = new ImageIcon(imgURL);
@@ -643,7 +640,7 @@ public class GameMaker extends GUIMaker {
 		CheckersBoard checkersBoard = (CheckersBoard) board;
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				if (checkersBoard.findPiece(j, i).getIcon().equals(red_val)) {
+				if (checkersBoard.findPiece(j, i).getIcon().equals("x")) {
 					try {
 						java.net.URL imgURL = getClass().getResource("/red_piece.png");
 						ImageIcon img = new ImageIcon(imgURL);
@@ -657,7 +654,7 @@ public class GameMaker extends GUIMaker {
 					System.out.println(e);
 					}
 				}
-				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_val)) {
+				else if (checkersBoard.findPiece(j, i).getIcon().equals("o")) {
 					try {
 						java.net.URL imgURL = getClass().getResource("/black_piece.png");
 						ImageIcon img = new ImageIcon(imgURL);
@@ -673,7 +670,7 @@ public class GameMaker extends GUIMaker {
 					}
 				}
 				
-				else if (checkersBoard.findPiece(j, i).getIcon().equals(black_king)) {
+				else if (checkersBoard.findPiece(j, i).getIcon().equals("O")) {
 					try {
 						java.net.URL imgURL = getClass().getResource("/black_king.png");
 						ImageIcon img = new ImageIcon(imgURL);
@@ -689,7 +686,7 @@ public class GameMaker extends GUIMaker {
 					}
 				}
 				
-				else if (checkersBoard.findPiece(j, i).getIcon().equals(red_king)) {
+				else if (checkersBoard.findPiece(j, i).getIcon().equals("X")) {
 					try {
 						java.net.URL imgURL = getClass().getResource("/red_king.png");
 						ImageIcon img = new ImageIcon(imgURL);
@@ -705,7 +702,7 @@ public class GameMaker extends GUIMaker {
 					}
 				}
 				
-				else if (checkersBoard.findPiece(j, i).getIcon().equals(null_val)) {
+				else if (checkersBoard.findPiece(j, i).getIcon().equals("")) {
 					try {
 						boardSquares[i][j].setIcon(null);
 					}
@@ -718,10 +715,102 @@ public class GameMaker extends GUIMaker {
 	}
 	
 	void updateC4BoardGUI () {
+		
 		ConnectFourBoard c4Board = (ConnectFourBoard) board;
+//		for (int i = 0; i < rows; i++) {
+//			for (int j = 0; j < cols; j++) {
+//				if (c4Board.findPiece(j, i).getIcon().equals("R")) {
+//					try {
+//						java.net.URL imgURL = getClass().getResource("/red_piece.png");
+//						ImageIcon img = new ImageIcon(imgURL);
+//						boardSquares[i][j].setIcon(img);
+//						
+//						java.net.URL imgURL2 = getClass().getResource("/red_piece_selected.png");
+//						ImageIcon img2 = new ImageIcon(imgURL2);
+//						boardSquares[i][j].setSelectedIcon(img2);
+//					}
+//					catch (Exception e) {
+//					System.out.println(e);
+//					}
+//				}
+//				else if (c4.findPiece(j, i).getIcon().equals("Y")) {
+//					try {
+//						java.net.URL imgURL = getClass().getResource("/black_piece.png");
+//						ImageIcon img = new ImageIcon(imgURL);
+//						boardSquares[i][j].setIcon(img);
+//						
+//						java.net.URL imgURL2 = getClass().getResource("/black_piece_selected.png");
+//						ImageIcon img2 = new ImageIcon(imgURL2);
+//						boardSquares[i][j].setSelectedIcon(img2);
+//					
+//					}
+//					catch (Exception e) {
+//					System.out.println(e);
+//					}
+//				}
+//				
+//				
+//				else if (c4Board.findPiece(j, i).getIcon().equals(" ")) {
+//					try {
+//						boardSquares[i][j].setIcon(null);
+//					}
+//					catch (Exception e) {
+//						System.out.println(e);
+//					}
+//				}
+//			}
+//		}
 	}
 	
 	void updateBattleshipBoardGUI () {
-		BattleshipDefenseBoard batBoard = (BattleshipDefenseBoard) board;
+//		BattleshipDefenseBoard batBoard = (BattleshipDefenseBoard) board;
+//		for (int i = 0; i < rows; i++) {
+//			for (int j = 0; j < cols; j++) {
+//				if (batBoard.findPiece(j, i).getIcon().equals("Battleship")) {
+//					try {
+//						//set color of square to gray
+//					}
+//					catch (Exception e) {
+//					System.out.println(e);
+//					}
+//				}
+//				else if (batBoard.findPiece(j, i).getIcon().equals("Ocean")) {
+//					try {
+//						//set color of square to ocean blue
+//					}
+//					catch (Exception e) {
+//					System.out.println(e);
+//					}
+//				}
+//				
+//				
+//				else if (batBoard.findPiece(j, i).getIcon().equals("BattleshipHit")) {
+//					try {
+//						//set color of square to gray hit
+//					}
+//					catch (Exception e) {
+//						System.out.println(e);
+//					}
+//				}
+//				
+//				else if (batBoard.findPiece(j, i).getIcon().equals("OceanHit")) {
+//					try {
+//						//set color of square to ocean blue hit
+//					}
+//					catch (Exception e) {
+//					System.out.println(e);
+//					}
+//				}
+//
+//				else if (batBoard.findPiece(j, i).getIcon().equals("OceanMiss")) {
+//					try {
+//						//set color of square to ocean blue miss
+//					}
+//					catch (Exception e) {
+//					System.out.println(e);
+//					}
+//				}
+//			}
+//		}
 	}
 }
