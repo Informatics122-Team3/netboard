@@ -1,11 +1,13 @@
 package com.netboard.client;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import com.netboard.client.GUI.GameMaker;
 import com.netboard.client.GUI.HostGameMaker;
@@ -14,9 +16,9 @@ import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
 import com.netboard.game.piece.Piece;
 import com.netboard.message.ApplyMoveMessage;
+import com.netboard.message.BoardUpdateMessage;
 import com.netboard.message.CommsBridge;
 import com.netboard.message.InitMessage;
-import com.netboard.message.JoinMessage;
 import com.netboard.message.RefreshMessage;
 
 public class NetBoardClient {
@@ -117,10 +119,8 @@ public class NetBoardClient {
 	
 	public void showGame(String hostname, String gameType){
 		Player hostPlayer = new Player(this.username, s, gameType);
-		gameGUI = new GameMaker(this, hostPlayer);
-		gameGUI.prepareGUI();
-		//TODO show different gui depending on gameType?
-		
+		gameGUI = new GameMaker(hostPlayer, this);
+		gameGUI.prepareGUI();		
 		gameGUI.show();
 	}
 	
@@ -183,6 +183,26 @@ public class NetBoardClient {
 	public <T> T readMessage(){
 		return CommsBridge.readMessage(s);
 	}
+	
+	public void waitForBoardUpdate() {
+		
+		BoardUpdateMessage boardMsg = readMessage();
+		
+		if (!boardMsg.getTurn().equals(username)) {
+			
+			JFrame waitDialog = new JFrame();
+			waitDialog.add(new JLabel("Waiting for opponent..."));
+			
+			waitDialog.show();
+			
+			boardMsg = readMessage();
+			
+			waitDialog.dispose();
+		}
+		
+		gameGUI.updateBoardGUI(boardMsg.getBoardState(), boardMsg.getGameType());
+	}							
+	
 	
 }
 

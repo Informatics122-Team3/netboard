@@ -41,4 +41,10 @@ public class ConnectFourGame extends Game {
 		}
 	}
 
+	@Override
+	public boolean isGameOver() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

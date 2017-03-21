@@ -272,9 +272,18 @@ public class LobbyMaker extends GUIMaker{
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 client.getSupportedGames().toArray(),
-                client.getSupportedGames().toArray()[0]);
+                "checkers");
    	 
-	    	if (gameChoice == null) {return; }
+	    	if (gameChoice == null) { return; }
+	    	
+	    	HostMessage hostMsg = 
+	        	 new HostMessage(
+	        			 "nothing", 
+	        			 client.getUsername(), 
+	        			 gameChoice);
+	        	 
+        	 client.writeMessage(hostMsg);
+        	 client.showGame(client.getUsername(), gameChoice); // TODO remove hard-coded gameType
 	    	
 	    }
 	    else if (command.equals("Join")) {
@@ -294,6 +303,7 @@ public class LobbyMaker extends GUIMaker{
 	    }
 	    else if (command.equals("Refresh")) {
 	    	client.refreshLobby();
+	    	refresh();
 	    }
 	         
 	    }
@@ -301,7 +311,29 @@ public class LobbyMaker extends GUIMaker{
 
 
 	public void refresh() {
-		// TODO refresh the lobby somehow?
+		this.listPanel.remove(listScroller);
+		
+		//get playerInfo from client, display current players
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		for (String e : client.getPlayerInfo()){
+			listModel.addElement(e);
+		}
+		
+		//initialize the actual JList component that will appear in the frame
+		usernameList = new JList(listModel);
+		usernameList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		usernameList.setLayoutOrientation(JList.VERTICAL);
+		usernameList.setVisibleRowCount(-1);
+		listScroller = new JScrollPane(usernameList);
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
+		listScroller.setBorder(BorderFactory.createCompoundBorder( 
+            BorderFactory.createEmptyBorder(20, 20, 20, 20), border));
+		listScroller.setPreferredSize(new Dimension(300, 400));
+		
+		listPanel.add(listScroller, BorderLayout.CENTER);
+		
+		listPanel.revalidate();
+		listPanel.repaint();
 		
 	}
 		

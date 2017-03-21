@@ -11,6 +11,7 @@ public class BoardUpdateMessage extends Message {
 	private boolean isValid;
 	private boolean isConnected;
 	private String turn;
+	private String gameType;
 	
 	/**
 	 * 
@@ -18,9 +19,12 @@ public class BoardUpdateMessage extends Message {
 	 * @param isValid was the previously made move a valid one
 	 * @param isConnected does the sender still wish to stay connected
 	 * @param turn who's turn is it
+	 * @param gameType the gametype
 	 */
-	public BoardUpdateMessage(List<Board> bs, boolean isValid, boolean isConnected, String turn) {
+	public BoardUpdateMessage(List<Board> bs, boolean isValid, boolean isConnected, String turn, String gameType) {
 		super("boardupdate");
+
+		this.gameType = gameType;
 		this.boardState = bs;
 		this.isValid = isValid;
 		this.isConnected = isConnected;
@@ -37,6 +41,10 @@ public class BoardUpdateMessage extends Message {
 	
 	public boolean inConnectedState() {
 		return isConnected;
+	}
+	
+	public String getGameType() {
+		return this.gameType;
 	}
 	
 	public String getTurn() {

@@ -61,6 +61,7 @@ public class GameMaker extends GUIMaker {
 	JButton disconnectBtn, restartBtn, sendMoveBtn;
 	JLabel selectedButton;
 	Board board;
+	String playerTurn;
 	
 	int prevRow, prevCol, selectedRow, selectedCol;
 	int moveRow = -1;
@@ -68,6 +69,9 @@ public class GameMaker extends GUIMaker {
 	
 	boolean buttonSelected = false;
 	boolean sendReady = false;
+	protected static String checkersName = "checkers";
+	protected static String battleshipName = "battleship";
+	protected static String connect4Name = "connect4";
 	
 	//TODO -----TEMP------
 	CheckersGame checkers = new CheckersGame("Player 1", "Player 2");
@@ -94,7 +98,15 @@ public class GameMaker extends GUIMaker {
 	// battleship: 10 rows x 10 cols, 2 boards
 
 	//standalone GameMaker window, doesn't have client connectivity
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
+//	
+//		Player player1 = new Player("desoron", checkersName);
+//		Player player2 = new Player("paulusm", "battleship");
+//		Player player3 = new Player("darksteelknight", "connect4");
+//		GameMaker gm = new GameMaker(player1);
+//		gm.prepareGUI();
+//		gm.show();
+//}
 	
 		Player player1 = new Player("desoron", "Checkers");
 		Player player2 = new Player("paulusm", "Battleship");
@@ -106,19 +118,20 @@ public class GameMaker extends GUIMaker {
 	
 	//constructor for standalone GameMaker window
 	public GameMaker(Player player) {
+	public GameMaker(Player player, NetBoardClient nbc) {
+		super(nbc);
 		this.host = player;
-		if (host.getGameType().equals("Checkers"))
+		
+		//BoardUpdateMessage msg = client.readMessage();
+		//this.playerTurn = msg.getTurn();
+		
+		if (host.getGameType().equals(checkersName))
 			this.board = board1;
-		else if (host.getGameType().equals("ConnectFour"))
+		else if (host.getGameType().equals("connect4"))
 			this.board = board2;
-		else if (host.getGameType().equals("Battleship"))
+		else if (host.getGameType().equals("battleship"))
 			this.board = board3;
 		
-	}
-	
-	public GameMaker(NetBoardClient client, Player host) {
-		super(client);
-		this.host = host;
 	}
 	
 	public void show(){
@@ -204,15 +217,17 @@ public class GameMaker extends GUIMaker {
 	        	 if (sendReady) {
 	        		 //send ApplyMoveMessage
 	        		 
-	        		 if (host.getGameType().equals("Checkers")) {
+	        		 if (host.getGameType().equals(checkersName)) {
 	        			 Piece selectedPiece = board1.findPiece(selectedCol, selectedRow);
 	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
 	        			 System.out.println("Current turn is: " + checkers.getPlayerTurn());
-	        			 updateCheckersBoardGUI();
+	        			 //updateCheckersBoardGUI();
 	        			 checkers.toggleTurn();
 	        			 boardSquares[selectedRow][selectedCol].setSelected(false);
 	        			 boardSquares[moveRow][moveCol].setSelected(false);
-	        			 
+	    
+	    	        	 client.applyBoardMove(selectedPiece, moveCol, moveRow);
+	        			 client.waitForBoardUpdate();	 
 	        			 selectedCol = -1;
 	        			 selectedRow = -1;
 	        			 moveCol = -1;
@@ -220,14 +235,17 @@ public class GameMaker extends GUIMaker {
 	        			 
 	        			 sendReady = false;
 	        			 buttonSelected = false;
+	        			 
+
+	        			 
 	        		 }
 	        		 /* for non-server/client version:
 	        		  * 
-	        		  * 	if (host.getGameType().equals("Checkers"))
+	        		  * 	if (host.getGameType().equals(checkersName))
 	        		  *			//apply checkers logic here manually
 	        		  *			//if there's no winner yet, apply move
 	        		  *			//call updateCheckersGUI
-	        		  *		else if (host.getGameType().equals("ConnectFour"))
+	        		  *		else if (host.getGameType().equals("connect4"))
 	        		  *			//apply c4 logic here manually
 	        		  *		else if (host.getGameType().equals("Battleship"))
 	        		  *			//apply battleship logic here manually
@@ -245,7 +263,7 @@ public class GameMaker extends GUIMaker {
 	        	 int row = Integer.parseInt(coordList.get(0));
 	        	 int col = Integer.parseInt(coordList.get(1));
 	        	
-	        	 if (host.getGameType().equals("Checkers")) {
+	        	 if (host.getGameType().equals(checkersName)) {
 	        		 System.out.println("Top: --- buttonSelected is: " + buttonSelected + " ---\n");
 	        		 chooseCheckersPiece(row, col);
  
@@ -263,7 +281,7 @@ public class GameMaker extends GUIMaker {
 		        	 // then make move
 	        	 }
 
-	        	 else if (host.getGameType().equals("ConnectFour")){
+	        	 else if (host.getGameType().equals("connect4")){
 	        		 
 	        	 }
 	         }
@@ -303,6 +321,7 @@ public class GameMaker extends GUIMaker {
 		}
 		
 		CheckersPiece selectedPiece = ((CheckersBoard) board).findPiece(col, row);
+		Piece selectedPiece = board.findPiece(col, row);
 		
 		if ((!buttonSelected) && (selectedPiece.getIcon().equals(piece1) || selectedPiece.getIcon().equals(piece2))) {
 			System.out.println("Second if statement");
@@ -495,7 +514,7 @@ public class GameMaker extends GUIMaker {
 		makeBoard(board1Panel, boardSquares);
 //		colorCheckersBoard(boardSquares); //TODO: take this out after you're done
 		
-//		if (host.getGameType().equals("Checkers")) {
+//		if (host.getGameType().equals(checkersName)) {
 //			colorCheckersBoard(boardSquares);
 //		}
 		
@@ -612,9 +631,9 @@ public class GameMaker extends GUIMaker {
 	
 	void makeBoard(JPanel boardPanel, JToggleButton[][] boardTiles) {
 		
-		if (host.getGameType().equals("Checkers"))
+		if (host.getGameType().equals(checkersName))
 			makeCheckersBoard(boardPanel, boardTiles);
-		else if (host.getGameType().equals("ConnectFour"))
+		else if (host.getGameType().equals("connect4"))
 			makeC4Board(boardPanel, boardTiles);
 		else if (host.getGameType().equals("Battleship"))
 			makeBattleshipBoard(boardPanel, boardTiles);
@@ -636,7 +655,7 @@ public class GameMaker extends GUIMaker {
 		}
 	}
 	
-	void updateCheckersBoardGUI() {
+	void updateCheckersBoardGUI(Board board) {
 		CheckersBoard checkersBoard = (CheckersBoard) board;
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
@@ -712,6 +731,11 @@ public class GameMaker extends GUIMaker {
 				}
 			}
 		}
+		//boardPanel.revalidate();
+		mainFrame.revalidate();
+		
+		//boardPanel.repaint();
+		mainFrame.repaint();
 	}
 	
 	void updateC4BoardGUI () {
@@ -812,5 +836,23 @@ public class GameMaker extends GUIMaker {
 //				}
 //			}
 //		}
+	}
+	
+	
+ 	public void updateBoardGUI(List<Board> boards, String gameType){
+ 		if (gameType.equals(checkersName)) {
+ 			updateCheckersBoardGUI(boards.get(0));
+ 		}
+ 		else if (gameType.equals(battleshipName)) {
+ 			//updateBattleshipBoardGUI(boards.get(0), boards.get(1));
+ 		}
+ 		else if (gameType.equals(connect4Name)) {
+ 			//updateC4BoardGUI(boards.get(0));
+ 		}
+ 	}
+	
+	public void refresh(List<Board> boardState) {
+		// TODO Auto-generated method stub
+		
 	}
 }

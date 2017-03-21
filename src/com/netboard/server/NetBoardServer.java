@@ -40,7 +40,7 @@ public class NetBoardServer {
 	 * @param port the port on which to listen for connections
 	 */
 	public NetBoardServer(int port) {
-		playerLobby = new ArrayList<>();
+		playerLobby = new ArrayList<Player>();
 		try {
 			ss = new ServerSocket(PORT);
 			listenForConnections();
