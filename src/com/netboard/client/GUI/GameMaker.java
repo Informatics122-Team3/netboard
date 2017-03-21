@@ -45,7 +45,8 @@ public class GameMaker extends GUIMaker {
 	Board board;
 	String playerTurn;
 	
-	int prevRow, prevCol, selectedRow, selectedCol;
+	int selectedRow = -1;
+	int selectedCol = -1;
 	int moveRow = -1;
 	int moveCol = -1;
 	
@@ -59,7 +60,7 @@ public class GameMaker extends GUIMaker {
 	CheckersGame checkers = new CheckersGame("Player 1", "Player 2");
 	CheckersBoard board1 = checkers.getBoard();
 	
-	ConnectFourGame c4 = new ConnectFourGame(6, 7);
+	ConnectFourGame c4 = new ConnectFourGame(7, 15);
 	ConnectFourBoard board2 = c4.getBoard();
 	
 	//Battleship
@@ -72,9 +73,10 @@ public class GameMaker extends GUIMaker {
 	// ----- TEMP --------
 		
 	int rows = 8;
-	int cols = 8;
-	JToggleButton[][] boardSquares = new JToggleButton[rows][cols]; //TODO don't hardcode board dimensions
-	JToggleButton[][] boardSquares2 = new JToggleButton[rows][cols];
+	int cols = 8;	
+	JToggleButton[][] boardSquares; //TODO don't hardcode board dimensions
+	JToggleButton[][] boardSquares2;
+
 	// checkers: 10 rows x 10 cols
 	// connectfour: 6 rows x 7 cols
 	// battleship: 10 rows x 10 cols, 2 boards
@@ -82,11 +84,10 @@ public class GameMaker extends GUIMaker {
 	//standalone GameMaker window, doesn't have client connectivity
 	public static void main(String[] args) {
 	
-//		Player player1 = new Player("desoron", checkersName); //TODO: uncomment this for client
-		Player player1 = new Player("desoron", "checkers");
-		Player player2 = new Player("paulusm", "battleship");
-		Player player3 = new Player("darksteelknight", "connect4");
-		GameMaker gm = new GameMaker(player1);
+		Player player1 = new Player("desoron", checkersName);
+		Player player2 = new Player("paulusm", battleshipName);
+		Player player3 = new Player("darksteelknight", connect4Name);
+		GameMaker gm = new GameMaker(player3);
 		gm.prepareGUI();
 		gm.show();
 }
@@ -96,13 +97,26 @@ public class GameMaker extends GUIMaker {
 	public GameMaker(Player player) { 
 		this.host = player;
 		
-		if (host.getGameType().equals(checkersName))
+		if (host.getGameType().equals(checkersName)) {
 			this.board = board1;
-		else if (host.getGameType().equals("connect4"))
+			rows = 8;
+			cols = 8;
+		}
+		else if (host.getGameType().equals(connect4Name)) {
 			this.board = board2;
-		else if (host.getGameType().equals("battleship"))
+			c4.setPlayers("Jot", "Dan");
+			rows = 6;
+			cols = 7;
+		}
+		else if (host.getGameType().equals(battleshipName)) {
 			this.board = board3;
+			rows = 10;
+			cols = 10;
+		}
+		boardSquares = new JToggleButton[rows][cols]; //TODO don't hardcode board dimensions
+		boardSquares2 = new JToggleButton[rows][cols];
 	}
+	
 	public GameMaker(Player player, NetBoardClient nbc) {
 		super(nbc);
 		this.host = player;
@@ -111,12 +125,12 @@ public class GameMaker extends GUIMaker {
 		//this.playerTurn = msg.getTurn();
 		
 		if (host.getGameType().equals(checkersName))
-			this.board = board1;
-		else if (host.getGameType().equals("connect4"))
-			this.board = board2;
-		else if (host.getGameType().equals("battleship"))
-			this.board = board3;
-			
+			this.board = checkers.getBoard();
+		else if (host.getGameType().equals(connect4Name))
+			this.board = c4.getBoard();
+		else if (host.getGameType().equals(battleshipName))
+			this.board = bat.getPlayerDenfenseBoards().get(0);
+		
 	}
 	
 	public void show(){
@@ -127,50 +141,52 @@ public class GameMaker extends GUIMaker {
 
 		public void mouseClicked(MouseEvent e)
 		{
-			if (SwingUtilities.isRightMouseButton(e) && buttonSelected) {
-                System.out.println("Right Worked");
-                for (int i = 0; i < rows; i++)
-                {
-                    for (int j = 0; j < cols; j++)
-                    {
-                        if (boardSquares[i][j] == e.getSource())
-                        { 
-                        	System.out.println("Button " + i + ", " + j + " was clicked"); //i = row, j = col
-                        	Boolean validMove = checkers.checkLogic((Piece) ((CheckersBoard)board).findPiece(selectedCol, selectedRow), j, i);
-                        	
-                        	if (!validMove) {
-//								moveRow = -1;
-//								moveCol = -1;
-//								sendReady = false;
-                        	}
-                        	else if (validMove && (i == moveRow && j == moveCol)) {
-                        		boardSquares[i][j].setSelected(false);
-								moveRow = -1;
-								moveCol = -1;
-								sendReady = false;
-                        	}
-                        	else if (validMove && (moveRow == -1 && moveCol == -1)) {
-                        		boardSquares[i][j].setSelected(true);
-								moveRow = i;
-								moveCol = j;
-								sendReady = true;
-                        	}
-                        	else if (validMove && (i != moveRow || j != moveCol)) {
-                        		boardSquares[moveRow][moveCol].setSelected(false);
-                        		boardSquares[i][j].setSelected(true);
-								moveRow = i;
-								moveCol = j;
-								sendReady = true;
-                        	}
-
-                        	System.out.println("Move from : " + selectedRow + ", " + selectedCol + 
-                        		" to " + i + ", " + j + " is " + validMove);
-
-                        	return;
-                        }
-                    }
-                }
-            }
+			if (host.getGameType().equals(checkersName)) {
+				if (SwingUtilities.isRightMouseButton(e) && buttonSelected) {
+	                System.out.println("Right Worked");
+	                for (int i = 0; i < rows; i++)
+	                {
+	                    for (int j = 0; j < cols; j++)
+	                    {
+	                        if (boardSquares[i][j] == e.getSource())
+	                        { 
+	                        	System.out.println("Button " + i + ", " + j + " was clicked"); //i = row, j = col
+	                        	Boolean validMove = checkers.checkLogic((Piece) ((CheckersBoard)board).findPiece(selectedCol, selectedRow), j, i);
+	                        	
+	                        	if (!validMove) {
+	//								moveRow = -1;
+	//								moveCol = -1;
+	//								sendReady = false;
+	                        	}
+	                        	else if (validMove && (i == moveRow && j == moveCol)) {
+	                        		boardSquares[i][j].setSelected(false);
+									moveRow = -1;
+									moveCol = -1;
+									sendReady = false;
+	                        	}
+	                        	else if (validMove && (moveRow == -1 && moveCol == -1)) {
+	                        		boardSquares[i][j].setSelected(true);
+									moveRow = i;
+									moveCol = j;
+									sendReady = true;
+	                        	}
+	                        	else if (validMove && (i != moveRow || j != moveCol)) {
+	                        		boardSquares[moveRow][moveCol].setSelected(false);
+	                        		boardSquares[i][j].setSelected(true);
+									moveRow = i;
+									moveCol = j;
+									sendReady = true;
+	                        	}
+	
+	                        	System.out.println("Move from : " + selectedRow + ", " + selectedCol + 
+	                        		" to " + i + ", " + j + " is " + validMove);
+	
+	                        	return;
+	                        }
+	                    }
+	                }
+	            }
+			}
 		}
 
 		public void mousePressed(MouseEvent e) { }
@@ -203,7 +219,7 @@ public class GameMaker extends GUIMaker {
 	        		 //send ApplyMoveMessage
 	        		 
 	        		 if (host.getGameType().equals(checkersName)) {
-	        			 Piece selectedPiece = board1.findPiece(selectedCol, selectedRow);
+	        			 Piece selectedPiece = checkers.getBoard().findPiece(selectedCol, selectedRow);
 	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
 	        			 updateCheckersBoardGUI(checkers.getBoard(), boardSquares, board1Panel);
 	        			 //System.out.println("Current turn is: " + checkers.getPlayerTurn());
@@ -227,6 +243,25 @@ public class GameMaker extends GUIMaker {
 
 	        			 
 	        		 }
+	        		 	        		 
+		        	 else if (host.getGameType().equals(connect4Name)){
+		        		 if (c4.isGameOver()) {
+		        			 return;
+		        		 }
+		        		 c4.makeMove(new Piece(), selectedCol, selectedRow);
+		        		 updateC4BoardGUI(c4.getBoard(), boardSquares, board1Panel);
+		        		 c4.toggleTurn();
+	        			 selectedCol = -1;
+	        			 selectedRow = -1;
+	        			 sendReady = false;
+	        			 buttonSelected = false;
+		        	 }
+	        		 
+		        	 else if (host.getGameType().equals(battleshipName)){
+		        		 
+		        	 }
+	        		 
+	        		 
 	        		 /* for non-server/client version:
 	        		  * 
 	        		  * 	if (host.getGameType().equals(checkersName))
@@ -245,7 +280,6 @@ public class GameMaker extends GUIMaker {
 	         else
 	         {	 //instructions to play the game on the right hand side
 	        	 
-	        	 boardSquares[prevRow][prevCol].setSelected(false);
 	        	 selectedButton.setText("You have selected [row,col]: [" + command + "]");
 	        	 List<String> coordList = Arrays.asList(command.split(","));
 	        	 int row = Integer.parseInt(coordList.get(0));
@@ -269,8 +303,12 @@ public class GameMaker extends GUIMaker {
 		        	 // then make move
 	        	 }
 
-	        	 else if (host.getGameType().equals("connect4")){
-	        		 
+	        	 else if (host.getGameType().equals(connect4Name)){
+	        		 if (c4.isGameOver()) {
+	        			 boardSquares[row][col].setSelected(false);
+	        			 return;
+	        		 }
+	        		 chooseC4Piece(row, col);
 	        	 }
 	         }
 	    }
@@ -347,12 +385,72 @@ public class GameMaker extends GUIMaker {
 		System.out.println("Checkers piece at this spot is: " + selectedPiece.getIcon());
 		System.out.println("Value of buttonSelected is: " + buttonSelected + ", selectedRow is: " + selectedRow + ", selectedCol is: " + selectedCol);
 		System.out.println();
-//		prevRow = row;
-//		prevCol = col;
+
 		}
 	
 	void chooseC4Piece(int row, int col){
+		String piece1;
+		if (c4.isGameOver()) {
+			boardSquares[row][col].setSelected(false);
+			return;
+		}
 		
+		if (c4.getTurn().equals(c4.getPlayer1())) {
+			piece1 = c4.getPlayer1();
+		}
+		else {
+			piece1 = c4.getPlayer2();
+		}
+		
+		if (row == selectedRow && col == selectedCol) {
+			System.out.println("First if statement");
+			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
+			buttonSelected = false;
+			selectedRow = -1;
+			selectedCol = -1;
+			
+			sendReady = false;
+			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
+			return;
+			
+		}
+		
+//		Piece selectedPiece = board.findPiece(col, row);
+		
+		if ((!buttonSelected) && (c4.getLogic().isValidMove(new Piece(), col, row))) {
+			System.out.println("Second if statement");
+			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
+			buttonSelected = true;
+			sendReady = true;
+			selectedRow = row;
+			selectedCol = col;
+			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
+		}
+		else if (buttonSelected && (c4.getLogic().isValidMove(new Piece(), col, row))) {
+			System.out.println("Else if statement");
+			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
+			boardSquares[selectedRow][selectedCol].setSelected(false);
+			selectedRow = row;
+			selectedCol = col;
+			
+			sendReady = true;
+			
+			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
+
+		}
+
+		if (!(c4.getBoard().at(col, row).getIcon().equals(" "))) { //NOT WORKING CURRENTLY
+			boardSquares[row][col].setSelected(false);
+		}
+		
+		if (!(c4.getLogic().isValidMove(new Piece(), col, row))) {
+			boardSquares[row][col].setSelected(false);
+		}
+		
+		System.out.println("C4 move was called");
+		System.out.println("Row is: " + row + ", Col is: " + col);
+		System.out.println("Value of buttonSelected is: " + buttonSelected + ", selectedRow is: " + selectedRow + ", selectedCol is: " + selectedCol);
+		System.out.println();
 	}
 	
 	void initFrame()
@@ -521,7 +619,7 @@ public class GameMaker extends GUIMaker {
 	}
 	
 	void makeCheckersBoard(JPanel boardPanel, JToggleButton[][] boardTiles) {
-		CheckersBoard checkersBoard = (CheckersBoard) board;
+		CheckersBoard checkersBoard = (CheckersBoard) checkers.getBoard();
 		Insets buttonMargin = new Insets(0, 0, 0, 0);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
@@ -610,7 +708,52 @@ public class GameMaker extends GUIMaker {
 	}
 	
 	void makeC4Board(JPanel boardPanel, JToggleButton[][] boardTiles) {
+		ConnectFourBoard c4Board = (ConnectFourBoard) c4.getBoard();
+		Insets buttonMargin = new Insets(0, 0, 0, 0);
 		
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				JToggleButton b = new JToggleButton();
+				b.addMouseListener(new HandleRight());
+				if (c4Board.at(i, j).getIcon().equals(c4.getPlayer1())) {
+					try {
+					java.net.URL imgURL = getClass().getResource("/Red_C4_Teacher_small.png");
+					ImageIcon img = new ImageIcon(imgURL);
+					b.setIcon(img);
+					
+				}
+				catch (Exception e) {
+					System.out.println(e);
+				}
+				}
+				else if (c4Board.at(i, j).getIcon().equals(c4.getPlayer2())) {
+					try {
+					java.net.URL imgURL = getClass().getResource("/Yellow_C4_TA_small.png");
+					ImageIcon img = new ImageIcon(imgURL);
+					b.setIcon(img);
+					
+					
+				}
+				catch (Exception e) {
+					System.out.println(e);
+				}
+				}
+				
+
+				
+				b.setActionCommand(i + "," + j);
+				b.addActionListener(new ButtonClickListener());
+				b.setMargin(buttonMargin);
+				b.setBackground(Color.WHITE);
+				boardTiles[i][j] = b;
+			}
+		}
+		
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				boardPanel.add(boardSquares[i][j]);
+			}
+		}
 	}
 	
 	void makeBattleshipBoard(JPanel boardPanel, JToggleButton[][] boardTiles) {
@@ -621,9 +764,9 @@ public class GameMaker extends GUIMaker {
 		
 		if (host.getGameType().equals(checkersName))
 			makeCheckersBoard(boardPanel, boardTiles);
-		else if (host.getGameType().equals("connect4"))
+		else if (host.getGameType().equals(connect4Name))
 			makeC4Board(boardPanel, boardTiles);
-		else if (host.getGameType().equals("Battleship"))
+		else if (host.getGameType().equals(battleshipName))
 			makeBattleshipBoard(boardPanel, boardTiles);
 	
 	}
@@ -644,7 +787,7 @@ public class GameMaker extends GUIMaker {
 	}
 	
 	void updateCheckersBoardGUI(Board newBoard, JToggleButton[][] boardTiles, JPanel boardPanel) {
-		board1Panel.removeAll();
+		boardPanel.removeAll();
 		CheckersBoard checkersBoard = (CheckersBoard) newBoard;
 		Insets buttonMargin = new Insets(0, 0, 0, 0);
 		
@@ -807,59 +950,60 @@ public class GameMaker extends GUIMaker {
 //				}
 //			}
 //		}
-		//boardPanel.revalidate();
-		mainFrame.revalidate();
+		boardPanel.revalidate();
+//		mainFrame.revalidate();
 		
-		//boardPanel.repaint();
-		mainFrame.repaint();
+		boardPanel.repaint();
+//		mainFrame.repaint();
 	}
 	
-	void updateC4BoardGUI () {
+	void updateC4BoardGUI (Board newBoard, JToggleButton[][] boardTiles, JPanel boardPanel) {
+		boardPanel.removeAll();
+		ConnectFourBoard c4Board = (ConnectFourBoard) newBoard;
+		Insets buttonMargin = new Insets(0, 0, 0, 0);
 		
-		ConnectFourBoard c4Board = (ConnectFourBoard) board;
-//		for (int i = 0; i < rows; i++) {
-//			for (int j = 0; j < cols; j++) {
-//				if (c4Board.findPiece(j, i).getIcon().equals("R")) {
-//					try {
-//						java.net.URL imgURL = getClass().getResource("/red_piece.png");
-//						ImageIcon img = new ImageIcon(imgURL);
-//						boardSquares[i][j].setIcon(img);
-//						
-//						java.net.URL imgURL2 = getClass().getResource("/red_piece_selected.png");
-//						ImageIcon img2 = new ImageIcon(imgURL2);
-//						boardSquares[i][j].setSelectedIcon(img2);
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				else if (c4.findPiece(j, i).getIcon().equals("Y")) {
-//					try {
-//						java.net.URL imgURL = getClass().getResource("/black_piece.png");
-//						ImageIcon img = new ImageIcon(imgURL);
-//						boardSquares[i][j].setIcon(img);
-//						
-//						java.net.URL imgURL2 = getClass().getResource("/black_piece_selected.png");
-//						ImageIcon img2 = new ImageIcon(imgURL2);
-//						boardSquares[i][j].setSelectedIcon(img2);
-//					
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				
-//				
-//				else if (c4Board.findPiece(j, i).getIcon().equals(" ")) {
-//					try {
-//						boardSquares[i][j].setIcon(null);
-//					}
-//					catch (Exception e) {
-//						System.out.println(e);
-//					}
-//				}
-//			}
-//		}
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				JToggleButton b = new JToggleButton();
+				b.addMouseListener(new HandleRight());
+				if (newBoard.at(i, j).getIcon().equals(c4.getPlayer1())) {
+					try {
+					java.net.URL imgURL = getClass().getResource("/Red_C4_Teacher_small.png");
+					ImageIcon img = new ImageIcon(imgURL);
+					b.setIcon(img);				
+					}
+					catch (Exception e) {
+						System.out.println(e);
+					}
+				}
+				else if (newBoard.at(i, j).getIcon().equals(c4.getPlayer2())) {
+					try {
+					java.net.URL imgURL = getClass().getResource("/Yellow_C4_TA_small.png");
+					ImageIcon img = new ImageIcon(imgURL);
+					b.setIcon(img);
+					}
+					catch (Exception e) {
+						System.out.println(e);
+					}
+				}
+				
+				b.setActionCommand(i + "," + j);
+				b.addActionListener(new ButtonClickListener());
+				b.setMargin(buttonMargin);
+				b.setBackground(Color.WHITE);
+				boardTiles[i][j] = b; 
+			}
+			}
+	
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				boardPanel.add(boardSquares[i][j]);
+			}
+		}
+		
+		boardPanel.revalidate();
+		boardPanel.repaint();
+
 	}
 	
 	void updateBattleshipBoardGUI () {
