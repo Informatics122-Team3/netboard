@@ -272,11 +272,8 @@ public class LobbyMaker extends GUIMaker{
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 client.getSupportedGames().toArray(),
-                client.getSupportedGames().toArray()[0]);
+                "checkers");
    	 
-    	if (gameChoice == null) {return; } 
-       	 
-       	 client.showGame(client.getUsername(), gameChoice);
 	    	if (gameChoice == null) { return; }
 	    	
 	    	HostMessage hostMsg = 

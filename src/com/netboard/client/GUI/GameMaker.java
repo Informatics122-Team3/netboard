@@ -1,47 +1,32 @@
 package com.netboard.client.GUI;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
-//import Checkers Game Logic
+import Battleship.BattleshipGame;
+
+import com.netboard.client.NetBoardClient;
 import com.netboard.game.CheckersGame;
 import com.netboard.game.ConnectFourGame;
-import com.netboard.client.NetBoardClient;
 import com.netboard.game.Player;
 import com.netboard.game.board.BattleshipDefenseBoard;
 import com.netboard.game.board.Board;
@@ -49,7 +34,8 @@ import com.netboard.game.board.CheckersBoard;
 import com.netboard.game.board.ConnectFourBoard;
 import com.netboard.game.piece.CheckersPiece;
 import com.netboard.game.piece.Piece;
-import Battleship.BattleshipGame;
+import com.netboard.message.BoardUpdateMessage;
+//import Checkers Game Logic
 
 public class GameMaker extends GUIMaker {
 
@@ -61,6 +47,7 @@ public class GameMaker extends GUIMaker {
 	JButton disconnectBtn, restartBtn, sendMoveBtn;
 	JLabel selectedButton;
 	Board board;
+	String playerTurn;
 	
 	int prevRow, prevCol, selectedRow, selectedCol;
 	int moveRow = -1;
@@ -112,6 +99,10 @@ public class GameMaker extends GUIMaker {
 	public GameMaker(Player player, NetBoardClient nbc) {
 		super(nbc);
 		this.host = player;
+		
+		//BoardUpdateMessage msg = client.readMessage();
+		//this.playerTurn = msg.getTurn();
+		
 		if (host.getGameType().equals(checkersName))
 			this.board = board1;
 		else if (host.getGameType().equals("connect4"))

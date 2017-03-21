@@ -2,6 +2,8 @@ package com.netboard.game.board;
 
 import java.util.ArrayList;
 
+import com.netboard.game.piece.Piece;
+
 public abstract class Board {
 	private int width,height,p1Pieces,p2Pieces, turn;
 	private ArrayList<ArrayList<com.netboard.game.piece.Piece>> boardState;
@@ -52,7 +54,6 @@ public abstract class Board {
 	
 	public abstract void addPiece(int x, int y, String type); //NOTE: you can compare the string type, and then create the object accordingly.
 	public abstract void removePiece(int x, int y, String type);
-	
 }
 
 

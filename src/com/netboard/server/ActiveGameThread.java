@@ -1,6 +1,7 @@
 package com.netboard.server;
 
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
 
 import com.netboard.game.Game;
 import com.netboard.game.GameFactory;
@@ -32,7 +33,14 @@ public class ActiveGameThread implements Runnable {
 	}
 	
 	public void run() {
+		//initializePlayers();
 		listenForApplyMoves();		
+	}
+	
+	private void initializePlayers() {
+		//host always goes first
+		broadcastBoardUpdate(null, true, true, host.getUsername());
+		
 	}
 	
 	private void listenForApplyMoves() {
@@ -76,11 +84,12 @@ public class ActiveGameThread implements Runnable {
 						null,
 						false, // this indicates that the previous move was invalid
 						true,
-						null
+						null,
+						gameInstance.getGameName()
 				);
 				
 				CommsBridge.writeMessage(
-						activePlayer.getSocket(), invalidMoveMsg);					
+						activePlayer.getSocket(), invalidMoveMsg);
 			}
 			
 			gameInstance.toggleTurn();
@@ -95,7 +104,7 @@ public class ActiveGameThread implements Runnable {
 	private void broadcastBoardUpdate(List<Board> boardState, boolean isValid, boolean isConnected, String turn) {
 		
 		BoardUpdateMessage boardMsg = 
-				new BoardUpdateMessage(boardState, isValid, isConnected, turn);
+				new BoardUpdateMessage(boardState, isValid, isConnected, turn, gameInstance.getGameName());
 		
 		CommsBridge.writeMessage(host.getSocket(), boardMsg);
 		CommsBridge.writeMessage(guest.getSocket(), boardMsg);

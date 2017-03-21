@@ -30,6 +30,7 @@ public class LobbyThread implements Runnable {
 			if(msgObj instanceof HostMessage)
 			{
 			    HostMessage hostMsgObj = (HostMessage) msgObj;
+			    
 			    nbs.addHostToLobby(hostMsgObj.getHostUsername(), s, hostMsgObj.getGameType());
 			    break;
 			}
@@ -39,7 +40,6 @@ public class LobbyThread implements Runnable {
 				
 				String guestUsername = joinMsgObj.getGuestUserName(),
 						hostUsername = joinMsgObj.getHostUsername();
-				
 				
 				Player host = nbs.findPlayer(hostUsername);
 				// TODO if (host == null) {} 
