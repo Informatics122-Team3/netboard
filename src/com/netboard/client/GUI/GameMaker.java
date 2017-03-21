@@ -81,26 +81,29 @@ public class GameMaker extends GUIMaker {
 	// battleship: 10 rows x 10 cols, 2 boards
 
 	//standalone GameMaker window, doesn't have client connectivity
-//	public static void main(String[] args) {
-//	
-//		Player player1 = new Player("desoron", checkersName);
-//		Player player2 = new Player("paulusm", "battleship");
-//		Player player3 = new Player("darksteelknight", "connect4");
-//		GameMaker gm = new GameMaker(player1);
-//		gm.prepareGUI();
-//		gm.show();
-//}
+	public static void main(String[] args) {
 	
-//		Player player1 = new Player("desoron", "Checkers");
-//		Player player2 = new Player("paulusm", "Battleship");
-//		Player player3 = new Player("darksteelknight", "ConnectFour");
-//		GameMaker gm = new GameMaker(player1);
-//		gm.prepareGUI();
-//		gm.show();
-//}
+//		Player player1 = new Player("desoron", checkersName); //TODO: uncomment this for client
+		Player player1 = new Player("desoron", "checkers");
+		Player player2 = new Player("paulusm", "battleship");
+		Player player3 = new Player("darksteelknight", "connect4");
+		GameMaker gm = new GameMaker(player1);
+		gm.prepareGUI();
+		gm.show();
+}
+	
 	
 	//constructor for standalone GameMaker window
-//	public GameMaker(Player player) { }
+	public GameMaker(Player player) { 
+		this.host = player;
+		
+		if (host.getGameType().equals(checkersName))
+			this.board = board1;
+		else if (host.getGameType().equals("connect4"))
+			this.board = board2;
+		else if (host.getGameType().equals("battleship"))
+			this.board = board3;
+	}
 	public GameMaker(Player player, NetBoardClient nbc) {
 		super(nbc);
 		this.host = player;
@@ -202,18 +205,18 @@ public class GameMaker extends GUIMaker {
 	        		 
 	        		 if (host.getGameType().equals(checkersName)) {
 	        			 Piece selectedPiece = board1.findPiece(selectedCol, selectedRow);
-	        			 //checkers.makeMove(selectedPiece, moveCol, moveRow);
+	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
+	        			 updateCheckersBoardGUI(checkers.getBoard(), boardSquares, board1Panel);
 	        			 //System.out.println("Current turn is: " + checkers.getPlayerTurn());
-	        			 //checkers.makeMove(selectedPiece, moveCol, moveRow);
-	        			 System.out.println("Current turn is: " + checkers.getPlayerTurn());
-	        			 //updateCheckersBoardGUI();
+
 	        			 //checkers.toggleTurn();
-//	        			 checkers.toggleTurn();
+
 	        			 boardSquares[selectedRow][selectedCol].setSelected(false);
 	        			 boardSquares[moveRow][moveCol].setSelected(false);
-	    
-	    	        	 client.applyBoardMove(selectedPiece, moveCol, moveRow);
-	        			 client.waitForBoardUpdate();	 
+
+	        			 //Put these back in for client/server	    
+//	    	        	 client.applyBoardMove(selectedPiece, moveCol, moveRow);
+//	        			 client.waitForBoardUpdate();	 
 	        			 selectedCol = -1;
 	        			 selectedRow = -1;
 	        			 moveCol = -1;
