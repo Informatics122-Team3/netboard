@@ -19,6 +19,7 @@ public class CheckersGame extends Game{
 	//Default Constructor
 	public CheckersGame(String player1, String player2)
 	{
+		name = "checkers";
 		setPlayers(player1, player2);
 		board = new com.netboard.game.board.CheckersBoard(getPlayer1(), getPlayer2());
 		boardState = new ArrayList<com.netboard.game.board.Board>(Arrays.asList(board));

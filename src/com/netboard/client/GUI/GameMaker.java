@@ -219,10 +219,10 @@ public class GameMaker extends GUIMaker {
 	        		 
 	        		 if (host.getGameType().equals(checkersName)) {
 	        			 Piece selectedPiece = board1.findPiece(selectedCol, selectedRow);
-	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
-	        			 System.out.println("Current turn is: " + checkers.getPlayerTurn());
+	        			 //checkers.makeMove(selectedPiece, moveCol, moveRow);
+	        			 //System.out.println("Current turn is: " + checkers.getPlayerTurn());
 	        			 //updateCheckersBoardGUI();
-	        			 checkers.toggleTurn();
+	        			 //checkers.toggleTurn();
 	        			 boardSquares[selectedRow][selectedCol].setSelected(false);
 	        			 boardSquares[moveRow][moveCol].setSelected(false);
 	    

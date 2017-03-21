@@ -6,7 +6,7 @@ import com.netboard.game.board.Board;
 
 public abstract class Game {
 	protected ArrayList<Board> boardState;
-	private String name;
+	protected String name;
 	private boolean whosTurn;
 	private String player1;
 	private String player2;

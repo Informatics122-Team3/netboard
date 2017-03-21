@@ -191,7 +191,7 @@ public class NetBoardClient {
 			JOptionPane.showInputDialog("INVALID MOVE");
 		}		
 
-		if (!boardMsg.getTurn().equals(username)) {
+		else if (!boardMsg.getTurn().equals(username)) {
 			
 			JFrame waitDialog = new JFrame();
 			waitDialog.add(new JLabel("Waiting for opponent..."));

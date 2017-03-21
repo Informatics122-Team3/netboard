@@ -31,8 +31,20 @@ public class CheckersLogic implements com.netboard.game.Logic{
 	public String getWinner() { return checkWinner() == 0? board.getPlayer1() : board.getPlayer2(); }
 		
 	public boolean isValidMove(Piece p, int newX, int newY) {
-		if(Jumping){ if(getJumpMoves(p.getX(), p.getY(), p.getIcon()).contains(new ArrayList<Integer>(Arrays.asList(newX, newY)))) { return true; } }
-		else{ if(getPieceMoves(p.getX(), p.getY(), p.getIcon()).contains(new ArrayList<Integer>(Arrays.asList(newX, newY)))) {return true; } }
+		if(Jumping){ 
+			if(getJumpMoves(p.getX(), p.getY(), p.getIcon())
+					.contains(new ArrayList<Integer>(Arrays.asList(newX, newY)))) 
+			{ 
+				return true; 
+			} 
+		}
+		else { 
+			if(getPieceMoves(p.getX(), p.getY(), p.getIcon())
+					.contains(new ArrayList<Integer>(Arrays.asList(newX, newY)))) 
+			{
+				return true; 
+			} 
+		}
 		return false;
 	}
 	public String pieceAt(int x, int y)	{ return board.findPiece(x, y).getIcon(); }
