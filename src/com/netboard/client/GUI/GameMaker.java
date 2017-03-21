@@ -1,47 +1,30 @@
 package com.netboard.client.GUI;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-
+import com.netboard.client.NetBoardClient;
 //import Checkers Game Logic
 import com.netboard.game.CheckersGame;
 import com.netboard.game.ConnectFourGame;
-import com.netboard.client.NetBoardClient;
 import com.netboard.game.Player;
 import com.netboard.game.board.BattleshipDefenseBoard;
 import com.netboard.game.board.Board;
@@ -219,10 +202,10 @@ public class GameMaker extends GUIMaker {
 	        		 
 	        		 if (host.getGameType().equals(checkersName)) {
 	        			 Piece selectedPiece = board1.findPiece(selectedCol, selectedRow);
-	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
+	        			 //checkers.makeMove(selectedPiece, moveCol, moveRow);
 	        			 System.out.println("Current turn is: " + checkers.getPlayerTurn());
 	        			 //updateCheckersBoardGUI();
-	        			 checkers.toggleTurn();
+//	        			 checkers.toggleTurn();
 	        			 boardSquares[selectedRow][selectedCol].setSelected(false);
 	        			 boardSquares[moveRow][moveCol].setSelected(false);
 	    
@@ -836,6 +819,10 @@ public class GameMaker extends GUIMaker {
 //				}
 //			}
 //		}
+	}
+	
+	public void showInvalidMsg() {
+		JOptionPane.showMessageDialog(mainFrame, "INVALID MOVE");
 	}
 	
 	
