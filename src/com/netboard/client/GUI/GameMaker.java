@@ -32,7 +32,7 @@ import com.netboard.game.board.CheckersBoard;
 import com.netboard.game.board.ConnectFourBoard;
 import com.netboard.game.piece.CheckersPiece;
 import com.netboard.game.piece.Piece;
-import Battleship.BattleshipGame;
+import com.netboard.game.BattleshipGame;
 
 public class GameMaker extends GUIMaker {
 

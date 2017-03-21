@@ -1,6 +1,5 @@
-package Battleship;
+package com.netboard.game.piece;
 
-import com.netboard.game.piece.Piece;
 
 public class Ship extends Piece {
 
