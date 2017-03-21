@@ -46,7 +46,14 @@ public class CheckersGame extends Game{
 		else if(logic.checkWinner() == 1)
 			System.out.println(getPlayer2() + " Wins!");
 	}
-	
+	public boolean getJumping() { return logic.getJumping(); }
+	public void setJumping(boolean Jumping) { logic.setJumping(Jumping); }
+	public boolean canJump(com.netboard.game.piece.Piece p)
+	{
+		if(logic.canJump(p.getX(), p.getY(), p.getIcon()))
+			return true;
+		return false;
+	}
 	
 	//returns the player turn
 	public String getPlayerTurn()
@@ -68,7 +75,6 @@ public class CheckersGame extends Game{
 			return true;
 		return false;
 	}
-
 	
 	//method that processes the user's desired move
 	public boolean makeMove(Piece p, int newX, int newY){
