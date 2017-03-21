@@ -6,11 +6,11 @@ import com.netboard.game.piece.Piece;
 
 public abstract class Board {
 	private int width,height,p1Pieces,p2Pieces, turn;
-	private ArrayList<ArrayList<com.netboard.game.piece.Piece>> boardState;
+	private ArrayList<ArrayList<Piece>> boardState;
 	private String player1, player2;
 	
 	public Board(){
-		boardState = new ArrayList<ArrayList<com.netboard.game.piece.Piece>>();
+		boardState = new ArrayList<ArrayList<Piece>>();
 		player1 = "";
 		player2 = "";
 		turn = 0;
@@ -43,6 +43,11 @@ public abstract class Board {
 	public void setHeight(int height) 	{ this.height = height; }
 	public void setp1Pieces(int amount)	{ p1Pieces = amount; }
 	public void setp2Pieces(int amount)	{ p2Pieces = amount; }
+	
+	public Piece findPiece(int x, int y)
+	{
+		return boardState.get(x).get(y);
+	}
 	
 	public void setBoardState(ArrayList<ArrayList<com.netboard.game.piece.Piece>> boardState ){ this.boardState = boardState; }
 

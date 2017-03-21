@@ -43,6 +43,10 @@ public class BoardUpdateMessage extends Message {
 		return isConnected;
 	}
 	
+	public String getGameType() {
+		return this.gameType;
+	}
+	
 	public String getTurn() {
 		return turn;
 	}

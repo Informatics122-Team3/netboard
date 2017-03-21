@@ -6,12 +6,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import com.netboard.client.GUI.GameMaker;
 import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
 import com.netboard.client.GUI.LoginMaker;
 import com.netboard.game.Player;
-import com.netboard.game.board.Board;
 import com.netboard.game.piece.Piece;
 import com.netboard.message.ApplyMoveMessage;
 import com.netboard.message.BoardUpdateMessage;
@@ -186,15 +188,21 @@ public class NetBoardClient {
 		
 		BoardUpdateMessage boardMsg = readMessage();
 		
-		String turn = boardMsg.getTurn();
+		if (!boardMsg.getTurn().equals(username)) {
+			
+			JFrame waitDialog = new JFrame();
+			waitDialog.add(new JLabel("Waiting for opponent..."));
+			
+			waitDialog.show();
+			
+			boardMsg = readMessage();
+			
+			waitDialog.dispose();
+		}
 		
-		// TODO block game if its not your turn
-		
-		List<Board> boardState = boardMsg.getBoardState();
-		//String gameType = game.getGameType();		//get game type so GUI knows which type of update to call
-								//where do we get this?
-		//gameGUI.updateBoardGUI(boardState, gameType);	//generic updateBoardGUI to call appropriate updateGUI based on gametype
-	}							//this has been stubbed in gameGUI
+		gameGUI.updateBoardGUI(boardMsg.getBoardState(), boardMsg.getGameType());
+	}							
+	
 	
 }
 

@@ -202,19 +202,13 @@ public class GameMaker extends GUIMaker {
 	        			 Piece selectedPiece = board1.findPiece(selectedCol, selectedRow);
 	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
 	        			 System.out.println("Current turn is: " + checkers.getPlayerTurn());
-	        			 updateCheckersBoardGUI();
+	        			 //updateCheckersBoardGUI();
 	        			 checkers.toggleTurn();
 	        			 boardSquares[selectedRow][selectedCol].setSelected(false);
 	        			 boardSquares[moveRow][moveCol].setSelected(false);
 	        			 
-	        			 selectedCol = -1;
-	        			 selectedRow = -1;
-	        			 moveCol = -1;
-	        			 moveRow = -1;
-	        			 
 	        			 sendReady = false;
 	        			 buttonSelected = false;
-	        			 
 	        			 
 	        			 client.applyBoardMove(selectedPiece, moveCol, moveRow);
 	        			 client.waitForBoardUpdate();
@@ -226,7 +220,7 @@ public class GameMaker extends GUIMaker {
 	        		  *			//apply checkers logic here manually
 	        		  *			//if there's no winner yet, apply move
 	        		  *			//call updateCheckersGUI
-	        		  *		else if (host.getGameType().equals("ConnectFour"))
+	        		  *		else if (host.getGameType().equals("connect4"))
 	        		  *			//apply c4 logic here manually
 	        		  *		else if (host.getGameType().equals("Battleship"))
 	        		  *			//apply battleship logic here manually
@@ -262,7 +256,7 @@ public class GameMaker extends GUIMaker {
 		        	 // then make move
 	        	 }
 
-	        	 else if (host.getGameType().equals("ConnectFour")){
+	        	 else if (host.getGameType().equals("connect4")){
 	        		 
 	        	 }
 	         }
@@ -303,7 +297,7 @@ public class GameMaker extends GUIMaker {
 			
 		}
 		
-		CheckersPiece selectedPiece = ((CheckersBoard) board).findPiece(col, row);
+		Piece selectedPiece = board.findPiece(col, row);
 		
 		if ((!buttonSelected) && (selectedPiece.getIcon().equals(piece1) || selectedPiece.getIcon().equals(piece2))) {
 			System.out.println("Second if statement");
@@ -615,7 +609,7 @@ public class GameMaker extends GUIMaker {
 		
 		if (host.getGameType().equals(checkersName))
 			makeCheckersBoard(boardPanel, boardTiles);
-		else if (host.getGameType().equals("ConnectFour"))
+		else if (host.getGameType().equals("connect4"))
 			makeC4Board(boardPanel, boardTiles);
 		else if (host.getGameType().equals("Battleship"))
 			makeBattleshipBoard(boardPanel, boardTiles);
@@ -713,10 +707,10 @@ public class GameMaker extends GUIMaker {
 				}
 			}
 		}
-		boardPanel.revalidate();
+		//boardPanel.revalidate();
 		mainFrame.revalidate();
 		
-		boardPanel.repaint();
+		//boardPanel.repaint();
 		mainFrame.repaint();
 	}
 	
@@ -730,12 +724,15 @@ public class GameMaker extends GUIMaker {
 	
 	
  	public void updateBoardGUI(List<Board> boards, String gameType){
-// 		if (gameType.equals(checkersName))
-// 			updateCheckersBoardGUI(boards[0]);
-// 		else if (gameType.equals(battleshipName))
-// 			updateBattleshipBoardGUI(boards);
-// 		else if (gameType.equals(connect4Name))
-// 			updateC4BoardGUI(boards[0]);
+ 		if (gameType.equals(checkersName)) {
+ 			updateCheckersBoardGUI(boards.get(0));
+ 		}
+ 		else if (gameType.equals(battleshipName)) {
+ 			//updateBattleshipBoardGUI(boards.get(0), boards.get(1));
+ 		}
+ 		else if (gameType.equals(connect4Name)) {
+ 			//updateC4BoardGUI(boards.get(0));
+ 		}
  	}
 	
 	public void refresh(List<Board> boardState) {

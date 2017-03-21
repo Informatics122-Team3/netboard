@@ -102,6 +102,7 @@ public class CheckersBoard extends Board{
 		
 	}
 
+	@Override
 	public com.netboard.game.piece.CheckersPiece findPiece(int x, int y)
 	{
 		for(com.netboard.game.piece.CheckersPiece p : p1)
