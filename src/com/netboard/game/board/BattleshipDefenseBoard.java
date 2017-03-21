@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.netboard.game.piece.*;
 
-import Battleship.*;
-
 public class BattleshipDefenseBoard extends Board{
 	
 	private AircraftCarrier aircraftcarrier;

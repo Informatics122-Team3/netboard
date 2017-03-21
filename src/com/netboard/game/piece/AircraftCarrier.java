@@ -1,19 +1,19 @@
-package Battleship;
+package com.netboard.game.piece;
 
-public class Submarine extends Ship{
+public class AircraftCarrier extends Ship{
 
-	// submarine is length 3
-	int hit_record[] = new int[length];
+	// aircraft carrier is length 5
+	int [] hit_record = new int[length];
 	int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
 	
 	// initializing ships start and end points
-	public Submarine(){
+	public AircraftCarrier(){
 		super();
 		for (int i = 0; i < length; i++){
 			this.hit_record[i] = 0;
 		}
 		this.setName("Submarine");
-		this.setLength(3);
+		this.setLength(5);
 	}
 	
 	// starting x-coordinate
@@ -35,4 +35,5 @@ public class Submarine extends Ship{
 	public int get_y2(){
 		return y2;
 	}
+	
 }

@@ -1,18 +1,18 @@
-package Battleship;
+package com.netboard.game.piece;
 
-public class Destroyer extends Ship{
+public class Cruiser extends Ship{
 
-	// destroyer is length 2
+	// cruiser is length 3
 	int hit_record[] = new int[length];
 	int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
 	
 	// initializing ships start and end points
-	public Destroyer(){
+	public Cruiser(){
 		for (int i = 0; i < length; i++){
 			hit_record[i] = 0;
 		}
-		this.setName("Destroyer");
-		this.setLength(2);
+		this.setName("Cruiser");
+		this.setLength(3);
 	}
 	
 	// starting x-coordinate
@@ -34,5 +34,5 @@ public class Destroyer extends Ship{
 	public int get_y2(){
 		return y2;
 	}
-
+	
 }
