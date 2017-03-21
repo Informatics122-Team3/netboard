@@ -19,8 +19,11 @@ public class ActiveGameThread implements Runnable {
 	private Player guest;
 	private NetBoardServer nbs;
 	
+	private String gameType;
+	
 	public ActiveGameThread(String gameType, Player host, Player guest, NetBoardServer nbs) {
 		try {
+			this.gameType = gameType;
 			this.nbs = nbs;
 			this.gameInstance = GameFactory.createGame(gameType);
 			gameInstance.setPlayers(host.getUsername(), guest.getUsername());
@@ -93,10 +96,26 @@ public class ActiveGameThread implements Runnable {
 				CommsBridge.writeMessage(
 						activePlayer.getSocket(), invalidMoveMsg);
 			}
+			if(gameInstance.getBoardState().get(0).getp1Pieces() == 0)
+				System.out.println("Player 2 Wins!");
+			else if(gameInstance.getBoardState().get(0).getp2Pieces() == 0)
+				System.out.println("Player 1 Wins!");
+			else{
+				if(gameType.equals("checkers"))
+				{
+					if(((com.netboard.game.CheckersGame) gameInstance).canJump(moveMsg.getPiece()))
+						((com.netboard.game.CheckersGame) gameInstance).setJumping(true);
+					else
+					{
+						((com.netboard.game.CheckersGame) gameInstance).setJumping(false);
+						gameInstance.toggleTurn();
+					}
+				}
+				else
+					gameInstance.toggleTurn();
 			
-			gameInstance.toggleTurn();
+				}	
 		}
-		
 	}
 	
 	private Player getActivePlayer() {
