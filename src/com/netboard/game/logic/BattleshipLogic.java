@@ -3,6 +3,7 @@ package com.netboard.game.logic;
 import java.util.ArrayList;
 
 import com.netboard.game.BattleshipGame;
+import com.netboard.game.Logic;
 import com.netboard.game.board.BattleshipDefenseBoard;
 import com.netboard.game.board.Board;
 import com.netboard.game.piece.Piece;
