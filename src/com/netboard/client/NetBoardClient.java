@@ -188,7 +188,7 @@ public class NetBoardClient {
 		BoardUpdateMessage boardMsg = readMessage();
 		
 		if (!boardMsg.inValidState()) { 
-			JOptionPane.showInputDialog("INVALID MOVE");
+			gameGUI.showInvalidMsg();
 		}		
 
 		else if (!boardMsg.getTurn().equals(username)) {
