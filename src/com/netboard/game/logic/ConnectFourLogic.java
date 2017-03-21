@@ -10,6 +10,12 @@ import com.netboard.game.Logic;
 public class ConnectFourLogic implements Logic {
 	private ConnectFourBoard board;
 
+	public ConnectFourLogic () {}
+	
+	public ConnectFourLogic(ConnectFourBoard board) {
+		this.board = board;
+	}
+	
 	// There are basically four patterns
 	// of Reds or Yellows that can win the game
 	// One pattern is a horizontal line of four Rs or Ys,
@@ -145,6 +151,8 @@ public class ConnectFourLogic implements Logic {
 	public boolean isValidMove(Piece p, int newX, int newY) {
 		for (int i = 5; i >= 0; i--) 
 		{
+			System.out.println("The Icon of X is: " + board.getBoard().get(i).get(newX).getIcon());
+			
 			if (board.getBoard().get(i).get(newX).getIcon() == " ") 
 			{
 				break;

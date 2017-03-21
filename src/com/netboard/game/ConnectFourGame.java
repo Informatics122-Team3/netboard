@@ -10,12 +10,19 @@ import com.netboard.game.piece.Piece;
 
 public class ConnectFourGame extends Game {
 	private ConnectFourLogic logic;
+	
+
 	private ConnectFourBoard board;
 	
 	public ConnectFourGame(int rows, int columns)
 	{
-		logic = new ConnectFourLogic();
 		board = new ConnectFourBoard(rows, columns);
+		logic = new ConnectFourLogic(board);
+	}
+	
+	public ConnectFourLogic getLogic()
+	{
+		return logic;
 	}
 	
 	@Override
@@ -27,7 +34,7 @@ public class ConnectFourGame extends Game {
 	@Override
 	public boolean makeMove(Piece p, int newX, int newY) 
 	{
-		logic.setBoard(board);
+//		logic.setBoard(board);
 		
 		if(logic.isValidMove(p, newX, newY))
 		{
