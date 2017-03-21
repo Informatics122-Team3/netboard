@@ -20,10 +20,13 @@ public class ConnectFourMain {
 			}
 			else
 			{
+				//workaround for toggling the turn after every move even when invalid
+				c.toggleTurn();
 				//gameInstance.getGameName()
 				//GameName never gets set not sure why this is used in ActiveGameThread
 			}
 			
+			//turn should not be toggled here if its an invalid move @MaxP
 			c.toggleTurn();
 			
 			count++;
