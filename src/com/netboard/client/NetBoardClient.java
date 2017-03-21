@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
+import javax.swing.JOptionPane;
 import com.netboard.client.GUI.GameMaker;
 import com.netboard.client.GUI.HostGameMaker;
 import com.netboard.client.GUI.LobbyMaker;
@@ -185,9 +185,12 @@ public class NetBoardClient {
 	}
 	
 	public void waitForBoardUpdate() {
-		
 		BoardUpdateMessage boardMsg = readMessage();
 		
+		if (!boardMsg.inValidState()) { 
+			JOptionPane.showInputDialog("INVALID MOVE");
+		}		
+
 		if (!boardMsg.getTurn().equals(username)) {
 			
 			JFrame waitDialog = new JFrame();

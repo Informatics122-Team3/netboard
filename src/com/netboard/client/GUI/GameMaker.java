@@ -108,16 +108,16 @@ public class GameMaker extends GUIMaker {
 //		gm.show();
 //}
 	
-		Player player1 = new Player("desoron", "Checkers");
-		Player player2 = new Player("paulusm", "Battleship");
-		Player player3 = new Player("darksteelknight", "ConnectFour");
-		GameMaker gm = new GameMaker(player1);
-		gm.prepareGUI();
-		gm.show();
-}
+//		Player player1 = new Player("desoron", "Checkers");
+//		Player player2 = new Player("paulusm", "Battleship");
+//		Player player3 = new Player("darksteelknight", "ConnectFour");
+//		GameMaker gm = new GameMaker(player1);
+//		gm.prepareGUI();
+//		gm.show();
+//}
 	
 	//constructor for standalone GameMaker window
-	public GameMaker(Player player) {
+//	public GameMaker(Player player) { }
 	public GameMaker(Player player, NetBoardClient nbc) {
 		super(nbc);
 		this.host = player;
@@ -321,7 +321,7 @@ public class GameMaker extends GUIMaker {
 		}
 		
 		CheckersPiece selectedPiece = ((CheckersBoard) board).findPiece(col, row);
-		Piece selectedPiece = board.findPiece(col, row);
+//		Piece selectedPiece = board.findPiece(col, row);
 		
 		if ((!buttonSelected) && (selectedPiece.getIcon().equals(piece1) || selectedPiece.getIcon().equals(piece2))) {
 			System.out.println("Second if statement");

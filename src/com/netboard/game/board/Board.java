@@ -1,10 +1,10 @@
 package com.netboard.game.board;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-
 import com.netboard.game.piece.Piece;
 
-public abstract class Board {
+public abstract class Board implements Serializable {
 	private int width,height,p1Pieces,p2Pieces, turn;
 	private ArrayList<ArrayList<Piece>> boardState;
 	private String player1, player2;
