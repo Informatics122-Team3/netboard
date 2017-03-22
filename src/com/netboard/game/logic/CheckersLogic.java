@@ -14,6 +14,10 @@ public class CheckersLogic implements com.netboard.game.Logic{
 		this.board = board;
 		Jumping = false;
 	}
+	
+	public com.netboard.game.board.CheckersBoard getBoard() {
+		return this.board;
+	}
 
 	public boolean getJumping() { return Jumping; }
 	public void setJumping(boolean Jumping)	{ this.Jumping = Jumping; }
@@ -249,9 +253,12 @@ public class CheckersLogic implements com.netboard.game.Logic{
 	
 	public boolean canJump(int x, int y, String type)
 	{
+		System.out.println("x: "+ x + " y: " + y + " type: " + type);
+		System.out.println(board.getCLIBoard());
+		System.out.println(getJumpMoves(x,y,type));
 		if(getJumpMoves(x,y,type).isEmpty())
-			return true;
-		return false;
+			return false;
+		return true;
 	}
 	
 	

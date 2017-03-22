@@ -88,7 +88,7 @@ public class GameMaker extends GUIMaker {
 		Player player1 = new Player("desoron", checkersName);
 		Player player2 = new Player("paulusm", battleshipName);
 		Player player3 = new Player("darksteelknight", connect4Name);
-		GameMaker gm = new GameMaker(player3);
+		GameMaker gm = new GameMaker(player1);
 		gm.prepareGUI();
 		gm.show();
 }
@@ -130,11 +130,14 @@ public class GameMaker extends GUIMaker {
 		}
 		else if (host.getGameType().equals(connect4Name)) {
 			this.board = c4.getBoard();
-//			turnLabel.setText("Turn is: " + c4.getTurn()); //
+
 		}
 		else if (host.getGameType().equals(battleshipName)) {
 			this.board = bat.getPlayerDenfenseBoards().get(0);
 		}
+		
+		boardSquares = new JToggleButton[rows][cols]; //TODO don't hardcode board dimensions
+		boardSquares2 = new JToggleButton[rows][cols];
 	}
 	
 	public void show(){
@@ -206,7 +209,7 @@ public class GameMaker extends GUIMaker {
 	private class ButtonClickListener implements ActionListener{
 
 	    public void actionPerformed(ActionEvent e) {
-	         String command = e.getActionCommand();  
+	         String command = e.getActionCommand();
 	         
 	         if( command.equals( "Exit" ))  {
 	        	 promptAndClose();
@@ -223,12 +226,18 @@ public class GameMaker extends GUIMaker {
 	        		 //send ApplyMoveMessage
 	        		 
 	        		 if (host.getGameType().equals(checkersName)) {
-	        			 Piece selectedPiece = checkers.getBoard().findPiece(selectedCol, selectedRow);
-	        			 checkers.makeMove(selectedPiece, moveCol, moveRow);
-	        			 updateCheckersBoardGUI(checkers.getBoard(), boardSquares, board1Panel);
+	        			 Piece selectedPiece = checkers.getLogic().getBoard().findPiece(selectedCol, selectedRow);
+	        			 checkers.makeMove(selectedPiece, moveCol, moveRow); //COMMENT THIS OUT FOR CLIENT/SERVER PLS. PLS!!
+	        			 
+	        			 updateCheckersBoardGUI(checkers.getLogic().getBoard(), boardSquares, board1Panel);
+	        			 Piece secondaryPiece = checkers.getLogic().getBoard().findPiece(moveCol, moveRow);
+	        			 System.out.println("Value of secondaryPiece is: " + secondaryPiece.getIcon());
 	        			 //System.out.println("Current turn is: " + checkers.getPlayerTurn());
-
-	        			 //checkers.toggleTurn();
+	        			 System.out.println("Checkers canJump: "  + (checkers.canJump(secondaryPiece)));
+		 					if(!checkers.getLogic().getJumping()) {
+								checkers.toggleTurn();
+							}
+//	        			 checkers.toggleTurn(); //COMMENT THIS OUT FOR CLIENT/SERVER
 
 	        			 boardSquares[selectedRow][selectedCol].setSelected(false);
 	        			 boardSquares[moveRow][moveCol].setSelected(false);

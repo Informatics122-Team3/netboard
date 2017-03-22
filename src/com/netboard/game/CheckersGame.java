@@ -81,7 +81,15 @@ public class CheckersGame extends Game{
 			
 		if(logic.isValidMove(p, newX, newY))
 		{
+			int oldP1Pieces = board.getp1Pieces();
+			int oldP2Pieces = board.getp2Pieces();
 			board.updateBoard(board.findPiece(p.getX(), p.getY()), newX, newY);
+			logic.getBoard().updateBoard(board.findPiece(p.getX(), p.getY()), newX, newY);
+			
+			//if we ate a piece
+			if(oldP1Pieces < board.getp1Pieces() || oldP2Pieces < board.getp2Pieces())
+				logic.setJumping(true);
+			
 			return true;
 		}
 		else
@@ -91,6 +99,12 @@ public class CheckersGame extends Game{
 		}
 	}
 //END ENGINE PORTION ---------------------------------------------------------------------------
+
+	public com.netboard.game.logic.CheckersLogic getLogic()
+	{
+		// TODO Auto-generated method stub
+		return logic;
+	}
 
 
 }
