@@ -100,12 +100,12 @@ public class CheckersLogic implements com.netboard.game.Logic{
 		{
 			if(type.equals("o") || type.equals("O"))
 				if(pieceAt(x-1, y+1).equals("x") || pieceAt(x-1,y+1).equals("X")) //left 1 and down 1
-					if(x-1 > 0 && y+1 < board.getHeight() && pieceAt(x-2,y+2).equals("")) //left 2 and down 2 
+					if(x-1 > 0 && y+1 < board.getHeight()-1 && pieceAt(x-2,y+2).equals("")) //left 2 and down 2 
 						return true;
 			
 			if(type.equals("X"))
 				if(pieceAt(x-1, y+1).equals("o") || pieceAt(x-1, y+1).equals("O")) //left 1 and down 1
-					if(x-1 > 0 && y+1 < board.getHeight() && pieceAt(x-2,y+2).equals("")) //left 2 and down 2 
+					if(x-1 > 0 && y+1 < board.getHeight()-1 && pieceAt(x-2,y+2).equals("")) //left 2 and down 2 
 						return true;
 		}
 		return false;
@@ -124,13 +124,13 @@ public class CheckersLogic implements com.netboard.game.Logic{
 			if(type.equals("x") || type.equals("X"))
 			{
 				if(pieceAt(x+1, y-1).equals("o") || pieceAt(x+1,y-1).equals("O")) //right 1 and up 1
-					if(x+1 < board.getWidth() && y-1 > 0  && pieceAt(x+2,y-2).equals("")) //right 2 and up 2 
+					if(x+1 < board.getWidth()-1 && y-1 > 0  && pieceAt(x+2,y-2).equals("")) //right 2 and up 2 
 						return true;
 			}
 			else if(type.equals("O"))
 			{
 				if(pieceAt(x+1, y-1).equals("x") || pieceAt(x+1,y-1).equals("X")) //right 1 and up 1
-					if(x+1 < board.getWidth()&& y-1 > 0  && pieceAt(x+2,y-2).equals("")) //right 2 and up 2 
+					if(x+1 < board.getWidth()-1 && y-1 > 0  && pieceAt(x+2,y-2).equals("")) //right 2 and up 2 
 						return true;
 			}
 		}
@@ -149,12 +149,12 @@ public class CheckersLogic implements com.netboard.game.Logic{
 		{
 			if(type.equals("o") || type.equals("O"))
 				if(pieceAt(x+1, y+1).equals("x") || pieceAt(x+1,y+1).equals("X")) //left 1 and down 1
-					if(x+1 < board.getWidth() && y+1 < board.getHeight() && pieceAt(x+2,y+2).equals("")) //left 2 and down 2 
+					if(x+1 < board.getWidth()-1 && y+1 < board.getHeight()-1 && pieceAt(x+2,y+2).equals("")) //left 2 and down 2 
 						return true;
 			
 			if(type.equals("X"))
 				if(pieceAt(x+1, y+1).equals("o") || pieceAt(x+1, y+1).equals("O")) //left 1 and down 1
-					if(x+1 < board.getWidth() && y+1 < board.getHeight() && pieceAt(x+2,y+2).equals("")) //left 2 and down 2 
+					if(x+1 < board.getWidth()-1 && y+1 < board.getHeight()-1 && pieceAt(x+2,y+2).equals("")) //left 2 and down 2 
 						return true;
 		}
 		return false;
@@ -253,9 +253,6 @@ public class CheckersLogic implements com.netboard.game.Logic{
 	
 	public boolean canJump(int x, int y, String type)
 	{
-		System.out.println("x: "+ x + " y: " + y + " type: " + type);
-		System.out.println(board.getCLIBoard());
-		System.out.println(getJumpMoves(x,y,type));
 		if(getJumpMoves(x,y,type).isEmpty())
 			return false;
 		return true;

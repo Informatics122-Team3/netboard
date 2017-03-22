@@ -79,24 +79,18 @@ public class CheckersGame extends Game{
 	//method that processes the user's desired move
 	public boolean makeMove(Piece p, int newX, int newY){
 			
-		if(logic.isValidMove(p, newX, newY))
-		{
-			int oldP1Pieces = board.getp1Pieces();
-			int oldP2Pieces = board.getp2Pieces();
-			board.updateBoard(board.findPiece(p.getX(), p.getY()), newX, newY);
-			logic.getBoard().updateBoard(board.findPiece(p.getX(), p.getY()), newX, newY);
-			
-			//if we ate a piece
-			if(oldP1Pieces < board.getp1Pieces() || oldP2Pieces < board.getp2Pieces())
-				logic.setJumping(true);
-			
-			return true;
-		}
-		else
-		{
-//			System.out.println("Invalid input, try again.");
-			return false;
-		}
+		int oldP1Pieces = board.getp1Pieces();
+		int oldP2Pieces = board.getp2Pieces();
+		
+		board.updateBoard(board.findPiece(p.getX(), p.getY()), newX, newY);
+		logic.getBoard().updateBoard(board.findPiece(p.getX(), p.getY()), newX, newY);
+		
+		getLogic().setJumping(false);					//I want the jump to be defaulted off and then turned on when needed
+		//if we ate a piece
+		if((oldP1Pieces > board.getp1Pieces() || oldP2Pieces > board.getp2Pieces()) && logic.canJump(newX, newY, p.getIcon()))
+			logic.setJumping(true);
+		
+		return true;
 	}
 //END ENGINE PORTION ---------------------------------------------------------------------------
 

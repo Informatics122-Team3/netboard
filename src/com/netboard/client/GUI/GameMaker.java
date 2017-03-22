@@ -148,16 +148,14 @@ public class GameMaker extends GUIMaker {
 
 		public void mouseClicked(MouseEvent e)
 		{
-			if (host.getGameType().equals(checkersName)) {
+			 if (host.getGameType().equals(checkersName)) {
 				if (SwingUtilities.isRightMouseButton(e) && buttonSelected) {
-	                System.out.println("Right Worked");
 	                for (int i = 0; i < rows; i++)
 	                {
 	                    for (int j = 0; j < cols; j++)
 	                    {
 	                        if (boardSquares[i][j] == e.getSource())
 	                        { 
-	                        	System.out.println("Button " + i + ", " + j + " was clicked"); //i = row, j = col
 	                        	Boolean validMove = checkers.checkLogic((Piece) ((CheckersBoard)board).findPiece(selectedCol, selectedRow), j, i);
 	                        	
 	                        	if (!validMove) {
@@ -184,9 +182,6 @@ public class GameMaker extends GUIMaker {
 									moveCol = j;
 									sendReady = true;
 	                        	}
-	
-	                        	System.out.println("Move from : " + selectedRow + ", " + selectedCol + 
-	                        		" to " + i + ", " + j + " is " + validMove);
 	
 	                        	return;
 	                        }
@@ -227,15 +222,16 @@ public class GameMaker extends GUIMaker {
 	        		 
 	        		 if (host.getGameType().equals(checkersName)) {
 	        			 Piece selectedPiece = checkers.getLogic().getBoard().findPiece(selectedCol, selectedRow);
-	        			 checkers.makeMove(selectedPiece, moveCol, moveRow); //COMMENT THIS OUT FOR CLIENT/SERVER PLS. PLS!!
+	        			 
+	        			 checkers.makeMove(selectedPiece, moveCol, moveRow); 	//COMMENT THIS OUT FOR CLIENT/SERVER PLS. PLS!!
 	        			 
 	        			 updateCheckersBoardGUI(checkers.getLogic().getBoard(), boardSquares, board1Panel);
 	        			 Piece secondaryPiece = checkers.getLogic().getBoard().findPiece(moveCol, moveRow);
-	        			 System.out.println("Value of secondaryPiece is: " + secondaryPiece.getIcon());
+	        			 
+	        			 
 	        			 //System.out.println("Current turn is: " + checkers.getPlayerTurn());
-	        			 System.out.println("Checkers canJump: "  + (checkers.canJump(secondaryPiece)));
-		 					if(!checkers.getLogic().getJumping()) {
-								checkers.toggleTurn();
+	        			 if(!checkers.getLogic().getJumping()) {
+	        				 checkers.toggleTurn();
 							}
 //	        			 checkers.toggleTurn(); //COMMENT THIS OUT FOR CLIENT/SERVER
 
@@ -252,6 +248,19 @@ public class GameMaker extends GUIMaker {
 	        			 
 	        			 sendReady = false;
 	        			 buttonSelected = false;
+	        			 if(checkers.getBoardState().get(0).getp1Pieces() == 0 || 
+	     						checkers.getBoardState().get(0).getp2Pieces() == 0) //We've reached an end condition on this player's turn, so they win
+	     				{
+	     					
+	     					JOptionPane.showMessageDialog(mainFrame, checkers.getTurn() + " Wins!");
+		     				for(JToggleButton[] boardRow : boardSquares)
+		     					for(JToggleButton button : boardRow)
+		     						button.setEnabled(false);
+	     				
+	     				}
+	        			 
+	     					
+
 	        			 
 
 	        			 
@@ -306,11 +315,8 @@ public class GameMaker extends GUIMaker {
 	        	 int col = Integer.parseInt(coordList.get(1));
 	        	
 	        	 if (host.getGameType().equals(checkersName)) {
-	        		 System.out.println("Top: --- buttonSelected is: " + buttonSelected + " ---\n");
 	        		 chooseCheckersPiece(row, col);
- 
-	        		 System.out.println("Bottom: --- buttonSelected is: " + buttonSelected + " ---\n");
-	        		 
+ 	        		 
 		        	 //if selected button is not a piece, then setSelected(false)
 	        	 	 
 		        	 //check if piece occupies that spot (x,y coord)
@@ -352,8 +358,6 @@ public class GameMaker extends GUIMaker {
 		}
 		
 		if (row == selectedRow && col == selectedCol) {
-			System.out.println("First if statement");
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			buttonSelected = false;
 			selectedRow = -1;
 			selectedCol = -1;
@@ -365,7 +369,6 @@ public class GameMaker extends GUIMaker {
 			}
 
 			sendReady = false;
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			return;
 			
 		}
@@ -374,16 +377,11 @@ public class GameMaker extends GUIMaker {
 //		Piece selectedPiece = board.findPiece(col, row);
 		
 		if ((!buttonSelected) && (selectedPiece.getIcon().equals(piece1) || selectedPiece.getIcon().equals(piece2))) {
-			System.out.println("Second if statement");
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			buttonSelected = true;
 			selectedRow = row;
 			selectedCol = col;
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 		}
 		else if (buttonSelected && (selectedPiece.getIcon().equals(piece1) || selectedPiece.getIcon().equals(piece2))) {
-			System.out.println("Else if statement");
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			boardSquares[selectedRow][selectedCol].setSelected(false);
 			selectedRow = row;
 			selectedCol = col;
@@ -395,7 +393,6 @@ public class GameMaker extends GUIMaker {
 			}
 			sendReady = false;
 			
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 
 		}
 
@@ -403,38 +400,25 @@ public class GameMaker extends GUIMaker {
 		if (!selectedPiece.getIcon().equals(piece1) || selectedPiece.getIcon().equals(piece2)) {
 			boardSquares[row][col].setSelected(false);
 		}
-		
-		System.out.println("Checkers move was called");
-		System.out.println("Row is: " + row + ", Col is: " + col);
-		System.out.println("Checkers piece at this spot is: " + selectedPiece.getIcon());
-		System.out.println("Value of buttonSelected is: " + buttonSelected + ", selectedRow is: " + selectedRow + ", selectedCol is: " + selectedCol);
-		System.out.println();
-
 		}
 	
 	void chooseC4Piece(int row, int col){
-		String piece1;
 		if (c4.isGameOver()) {
 			boardSquares[row][col].setSelected(false);
 			return;
 		}
 		
 		if (c4.getTurn().equals(c4.getPlayer1())) {
-			piece1 = c4.getPlayer1();
 		}
 		else {
-			piece1 = c4.getPlayer2();
 		}
 		
 		if (row == selectedRow && col == selectedCol) {
-			System.out.println("First if statement");
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			buttonSelected = false;
 			selectedRow = -1;
 			selectedCol = -1;
 			
 			sendReady = false;
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			return;
 			
 		}
@@ -442,24 +426,18 @@ public class GameMaker extends GUIMaker {
 //		Piece selectedPiece = board.findPiece(col, row);
 		
 		if ((!buttonSelected) && (c4.getLogic().isValidMove(new Piece(), col, row))) {
-			System.out.println("Second if statement");
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			buttonSelected = true;
 			sendReady = true;
 			selectedRow = row;
 			selectedCol = col;
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 		}
 		else if (buttonSelected && (c4.getLogic().isValidMove(new Piece(), col, row))) {
-			System.out.println("Else if statement");
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 			boardSquares[selectedRow][selectedCol].setSelected(false);
 			selectedRow = row;
 			selectedCol = col;
 			
 			sendReady = true;
 			
-			System.out.println("Value of buttonSelected is: " + buttonSelected + " selectedRow is: " + selectedRow + " selectedCol is: " + selectedCol);
 
 		}
 
@@ -471,10 +449,6 @@ public class GameMaker extends GUIMaker {
 			boardSquares[row][col].setSelected(false);
 		}
 		
-		System.out.println("C4 move was called");
-		System.out.println("Row is: " + row + ", Col is: " + col);
-		System.out.println("Value of buttonSelected is: " + buttonSelected + ", selectedRow is: " + selectedRow + ", selectedCol is: " + selectedCol);
-		System.out.println();
 	}
 	
 	void initFrame()
