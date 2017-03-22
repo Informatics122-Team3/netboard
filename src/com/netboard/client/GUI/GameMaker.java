@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -37,7 +38,7 @@ import com.netboard.game.BattleshipGame;
 public class GameMaker extends GUIMaker {
 
 	Player host;
-	JPanel board1Panel, board2Panel, board1constrain;
+	JPanel board1Panel, board2Panel, board1constrain, board2constrain;
 	GridBagConstraints board1CBG, board2CBG, disconnectCBG, 
 		restartCBG, sendMoveCBG, selectedButtonCBG, turnCBG, winnerCBG;
 	
@@ -66,8 +67,8 @@ public class GameMaker extends GUIMaker {
 	
 	//Battleship
 	BattleshipGame bat = new BattleshipGame();
-	BattleshipDefenseBoard board3 = bat.getPlayerDenfenseBoards().get(0); //TODO: only gets the first board right now
-	
+	BattleshipDefenseBoard board3 = bat.getPlayerDefenseBoards().get(0); //TODO: only gets the first board right now
+	BattleshipDefenseBoard board4 = bat.getPlayerDefenseBoards().get(1);
 
 	JLabel p1score, p2score;
 	GridBagConstraints p1scoreCBG, p2scoreCBG;
@@ -99,6 +100,7 @@ public class GameMaker extends GUIMaker {
 		this.host = player;
 		
 		if (host.getGameType().equals(checkersName)) {
+			checkers.toggleTurn();
 			this.board = board1;
 			rows = 8;
 			cols = 8;
@@ -133,7 +135,7 @@ public class GameMaker extends GUIMaker {
 
 		}
 		else if (host.getGameType().equals(battleshipName)) {
-			this.board = bat.getPlayerDenfenseBoards().get(0);
+			this.board = bat.getPlayerDefenseBoards().get(0);
 		}
 		
 		boardSquares = new JToggleButton[rows][cols]; //TODO don't hardcode board dimensions
@@ -233,7 +235,6 @@ public class GameMaker extends GUIMaker {
 	        			 if(!checkers.getLogic().getJumping()) {
 	        				 checkers.toggleTurn();
 							}
-//	        			 checkers.toggleTurn(); //COMMENT THIS OUT FOR CLIENT/SERVER
 
 	        			 boardSquares[selectedRow][selectedCol].setSelected(false);
 	        			 boardSquares[moveRow][moveCol].setSelected(false);
@@ -287,7 +288,33 @@ public class GameMaker extends GUIMaker {
 		        	 }
 	        		 
 		        	 else if (host.getGameType().equals(battleshipName)){
-		        		 
+		        		 if (!bat.isGameOver()) {
+		        			 
+			        		 //--- Standalone
+		        			 bat.makeMove(new Piece(), selectedRow, selectedCol);	//makeMove automatically switches turns
+		        			 
+		        			 // * --- Put these in for client/server	    
+//		    	        	 client.applyBoardMove(new Piece(), selectedRow, selectedCol);
+//		        			 client.waitForBoardUpdate();	 
+		        			 // * --- end client/server insert
+
+		        			 //updateBattleshipBoards(bat.getBoard(), boardSquares, board1Panel, boardSquares2, board2Panel)
+		        			 
+			        		 // --- end Standalone
+		        			 selectedCol = -1;
+		        			 selectedRow = -1;
+		        			 sendReady = false;
+		        			 buttonSelected = false;
+		        			 
+
+		        			 
+		        			 turnLabel.setText(bat.getTurn());
+		        			 
+		        		 }
+		        		 else { //display winner
+		        			 turnLabel.setText("");
+		        			 winnerLabel.setText("Winner is: " + bat.getBattleshipLogic().getWinner());
+		        		 }
 		        	 }
 	        		 
 	        		 
@@ -456,8 +483,8 @@ public class GameMaker extends GUIMaker {
 //		String frameTitle = "NetBoard - " + client.getUsername(); //TODO: put this line back in when testing with client/server
 		String frameTitle = "NetBoard - " + host.getUsername();
 		mainFrame = new JFrame(frameTitle);
-		if (host.getGameType().equals("Battleship")) {
-			mainFrame.setSize(900, 1000);
+		if (host.getGameType().equals(battleshipName)) {
+			mainFrame.setSize(1850, 800);
 		}
 		else {
 			mainFrame.setSize(900, 720);
@@ -534,6 +561,30 @@ public class GameMaker extends GUIMaker {
 	            return new Dimension(s,s);
 				}
 			};
+			
+			board2Panel = new JPanel(new GridLayout(0, cols)) {         
+				@Override
+				public final Dimension getPreferredSize() {
+	            Dimension d = super.getPreferredSize();
+	            Dimension prefSize = null;
+	            Component c = getParent();
+	            if (c == null) {
+	                prefSize = new Dimension(
+	                        (int)d.getWidth(),(int)d.getHeight());
+	            } else if (c!=null &&
+	                    c.getWidth()>d.getWidth() &&
+	                    c.getHeight()>d.getHeight()) {
+	                prefSize = c.getSize();
+	            } else {
+	                prefSize = d;
+	            }
+	            int w = (int) prefSize.getWidth();
+	            int h = (int) prefSize.getHeight();
+	            // the smaller of the two sizes
+	            int s = (w>h ? h : w);
+	            return new Dimension(s,s);
+				}
+			};
 		}
 		
 		board2Panel = new JPanel(new GridLayout(0, 10));
@@ -558,6 +609,7 @@ public class GameMaker extends GUIMaker {
 		restartCBG = new GridBagConstraints();
 		sendMoveCBG = new GridBagConstraints();
 		board1CBG = new GridBagConstraints();
+		board2CBG = new GridBagConstraints();
 		winnerCBG = new GridBagConstraints();
 		turnCBG = new GridBagConstraints();
 		
@@ -610,7 +662,7 @@ public class GameMaker extends GUIMaker {
 		board1constrain.add(board1Panel);
 		mainFrame.add(board1constrain);
 		
-		makeBoard(board1Panel, boardSquares);
+		makeBoard(board1Panel, boardSquares, board2Panel, boardSquares2);
 //		colorCheckersBoard(boardSquares); //TODO: take this out after you're done
 		
 //		if (host.getGameType().equals(checkersName)) {
@@ -623,6 +675,7 @@ public class GameMaker extends GUIMaker {
 		 */
 		
 		mainFrame.add(board1constrain, board1CBG);
+		//mainFrame.add(board2constrain, board2CBG);
 		mainFrame.add(selectedButton, selectedButtonCBG);
 		mainFrame.add(turnLabel, turnCBG);
 		mainFrame.add(winnerLabel, winnerCBG);
@@ -745,17 +798,13 @@ public class GameMaker extends GUIMaker {
 					try {
 					java.net.URL imgURL = getClass().getResource("/Yellow_C4_TA_small.png");
 					ImageIcon img = new ImageIcon(imgURL);
-					b.setIcon(img);
-					
-					
+					b.setIcon(img);					
 				}
 				catch (Exception e) {
 					System.out.println(e);
 				}
 				}
-				
-
-				
+					
 				b.setActionCommand(i + "," + j);
 				b.addActionListener(new ButtonClickListener());
 				b.setMargin(buttonMargin);
@@ -771,18 +820,112 @@ public class GameMaker extends GUIMaker {
 		}
 	}
 	
-	void makeBattleshipBoard(JPanel boardPanel, JToggleButton[][] boardTiles) {
+	void makeBattleshipBoard(JPanel boardPanel, JToggleButton[][] boardTiles, JPanel boardPanel2, JToggleButton[][] boardTiles2) {
+		//the client's board view differs depending on the player
+		ArrayList<BattleshipDefenseBoard> defBoards = bat.getPlayerDefenseBoards();
+		ArrayList<ArrayList<ArrayList<Integer>>> offBoards = bat.getPlayerOffenseBoards();
+		
+		Insets buttonMargin = new Insets(0, 0, 0, 0);
+		if (true) { //if getp1 == client's username
+			//p1 sees their p1 defense board and offense board (stuff they've hit on p2's board)
+			
+			// colors player1's defense board
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					if (defBoards.get(0).getBoard().get(i).get(j) == null)
+						b.setBackground(Color.BLUE);
+
+					else if (defBoards.get(0).getBoard().get(i).get(j).equals("x"))				
+						b.setBackground(Color.PINK);
+	
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles[i][j] = b;
+				}
+			}
+			
+			//colors player 1's offense board
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					if (offBoards.get(0).get(i).get(j) == 0)
+						b.setBackground(Color.BLUE);
+					
+					else if (offBoards.get(0).get(i).get(j) == 1)				
+						b.setBackground(Color.PINK);
+
+					else if (offBoards.get(0).get(i).get(j) == 2)					
+						b.setBackground(Color.YELLOW);
+						
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles2[i][j] = b;
+				}
+			}
+			
+		}
+		
+		else { //else we display p2's board (the other client)
+			//p2 sees their p2 defense board and offense board (stuff they've hit on p1's board)
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					if (defBoards.get(0).getBoard().get(i).get(j) == null)
+						b.setBackground(Color.BLUE);
+
+					else if (defBoards.get(0).getBoard().get(i).get(j).equals("x"))				
+						b.setBackground(Color.PINK);
+				
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles[i][j] = b;
+				}
+			}
+			
+			//colors player 1's offense board
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					if (offBoards.get(0).get(i).get(j) == 0)
+						b.setBackground(Color.BLUE);
+
+					else if (offBoards.get(0).get(i).get(j) == 1)					
+						b.setBackground(Color.PINK);
+	
+					else if (offBoards.get(0).get(i).get(j) == 2)						
+						b.setBackground(Color.YELLOW);
+						
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles2[i][j] = b;
+				}
+			}
+		}
+		
+		//add the buttons to their respective panels
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				boardPanel.add(boardSquares[i][j]);
+			}
+		}
+		
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				boardPanel2.add(boardSquares[i][j]);
+			}
+		}
 		
 	}
 	
-	void makeBoard(JPanel boardPanel, JToggleButton[][] boardTiles) {
+	void makeBoard(JPanel boardPanel, JToggleButton[][] boardTiles, JPanel boardPanel2, JToggleButton[][] boardTiles2) {
 		
 		if (host.getGameType().equals(checkersName))
 			makeCheckersBoard(boardPanel, boardTiles);
 		else if (host.getGameType().equals(connect4Name))
 			makeC4Board(boardPanel, boardTiles);
 		else if (host.getGameType().equals(battleshipName))
-			makeBattleshipBoard(boardPanel, boardTiles);
+			makeBattleshipBoard(boardPanel, boardTiles, boardPanel2, boardTiles2);
 	
 	}
 	
@@ -947,56 +1090,107 @@ public class GameMaker extends GUIMaker {
 
 	}
 	
-	void updateBattleshipBoardGUI () {
+	void updateBattleshipBoardGUI (ArrayList<Board> newBoards, JToggleButton[][] boardTiles, JPanel boardPanel,
+		JToggleButton[][] boardTiles2, JPanel boardPanel2) {
+		//Should be ArrayList<Board> newBoards
 //		BattleshipDefenseBoard batBoard = (BattleshipDefenseBoard) board;
-//		for (int i = 0; i < rows; i++) {
-//			for (int j = 0; j < cols; j++) {
-//				if (batBoard.findPiece(j, i).getIcon().equals("Battleship")) {
-//					try {
-//						//set color of square to gray
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				else if (batBoard.findPiece(j, i).getIcon().equals("Ocean")) {
-//					try {
-//						//set color of square to ocean blue
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//				
-//				
-//				else if (batBoard.findPiece(j, i).getIcon().equals("BattleshipHit")) {
-//					try {
-//						//set color of square to gray hit
-//					}
-//					catch (Exception e) {
-//						System.out.println(e);
-//					}
-//				}
-//				
-//				else if (batBoard.findPiece(j, i).getIcon().equals("OceanHit")) {
-//					try {
-//						//set color of square to ocean blue hit
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//
-//				else if (batBoard.findPiece(j, i).getIcon().equals("OceanMiss")) {
-//					try {
-//						//set color of square to ocean blue miss
-//					}
-//					catch (Exception e) {
-//					System.out.println(e);
-//					}
-//				}
-//			}
-//		}
+		ArrayList<BattleshipDefenseBoard> defBoards = bat.getPlayerDefenseBoards();
+		ArrayList<ArrayList<ArrayList<Integer>>> offBoards = bat.getPlayerOffenseBoards();
+		
+		Insets buttonMargin = new Insets(0, 0, 0, 0);
+		if (true) { //if getp1 == client's username
+			//p1 sees their p1 defense board and offense board (stuff they've hit on p2's board)
+			
+			// colors player1's defense board
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					b.addMouseListener(new HandleRight());
+					if (defBoards.get(0).getBoard().get(i).get(j) == null)
+						b.setBackground(Color.BLUE);
+
+					else if (defBoards.get(0).getBoard().get(i).get(j).equals("x"))				
+						b.setBackground(Color.PINK);
+	
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles[i][j] = b;
+				}
+			}
+			
+			//colors player 1's offense board
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					b.addMouseListener(new HandleRight());
+					if (offBoards.get(0).get(i).get(j) == 0)
+						b.setBackground(Color.BLUE);
+					
+					else if (offBoards.get(0).get(i).get(j) == 1)				
+						b.setBackground(Color.PINK);
+
+					else if (offBoards.get(0).get(i).get(j) == 2)					
+						b.setBackground(Color.YELLOW);
+						
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles2[i][j] = b;
+				}
+			}
+			
+		}
+		
+		else { //else we display p2's board (the other client)
+			//p2 sees their p2 defense board and offense board (stuff they've hit on p1's board)
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					b.addMouseListener(new HandleRight());
+					if (defBoards.get(0).getBoard().get(i).get(j) == null)
+						b.setBackground(Color.BLUE);
+
+					else if (defBoards.get(0).getBoard().get(i).get(j).equals("x"))				
+						b.setBackground(Color.PINK);
+				
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles[i][j] = b;
+				}
+			}
+			
+			//colors player 1's offense board
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					JToggleButton b = new JToggleButton();
+					b.addMouseListener(new HandleRight());
+					if (offBoards.get(0).get(i).get(j) == 0)
+						b.setBackground(Color.BLUE);
+
+					else if (offBoards.get(0).get(i).get(j) == 1)					
+						b.setBackground(Color.PINK);
+	
+					else if (offBoards.get(0).get(i).get(j) == 2)						
+						b.setBackground(Color.YELLOW);
+						
+					b.setActionCommand(i + "," + j);
+					b.setMargin(buttonMargin);
+					boardTiles2[i][j] = b;
+				}
+			}
+		}
+		
+		//add the buttons to their respective panels
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				boardPanel.add(boardSquares[i][j]);
+			}
+		}
+		
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				boardPanel2.add(boardSquares[i][j]);
+			}
+		}
 	}
 	
 	public void showInvalidMsg() {

@@ -11,7 +11,7 @@ public class BattleshipGame extends Game{
 	
 	// the player board is in this order
 	// [p1Denfense, p2Defense]
-	private ArrayList<BattleshipDefenseBoard> PlayerDenfenseBoards;
+	private ArrayList<BattleshipDefenseBoard> PlayerDefenseBoards;
 	
 	// The offense boards is in this order
 	// [p1offense, p2offense]
@@ -29,27 +29,37 @@ public class BattleshipGame extends Game{
 	public BattleshipGame(){
 		
 		// initialize the defense board
-		PlayerDenfenseBoards = new ArrayList<BattleshipDefenseBoard>();
-		PlayerDenfenseBoards.add(new BattleshipDefenseBoard());
-		PlayerDenfenseBoards.add(new BattleshipDefenseBoard());
+		PlayerDefenseBoards = new ArrayList<BattleshipDefenseBoard>();
+		PlayerDefenseBoards.add(new BattleshipDefenseBoard());
+		PlayerDefenseBoards.add(new BattleshipDefenseBoard());
 		
 		// initialize the offense board
 		PlayerOffenseBoards = new ArrayList<ArrayList<ArrayList<Integer>>>();
-		PlayerOffenseBoards.add(PlayerDenfenseBoards.get(1).getTried());
-		PlayerOffenseBoards.add(PlayerDenfenseBoards.get(0).getTried());
+		PlayerOffenseBoards.add(PlayerDefenseBoards.get(1).getTried());
+		PlayerOffenseBoards.add(PlayerDefenseBoards.get(0).getTried());
 		this.local_turn = 1;
 		
-		this.logic = new BattleshipLogic(PlayerDenfenseBoards);
+		this.logic = new BattleshipLogic(PlayerDefenseBoards);
 	}
 	
 	public BattleshipDefenseBoard getPlayer1Board()
 	{
-		return PlayerDenfenseBoards.get(0);
+		return PlayerDefenseBoards.get(0);
 	}
 	
 	public BattleshipDefenseBoard getPlayer2Board()
 	{
-		return PlayerDenfenseBoards.get(1);
+		return PlayerDefenseBoards.get(1);
+	}
+	
+	public ArrayList<ArrayList<Integer>> getPlayer1OffenseBoard()
+	{
+		return PlayerOffenseBoards.get(0);
+	}
+	
+	public ArrayList<ArrayList<Integer>> getPlayer2OffenseBoard()
+	{
+		return PlayerOffenseBoards.get(1);
 	}
 	
 	public void switchTurn()
@@ -63,7 +73,7 @@ public class BattleshipGame extends Game{
 	{
 		if(this.local_turn == 1)
 		{
-			int result = this.PlayerDenfenseBoards.get(1).hit(x, y);
+			int result = this.PlayerDefenseBoards.get(1).hit(x, y);
 			if(result == 3) return false;
 			else
 			{
@@ -73,7 +83,7 @@ public class BattleshipGame extends Game{
 		}
 		else
 		{
-			int result = this.PlayerDenfenseBoards.get(0).hit(x, y);
+			int result = this.PlayerDefenseBoards.get(0).hit(x, y);
 			if(result == 3) return false;
 			else
 			{
@@ -88,11 +98,11 @@ public class BattleshipGame extends Game{
 //	{
 //		if (this.local_turn == 1)
 //		{
-//			if (this.PlayerDenfenseBoards.get(1).allSunk()) return 1;
+//			if (this.PlayerDefenseBoards.get(1).allSunk()) return 1;
 //		}
 //		else
 //		{
-//			if (this.PlayerDenfenseBoards.get(0).allSunk()) return 2;
+//			if (this.PlayerDefenseBoards.get(0).allSunk()) return 2;
 //		}
 //		return 0;
 //	}
@@ -100,16 +110,16 @@ public class BattleshipGame extends Game{
 	public String getTurn()
 	{
 		if (this.local_turn == 1){
-			return PlayerDenfenseBoards.get(0).getPlayer1();
+			return PlayerDefenseBoards.get(0).getPlayer1();
 		}
 		else 
-			return PlayerDenfenseBoards.get(0).getPlayer2();
+			return PlayerDefenseBoards.get(0).getPlayer2();
 
 	}
 	
-	public ArrayList<BattleshipDefenseBoard> getPlayerDenfenseBoards()
+	public ArrayList<BattleshipDefenseBoard> getPlayerDefenseBoards()
 	{
-		return this.PlayerDenfenseBoards;
+		return this.PlayerDefenseBoards;
 	}
 	
 	public ArrayList<ArrayList<ArrayList<Integer>>> getPlayerOffenseBoards()
@@ -129,9 +139,9 @@ public class BattleshipGame extends Game{
 //			String s = scan.nextLine();
 //			String[] cord = s.split(" ");
 //			b.makeMove(new Piece(), Integer.parseInt(cord[0]), Integer.parseInt(cord[1])) ;
-//			b.getPlayerDenfenseBoards().get(0).printBoard();
+//			b.getPlayerDefenseBoards().get(0).printBoard();
 //			System.out.println();
-//			b.getPlayerDenfenseBoards().get(0).printTriedBoard(b.getPlayerOffenseBoards().get(0));
+//			b.getPlayerDefenseBoards().get(0).printTriedBoard(b.getPlayerOffenseBoards().get(0));
 //			if (b.isWinning()!= 0) break;
 //		}
 //		
