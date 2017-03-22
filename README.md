@@ -11,8 +11,8 @@ Michael Vavro,
 Jot Lambsar,
 Nicholas Digeronimo
 
-Professor Emily Navarro
-
+![Alt text](https://s23.postimg.org/6m2ebitu3/1516146.gif) Professor Emily Navarro
+![Alt text](https://s24.postimg.org/4axgt5vyd/1516136.gif)
 ## Assignment
 Design and implement an extensible Board Game Server
 
