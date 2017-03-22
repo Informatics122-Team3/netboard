@@ -8,7 +8,7 @@ Victor Stolle,
 Carolyn Lai,
 Daniel Albornoz,
 Michael Vavro,
-Jot Lambsar,
+Gurjot Lambsar,
 Nicholas Digeronimo
 
 ![Alt text](https://s23.postimg.org/6m2ebitu3/1516146.gif) Professor Emily Navarro
