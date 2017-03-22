@@ -89,7 +89,7 @@ public class GameMaker extends GUIMaker {
 		Player player1 = new Player("desoron", checkersName);
 		Player player2 = new Player("paulusm", battleshipName);
 		Player player3 = new Player("darksteelknight", connect4Name);
-		GameMaker gm = new GameMaker(player1);
+		GameMaker gm = new GameMaker(player2);
 		gm.prepareGUI();
 		gm.show();
 }
@@ -484,7 +484,7 @@ public class GameMaker extends GUIMaker {
 		String frameTitle = "NetBoard - " + host.getUsername();
 		mainFrame = new JFrame(frameTitle);
 		if (host.getGameType().equals(battleshipName)) {
-			mainFrame.setSize(1850, 800);
+			mainFrame.setSize(1850, 1000);
 		}
 		else {
 			mainFrame.setSize(900, 720);
@@ -587,9 +587,10 @@ public class GameMaker extends GUIMaker {
 			};
 		}
 		
-		board2Panel = new JPanel(new GridLayout(0, 10));
+//		board2Panel = new JPanel(new GridLayout(0, 10));
 		
 		board1constrain = new JPanel(new GridBagLayout());
+		board2constrain = new JPanel(new GridBagLayout());
 		
 	}
 	
@@ -649,6 +650,14 @@ public class GameMaker extends GUIMaker {
 		board1CBG.fill = GridBagConstraints.BOTH;
 		board1CBG.insets = new Insets(15, 15, 15, 15);
 		
+		board2CBG.gridx = 0;
+		board2CBG.gridy = 1;
+		board2CBG.weighty = 0.8;
+		board2CBG.weightx = 0.8;
+		board2CBG.anchor = GridBagConstraints.PAGE_END;
+		board2CBG.fill = GridBagConstraints.BOTH;
+		board2CBG.insets = new Insets(15, 15, 15, 15);
+		
 		disconnectBtn.setActionCommand("Disconnect/Concede");
 		restartBtn.setActionCommand("Restart Game");
 		sendMoveBtn.setActionCommand("Send Move");
@@ -657,10 +666,16 @@ public class GameMaker extends GUIMaker {
 		restartBtn.addActionListener(new ButtonClickListener());
 		sendMoveBtn.addActionListener(new ButtonClickListener());
 		
+		if (host.getGameType().equals(battleshipName)) {
+			board1CBG.gridy++;
+			board2constrain.add(board2Panel);
+		}
 		
-//		board1constrain.add(board1Panel, board1CBG);
 		board1constrain.add(board1Panel);
-		mainFrame.add(board1constrain);
+
+//		mainFrame.add(board1constrain);
+		
+
 		
 		makeBoard(board1Panel, boardSquares, board2Panel, boardSquares2);
 //		colorCheckersBoard(boardSquares); //TODO: take this out after you're done
@@ -669,17 +684,15 @@ public class GameMaker extends GUIMaker {
 //			colorCheckersBoard(boardSquares);
 //		}
 		
-		/*
-		 * if host.getGameType().equals("Battleship")
-		 * board1Panel.gridy++;
-		 */
 		
-		mainFrame.add(board1constrain, board1CBG);
-		//mainFrame.add(board2constrain, board2CBG);
+		
+//		mainFrame.add(board1constrain, board1CBG);
+		if (host.getGameType().equals(battleshipName)) {
+			mainFrame.add(board2constrain, board2CBG);
+		}
 		mainFrame.add(selectedButton, selectedButtonCBG);
 		mainFrame.add(turnLabel, turnCBG);
 		mainFrame.add(winnerLabel, winnerCBG);
-//		mainFrame.add(board1Panel, board1CBG);
 		mainFrame.add(disconnectBtn, disconnectCBG);
 		mainFrame.add(restartBtn, restartCBG);
 		mainFrame.add(sendMoveBtn, sendMoveCBG);
@@ -833,13 +846,15 @@ public class GameMaker extends GUIMaker {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					JToggleButton b = new JToggleButton();
-					if (defBoards.get(0).getBoard().get(i).get(j) == null)
+//					System.out.println("The piece at this location is: " + defBoards.get(0).getBoard().get(i).get(j).getIcon());
+					if (defBoards.get(0).getBoard().get(j).get(i) == null)
 						b.setBackground(Color.BLUE);
 
-					else if (defBoards.get(0).getBoard().get(i).get(j).equals("x"))				
+					else if (defBoards.get(0).getBoard().get(j).get(i).equals("x"))				
 						b.setBackground(Color.PINK);
 	
 					b.setActionCommand(i + "," + j);
+					b.addActionListener(new ButtonClickListener());
 					b.setMargin(buttonMargin);
 					boardTiles[i][j] = b;
 				}
@@ -849,16 +864,17 @@ public class GameMaker extends GUIMaker {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					JToggleButton b = new JToggleButton();
-					if (offBoards.get(0).get(i).get(j) == 0)
+					if (offBoards.get(0).get(j).get(i) == 0)
 						b.setBackground(Color.BLUE);
 					
-					else if (offBoards.get(0).get(i).get(j) == 1)				
+					else if (offBoards.get(0).get(j).get(i) == 1)				
 						b.setBackground(Color.PINK);
 
-					else if (offBoards.get(0).get(i).get(j) == 2)					
+					else if (offBoards.get(0).get(j).get(i) == 2)					
 						b.setBackground(Color.YELLOW);
 						
 					b.setActionCommand(i + "," + j);
+					b.addActionListener(new ButtonClickListener());
 					b.setMargin(buttonMargin);
 					boardTiles2[i][j] = b;
 				}
@@ -907,6 +923,7 @@ public class GameMaker extends GUIMaker {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				boardPanel.add(boardSquares[i][j]);
+				System.out.println("Button was added");
 			}
 		}
 		
