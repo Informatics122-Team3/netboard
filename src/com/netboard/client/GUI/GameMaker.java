@@ -89,7 +89,7 @@ public class GameMaker extends GUIMaker {
 		Player player1 = new Player("desoron", checkersName);
 		Player player2 = new Player("paulusm", battleshipName);
 		Player player3 = new Player("darksteelknight", connect4Name);
-		GameMaker gm = new GameMaker(player2);
+		GameMaker gm = new GameMaker(player1);
 		gm.prepareGUI();
 		gm.show();
 }
@@ -673,20 +673,20 @@ public class GameMaker extends GUIMaker {
 		
 		board1constrain.add(board1Panel);
 
-//		mainFrame.add(board1constrain);
+		mainFrame.add(board1constrain);
 		
 
 		
 		makeBoard(board1Panel, boardSquares, board2Panel, boardSquares2);
-//		colorCheckersBoard(boardSquares); //TODO: take this out after you're done
+		colorCheckersBoard(boardSquares); //TODO: take this out after you're done
 		
-//		if (host.getGameType().equals(checkersName)) {
-//			colorCheckersBoard(boardSquares);
-//		}
+		if (host.getGameType().equals(checkersName)) {
+			colorCheckersBoard(boardSquares);
+		}
 		
 		
 		
-//		mainFrame.add(board1constrain, board1CBG);
+		mainFrame.add(board1constrain, board1CBG);
 		if (host.getGameType().equals(battleshipName)) {
 			mainFrame.add(board2constrain, board2CBG);
 		}
